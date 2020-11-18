@@ -9,7 +9,6 @@ import com.github.neho4y.feedback.service.FeedbackService
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.DirtiesContext
@@ -19,6 +18,7 @@ import org.springframework.test.annotation.DirtiesContext
 internal class CommentServiceIntegrationTest {
     @Autowired
     private lateinit var commentService: CommentService
+
     @Autowired
     private lateinit var feedbackService: FeedbackService
 
@@ -28,8 +28,10 @@ internal class CommentServiceIntegrationTest {
 
     @BeforeEach
     fun createCommentService() {
-        val feedbackCreationDto = FeedbackCreationDto("Test feedback",
-            0, 0, 0, "test comment")
+        val feedbackCreationDto = FeedbackCreationDto(
+            "Test feedback",
+            0, 0, 0, "test comment"
+        )
         val feedback = feedbackService.createFeedback(feedbackCreationDto)
         feedbackRepository.save(feedback)
         feedbackRepository.flush()
@@ -41,12 +43,11 @@ internal class CommentServiceIntegrationTest {
         val feedback = feedbackRepository.getOne(feedbackId)
         val commentCreationDto = createDefaultCommentCreationDto(feedback.id)
         commentService.addComment(commentCreationDto)
-        assertDoesNotThrow {
-            val comments = commentService.getComments(commentCreationDto.feedbackId)
-            assertNotNull(comments)
-            assertTrue(comments.size == 1)
-            comments.first().assertEquals(createDefaultComment(feedback))
-        }
+
+        val comments = commentService.getComments(commentCreationDto.feedbackId)
+        assertNotNull(comments)
+        assertTrue(comments.size == 1)
+        comments.first().assertEquals(createDefaultComment(feedback))
     }
 
     @Test

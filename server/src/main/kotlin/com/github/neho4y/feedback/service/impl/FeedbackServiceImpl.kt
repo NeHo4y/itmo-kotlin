@@ -1,5 +1,6 @@
 package com.github.neho4y.feedback.service.impl
 
+import com.github.neho4y.common.exception.NotFoundException
 import com.github.neho4y.feedback.domain.Feedback
 import com.github.neho4y.feedback.domain.FeedbackPriority
 import com.github.neho4y.feedback.domain.FeedbackStatus
@@ -39,12 +40,12 @@ class FeedbackServiceImpl(
     }
 
     override fun getFeedback(id: Long): Feedback {
-        return feedbackRepository.findById(id).orElseThrow()
+        return feedbackRepository.findById(id).orElseThrow { NotFoundException("Unable to find feedback") }
     }
 
     override fun updateFeedback(feedbackDto: FeedbackDto): Feedback {
         val feedback = feedbackRepository.findById(feedbackDto.id)
-            .orElseThrow()
+            .orElseThrow { NotFoundException("Unable to find feedback") }
         feedback.apply {
             header = feedbackDto.header ?: header
             categoryId = feedbackDto.categoryId ?: categoryId
@@ -59,7 +60,7 @@ class FeedbackServiceImpl(
     }
 
     override fun updateStatus(status: FeedbackStatus, id: Long) {
-        val feedback = feedbackRepository.findById(id).orElseThrow()
+        val feedback = feedbackRepository.findById(id).orElseThrow { NotFoundException("Unable to find feedback") }
         feedback.status = status
         if (FeedbackStatus.CLOSED == status || FeedbackStatus.RESOLVED == status) {
             feedback.endDate = LocalDateTime.now()
@@ -68,7 +69,7 @@ class FeedbackServiceImpl(
     }
 
     override fun updatePriority(priority: FeedbackPriority, id: Long) {
-        val feedback = feedbackRepository.findById(id).orElseThrow()
+        val feedback = feedbackRepository.findById(id).orElseThrow { NotFoundException("Unable to find feedback") }
         feedback.priority = priority
         feedbackRepository.save(feedback)
     }

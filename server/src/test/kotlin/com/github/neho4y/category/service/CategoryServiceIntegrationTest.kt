@@ -1,6 +1,8 @@
 package com.github.neho4y.category.service
 
 import com.github.neho4y.category.model.CategoryCreationDto
+import com.github.neho4y.common.exception.BasicException
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,10 +26,13 @@ internal class CategoryServiceIntegrationTest {
         categoryService.createCategory(categoryCreationDto)
 
         // when
-        val exception = assertThrows<Exception> {
+        val exception = assertThrows<BasicException> {
             categoryService.createCategory(sameCategory)
         }
 
+        // then
+        val message = exception.message ?: ""
+        Assertions.assertTrue(message.contains("already exists"))
     }
 
 }

@@ -3,6 +3,8 @@ package com.github.neho4y.category.service
 import com.github.neho4y.category.domain.Category
 import com.github.neho4y.category.domain.repository.CategoryRepository
 import com.github.neho4y.category.model.TopicCreationDto
+import com.github.neho4y.common.exception.BasicException
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -38,10 +40,13 @@ internal class TopicServiceIntegrationTest {
         topicService.createTopic(topicCreationDto)
 
         // when
-        val exception = assertThrows<Exception> {
+        val exception = assertThrows<BasicException> {
             topicService.createTopic(sameCategory)
         }
 
+        // then
+        val message = exception.message ?: ""
+        assertTrue(message.contains("already exists"))
     }
 
 }

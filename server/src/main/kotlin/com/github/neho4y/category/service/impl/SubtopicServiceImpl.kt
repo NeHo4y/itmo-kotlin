@@ -5,9 +5,10 @@ import com.github.neho4y.category.domain.repository.SubtopicRepository
 import com.github.neho4y.category.model.SubtopicCreationDto
 import com.github.neho4y.category.model.SubtopicDto
 import com.github.neho4y.category.service.SubtopicService
+import com.github.neho4y.common.exception.BasicException
+import com.github.neho4y.common.exception.NotFoundException
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
-import java.lang.RuntimeException
 
 
 @Service
@@ -19,8 +20,10 @@ class SubtopicServiceImpl(
 
     override fun createSubtopic(subtopicCreationDto: SubtopicCreationDto): Subtopic {
         if (subtopicRepository.existsByDescriptionAndIsDeletedFalseAndTopicId(
-                subtopicCreationDto.description, subtopicCreationDto.topicId)) {
-            throw RuntimeException()
+                subtopicCreationDto.description, subtopicCreationDto.topicId
+            )
+        ) {
+            throw BasicException("Subtopic ${subtopicCreationDto.description} already exists")
         }
         val newSubtopic = Subtopic(subtopicCreationDto.description, subtopicCreationDto.topicId)
         val savedSubtopic = subtopicRepository.save(newSubtopic)
@@ -28,14 +31,19 @@ class SubtopicServiceImpl(
         return savedSubtopic
     }
 
-    override fun getSubtopic(id: Long) = subtopicRepository.findByIdAndIsDeletedFalse(id).orElseThrow()
+    override fun getSubtopic(id: Long): Subtopic = subtopicRepository.findByIdAndIsDeletedFalse(id)
+        .orElseThrow { NotFoundException("Unable to find requested subtopic") }
 
     override fun updateSubtopic(subtopicDto: SubtopicDto) {
-        val subtopic = subtopicRepository.findByIdAndIsDeletedFalse(subtopicDto.id).orElseThrow()
+        val subtopic = subtopicRepository.findByIdAndIsDeletedFalse(subtopicDto.id)
+            .orElseThrow { NotFoundException("Unable to find requested subtopic") }
         if (subtopicRepository.existsByDescriptionAndIsDeletedFalseAndTopicId(
-                subtopicDto.description, subtopicDto.topicId)) {
-            log.info("Subtopic ${subtopic.description} already exists")
-            throw RuntimeException()
+                subtopicDto.description, subtopicDto.topicId
+            )
+        ) {
+            val msg = "Subtopic ${subtopic.description} already exists"
+            log.error(msg)
+            throw BasicException(msg)
         }
         subtopic.description = subtopicDto.description
         subtopic.topicId = subtopicDto.topicId
@@ -48,7 +56,8 @@ class SubtopicServiceImpl(
     }
 
     override fun deleteSubtopic(id: Long): Subtopic {
-        val subtopic = subtopicRepository.findByIdAndIsDeletedFalse(id).orElseThrow()
+        val subtopic = subtopicRepository.findByIdAndIsDeletedFalse(id)
+            .orElseThrow { NotFoundException("Unable to find requested subtopic") }
         return subtopicRepository.save(subtopic.copy(isDeleted = true))
     }
 

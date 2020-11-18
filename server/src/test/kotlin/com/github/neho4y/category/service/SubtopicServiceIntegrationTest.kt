@@ -5,6 +5,8 @@ import com.github.neho4y.category.domain.Topic
 import com.github.neho4y.category.domain.repository.CategoryRepository
 import com.github.neho4y.category.domain.repository.TopicRepository
 import com.github.neho4y.category.model.SubtopicCreationDto
+import com.github.neho4y.common.exception.BasicException
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -49,10 +51,13 @@ internal class SubtopicServiceIntegrationTest {
         subtopicService.createSubtopic(subtopicCreationDto)
 
         // when
-        val exception = assertThrows<Exception> {
+        val exception = assertThrows<BasicException> {
             subtopicService.createSubtopic(sameCategory)
         }
 
+        // then
+        val message = exception.message ?: ""
+        Assertions.assertTrue(message.contains("already exists"))
     }
 
 }

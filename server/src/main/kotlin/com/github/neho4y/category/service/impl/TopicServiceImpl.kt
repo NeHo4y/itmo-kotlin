@@ -5,9 +5,10 @@ import com.github.neho4y.category.domain.repository.TopicRepository
 import com.github.neho4y.category.model.TopicCreationDto
 import com.github.neho4y.category.model.TopicDto
 import com.github.neho4y.category.service.TopicService
+import com.github.neho4y.common.exception.BasicException
+import com.github.neho4y.common.exception.NotFoundException
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
-import java.lang.RuntimeException
 
 
 @Service
@@ -19,8 +20,10 @@ class TopicServiceImpl(
 
     override fun createTopic(topicCreationDto: TopicCreationDto): Topic {
         if (topicRepository.existsByDescriptionAndIsDeletedFalseAndCategoryId(
-                topicCreationDto.description, topicCreationDto.categoryId)) {
-            throw RuntimeException()
+                topicCreationDto.description, topicCreationDto.categoryId
+            )
+        ) {
+            throw BasicException("Topic ${topicCreationDto.description} already exists")
         }
         val newTopic = Topic(topicCreationDto.description, topicCreationDto.categoryId)
         val savedTopic = topicRepository.save(newTopic)
@@ -32,14 +35,19 @@ class TopicServiceImpl(
         return topicRepository.findAllByIsDeletedFalse()
     }
 
-    override fun getTopic(id: Long) = topicRepository.findByIdAndIsDeletedFalse(id).orElseThrow()
+    override fun getTopic(id: Long): Topic = topicRepository.findByIdAndIsDeletedFalse(id)
+        .orElseThrow { NotFoundException("Unable to find requested topic") }
 
     override fun updateTopic(topicDto: TopicDto) {
-        val topic = topicRepository.findByIdAndIsDeletedFalse(topicDto.id).orElseThrow()
+        val topic = topicRepository.findByIdAndIsDeletedFalse(topicDto.id)
+            .orElseThrow { NotFoundException("Unable to find requested topic") }
         if (topicRepository.existsByDescriptionAndIsDeletedFalseAndCategoryId(
-                topicDto.description, topicDto.categoryId)) {
-            log.info("Topic ${topic.description} already exists")
-            throw RuntimeException()
+                topicDto.description, topicDto.categoryId
+            )
+        ) {
+            val msg = "Topic ${topic.description} already exists"
+            log.error(msg)
+            throw BasicException(msg)
         }
         topic.description = topicDto.description
         topic.categoryId = topicDto.categoryId
@@ -48,7 +56,8 @@ class TopicServiceImpl(
     }
 
     override fun deleteTopic(id: Long): Topic {
-        val topic = topicRepository.findByIdAndIsDeletedFalse(id).orElseThrow()
+        val topic = topicRepository.findByIdAndIsDeletedFalse(id)
+            .orElseThrow { NotFoundException("Unable to find requested topic") }
         return topicRepository.save(topic.copy(isDeleted = true))
     }
 
