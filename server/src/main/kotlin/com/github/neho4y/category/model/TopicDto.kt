@@ -6,7 +6,6 @@ data class TopicCreationDto(
     val categoryId: Long
 )
 
-
 data class TopicDto(
 
     val id: Long,

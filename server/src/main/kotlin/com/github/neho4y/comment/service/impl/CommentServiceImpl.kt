@@ -48,5 +48,4 @@ class CommentServiceImpl(
         comment.isDeleted = true
         commentRepository.save(comment)
     }
-
 }

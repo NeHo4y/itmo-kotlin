@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.DirtiesContext
 
-
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 internal class SubtopicServiceIntegrationTest {
@@ -44,7 +43,6 @@ internal class SubtopicServiceIntegrationTest {
 
     @Test
     fun `When add subtopic with the same description then fail`() {
-
         // given
         val subtopicCreationDto = SubtopicCreationDto("Test subtopic", topicId)
         val sameCategory = subtopicCreationDto.copy()
@@ -59,5 +57,4 @@ internal class SubtopicServiceIntegrationTest {
         val message = exception.message ?: ""
         Assertions.assertTrue(message.contains("already exists"))
     }
-
 }

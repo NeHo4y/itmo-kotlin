@@ -10,7 +10,6 @@ import com.github.neho4y.common.exception.NotFoundException
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
-
 @Service
 class TopicServiceImpl(
     private val topicRepository: TopicRepository
@@ -60,5 +59,4 @@ class TopicServiceImpl(
             .orElseThrow { NotFoundException("Unable to find requested topic") }
         return topicRepository.save(topic.copy(isDeleted = true))
     }
-
 }

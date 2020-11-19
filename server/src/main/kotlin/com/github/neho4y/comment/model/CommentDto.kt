@@ -1,3 +1,4 @@
+// ktlint-disable filename
 package com.github.neho4y.comment.model
 
 class CommentCreationDto(

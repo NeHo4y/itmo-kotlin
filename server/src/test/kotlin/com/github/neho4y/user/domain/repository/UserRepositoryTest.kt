@@ -13,7 +13,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
-
 @ExtendWith(SpringExtension::class)
 @DataJpaTest
 @EnableJpaAuditing
@@ -37,11 +36,11 @@ internal class UserRepositoryTest {
     @Test
     fun `When save multiple users then get all of them`() {
         // given
-        (1..3).forEach {
+        for (userNumber in 1..3) {
             val user = User(
-                email = "user$it@example.com",
+                email = "user$userNumber@example.com",
                 password = "userpass",
-                username = "user$it"
+                username = "user$userNumber"
             )
             userRepository.save(user)
         }

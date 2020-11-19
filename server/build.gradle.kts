@@ -8,10 +8,6 @@ plugins {
     kotlin("plugin.jpa") version "1.4.10"
 }
 
-repositories {
-    mavenCentral()
-}
-
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 configurations {

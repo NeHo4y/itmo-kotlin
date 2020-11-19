@@ -10,7 +10,6 @@ import com.github.neho4y.common.exception.NotFoundException
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
-
 @Service
 class CategoryServiceImpl(
     private val categoryRepository: CategoryRepository
@@ -53,5 +52,4 @@ class CategoryServiceImpl(
         val category = categoryRepository.findById(id).orElseThrow { NotFoundException("Unable to find category") }
         return categoryRepository.save(category.copy(isDeleted = true))
     }
-
 }

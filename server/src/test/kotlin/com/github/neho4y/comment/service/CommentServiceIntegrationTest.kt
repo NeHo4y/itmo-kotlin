@@ -71,5 +71,4 @@ internal class CommentServiceIntegrationTest {
         comment = commentService.getComments(commentCreationDto.feedbackId).first()
         assertFalse(comment.isUnread)
     }
-
 }

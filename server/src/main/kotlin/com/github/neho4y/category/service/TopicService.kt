@@ -11,5 +11,4 @@ interface TopicService {
     fun getTopic(id: Long): Topic
     fun updateTopic(topicDto: TopicDto)
     fun deleteTopic(id: Long): Topic
-
 }

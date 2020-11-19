@@ -7,5 +7,4 @@ enum class FeedbackPriority {
     HIGH,
     CRITICAL,
     GODLIKE
-
 }

@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.DirtiesContext
 
-
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 internal class FeedbackServiceIntegrationTest {
@@ -37,8 +36,6 @@ internal class FeedbackServiceIntegrationTest {
     private lateinit var categoryRepository: CategoryRepository
     private var categoryId: Long = 0
 
-
-
     @BeforeEach
     fun generateTestData() {
         val category = Category("Test category")
@@ -55,14 +52,14 @@ internal class FeedbackServiceIntegrationTest {
         subtopicId = subtopic.id
     }
 
-
     @Test
     fun `positive update feedback test`() {
-
         // given
 
-        val feedbackCreationDto = FeedbackCreationDto("Test feedback",
-            categoryId, topicId, subtopicId, "test comment")
+        val feedbackCreationDto = FeedbackCreationDto(
+            "Test feedback",
+            categoryId, topicId, subtopicId, "test comment"
+        )
         val savedFeedback = feedbackService.createFeedback(feedbackCreationDto)
 
         val feedbackDto = FeedbackDto(
@@ -83,7 +80,5 @@ internal class FeedbackServiceIntegrationTest {
         assertThat(updatedFeedback.subtopicId).isEqualTo(feedbackCreationDto.subtopicId)
         assertThat(updatedFeedback.status).isEqualTo(feedbackDto.status)
         assertThat(updatedFeedback.priority).isEqualTo(feedbackDto.priority)
-
     }
-
 }

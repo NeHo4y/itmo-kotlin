@@ -11,8 +11,7 @@ data class FeedbackCreationDto(
     val subtopicId: Long,
     val comment: String,
 
-    )
-
+)
 
 data class FeedbackDto(
 
@@ -24,4 +23,4 @@ data class FeedbackDto(
     val status: FeedbackStatus?,
     val priority: FeedbackPriority?
 
-    )
+)

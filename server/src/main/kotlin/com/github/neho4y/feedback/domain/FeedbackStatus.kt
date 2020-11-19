@@ -8,5 +8,4 @@ enum class FeedbackStatus {
     WAITING,
     CLOSED,
     RESOLVED
-
 }

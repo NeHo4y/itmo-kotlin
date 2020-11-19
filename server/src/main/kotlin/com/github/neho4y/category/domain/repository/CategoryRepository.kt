@@ -11,5 +11,4 @@ interface CategoryRepository : JpaRepository<Category, Long> {
     fun findAllByIsDeletedFalse(): List<Category>
 
     fun findByIdAndIsDeletedFalse(id: Long): Optional<Category>
-
 }

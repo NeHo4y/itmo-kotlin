@@ -6,7 +6,6 @@ data class SubtopicCreationDto(
     val topicId: Long
 )
 
-
 data class SubtopicDto(
 
     val id: Long,

@@ -11,5 +11,4 @@ interface SubtopicRepository : JpaRepository<Subtopic, Long> {
     fun findAllByIsDeletedFalse(): List<Subtopic>
 
     fun findByIdAndIsDeletedFalse(id: Long): Optional<Subtopic>
-
 }

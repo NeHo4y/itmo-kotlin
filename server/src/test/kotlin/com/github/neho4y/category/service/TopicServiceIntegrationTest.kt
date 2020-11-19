@@ -33,7 +33,6 @@ internal class TopicServiceIntegrationTest {
 
     @Test
     fun `When add topic with the same description then fail`() {
-
         // given
         val topicCreationDto = TopicCreationDto("Test topic", categoryId)
         val sameCategory = topicCreationDto.copy()
@@ -48,5 +47,4 @@ internal class TopicServiceIntegrationTest {
         val message = exception.message ?: ""
         assertTrue(message.contains("already exists"))
     }
-
 }

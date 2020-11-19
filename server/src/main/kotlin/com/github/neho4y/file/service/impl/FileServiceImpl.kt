@@ -32,8 +32,8 @@ class FileServiceImpl(private val fileRepository: FileRepository) : FileService 
     }
 
     override fun getFileRepresentation(fileRetrieveDto: FileRetrieveDto): FileSendDto {
-        val file = fileRepository.findById(fileRetrieveDto.uuid).orElseThrow { NotFoundException("Unable to find requested file") }
+        val file = fileRepository.findById(fileRetrieveDto.uuid)
+            .orElseThrow { NotFoundException("Unable to find requested file") }
         return FileSendDto(file.file, file.filename)
     }
-
 }

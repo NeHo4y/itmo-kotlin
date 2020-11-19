@@ -10,7 +10,6 @@ import com.github.neho4y.common.exception.NotFoundException
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
-
 @Service
 class SubtopicServiceImpl(
     private val subtopicRepository: SubtopicRepository
@@ -60,5 +59,4 @@ class SubtopicServiceImpl(
             .orElseThrow { NotFoundException("Unable to find requested subtopic") }
         return subtopicRepository.save(subtopic.copy(isDeleted = true))
     }
-
 }
