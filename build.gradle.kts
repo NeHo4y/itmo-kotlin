@@ -1,11 +1,13 @@
 buildscript {
     repositories {
         gradlePluginPortal()
+        google()
         mavenCentral()
         jcenter()
     }
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.10")
+        classpath("com.android.tools.build:gradle:4.0.1")
     }
 }
 
@@ -30,5 +32,6 @@ subprojects {
         version.set("0.39.0")
         enableExperimentalRules.set(true)
         verbose.set(true)
+        outputToConsole.set(true)
     }
 }
