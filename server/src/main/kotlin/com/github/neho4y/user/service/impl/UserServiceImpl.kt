@@ -1,5 +1,6 @@
 package com.github.neho4y.user.service.impl
 
+import com.github.neho4y.common.exception.AlreadyExistsException
 import com.github.neho4y.common.exception.BasicException
 import com.github.neho4y.common.exception.NotFoundException
 import com.github.neho4y.common.orNull
@@ -16,13 +17,18 @@ import org.springframework.stereotype.Service
 class UserServiceImpl(
     private val userRepository: UserRepository
 ) : UserService {
-    private val log = LoggerFactory.getLogger(this::class.java)
 
-    override fun findByUsername(username: String) = userRepository.findByUsernameAndIsDeletedFalse(username).orNull()
+    companion object {
+        private val log = LoggerFactory.getLogger(this::class.java)
+    }
 
-    override fun createUser(userCreationDto: UserCreationDto): User {
+    override suspend fun findByUsername(username: String) = userRepository
+        .findByUsernameAndIsDeletedFalse(username)
+        .orNull()
+
+    override suspend fun createUser(userCreationDto: UserCreationDto): User {
         if (userRepository.existsByEmailOrUsername(userCreationDto.email, userCreationDto.username)) {
-            throw UserCreationException(userCreationDto.username)
+            throw AlreadyExistsException("User ${userCreationDto.username} already exists and cannot be created")
         }
         val newUser = User(
             userCreationDto.email,
@@ -35,7 +41,7 @@ class UserServiceImpl(
         return savedUser
     }
 
-    override fun loginUser(username: String, password: String): User {
+    override suspend fun loginUser(username: String, password: String): User {
         val foundUser = userRepository.findByUsernameAndIsDeletedFalse(username)
             .orElseThrow { UserLoginException(username) }
         if (!validatePassword(password, foundUser) || foundUser.isDeleted) {
@@ -45,13 +51,13 @@ class UserServiceImpl(
         return foundUser
     }
 
-    override fun deleteUser(username: String) {
+    override suspend fun deleteUser(username: String) {
         val user = userRepository.findByUsernameAndIsDeletedFalse(username)
             .orElseThrow { NotFoundException("User $username is not found") }
         userRepository.save(user.copy(isDeleted = true))
     }
 
-    override fun updateUserInfo(user: User, userUpdateDto: UserUpdateDto): User {
+    override suspend fun updateUserInfo(user: User, userUpdateDto: UserUpdateDto): User {
         return userRepository.save(user.copy(phone = userUpdateDto.phone ?: user.phone))
     }
 
@@ -59,4 +65,3 @@ class UserServiceImpl(
 }
 
 internal class UserLoginException(username: String) : BasicException("User $username cannot be logged in")
-internal class UserCreationException(username: String) : BasicException("User $username cannot be created")

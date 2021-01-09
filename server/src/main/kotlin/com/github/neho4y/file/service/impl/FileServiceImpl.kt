@@ -12,7 +12,7 @@ import java.util.*
 
 @Service
 class FileServiceImpl(private val fileRepository: FileRepository) : FileService {
-    override fun addFile(fileCreationDto: FileCreationDto): UUID {
+    override suspend fun addFile(fileCreationDto: FileCreationDto): UUID {
         var uuid = UUID.randomUUID()
         while (fileRepository.existsById(uuid)) {
             uuid = UUID.randomUUID()
@@ -26,12 +26,12 @@ class FileServiceImpl(private val fileRepository: FileRepository) : FileService 
         return uuid
     }
 
-    override fun deleteFile(fileRetrieveDto: FileRetrieveDto) {
+    override suspend fun deleteFile(fileRetrieveDto: FileRetrieveDto) {
         fileRepository.findById(fileRetrieveDto.uuid).orElseThrow { NotFoundException("Unable to find requested file") }
         fileRepository.deleteById(fileRetrieveDto.uuid)
     }
 
-    override fun getFileRepresentation(fileRetrieveDto: FileRetrieveDto): FileSendDto {
+    override suspend fun getFileRepresentation(fileRetrieveDto: FileRetrieveDto): FileSendDto {
         val file = fileRepository.findById(fileRetrieveDto.uuid)
             .orElseThrow { NotFoundException("Unable to find requested file") }
         return FileSendDto(file.file, file.filename)

@@ -5,7 +5,7 @@ import com.github.neho4y.follower.model.FollowerDto
 import com.github.neho4y.follower.model.FollowerFilterDto
 
 interface FeedbackFollowerService {
-    fun findFollowsByFilter(filter: FollowerFilterDto): List<FeedbackFollower>
-    fun addFollowerToFeedback(creationDto: FollowerDto): FeedbackFollower
-    fun removeFollowerFromFeedback(followId: Long)
+    suspend fun findFollowsByFilter(filter: FollowerFilterDto): List<FeedbackFollower>
+    suspend fun addFollowerToFeedback(creationDto: FollowerDto): FeedbackFollower
+    suspend fun removeFollowerFromFeedback(followId: Long)
 }

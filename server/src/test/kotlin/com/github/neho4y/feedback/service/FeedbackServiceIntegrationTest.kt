@@ -10,6 +10,7 @@ import com.github.neho4y.feedback.domain.FeedbackPriority
 import com.github.neho4y.feedback.domain.FeedbackStatus
 import com.github.neho4y.feedback.model.FeedbackCreationDto
 import com.github.neho4y.feedback.model.FeedbackDto
+import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -53,7 +54,7 @@ internal class FeedbackServiceIntegrationTest {
     }
 
     @Test
-    fun `positive update feedback test`() {
+    fun `positive update feedback test`(): Unit = runBlocking {
         // given
 
         val feedbackCreationDto = FeedbackCreationDto(

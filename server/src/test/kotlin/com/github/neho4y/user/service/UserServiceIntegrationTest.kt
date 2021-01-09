@@ -1,11 +1,12 @@
 package com.github.neho4y.user.service
 
+import com.github.neho4y.common.exception.AlreadyExistsException
 import com.github.neho4y.user.assertEquals
 import com.github.neho4y.user.createDefaultUser
 import com.github.neho4y.user.createDefaultUserCreationDto
 import com.github.neho4y.user.model.UserUpdateDto
-import com.github.neho4y.user.service.impl.UserCreationException
 import com.github.neho4y.user.service.impl.UserLoginException
+import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -22,14 +23,14 @@ internal class UserServiceIntegrationTest {
     private lateinit var userService: UserService
 
     @Test
-    fun `When add user with the same username then fail`() {
+    fun `When add user with the same username then fail`() = runBlocking {
         // given
         val user = createDefaultUserCreationDto()
         val similarUser = user.copy()
         userService.createUser(user)
 
         // when
-        val exception = assertThrows<UserCreationException> {
+        val exception = assertThrows<AlreadyExistsException> {
             userService.createUser(similarUser)
         }
 
@@ -39,7 +40,7 @@ internal class UserServiceIntegrationTest {
     }
 
     @Test
-    fun `When user is created then it can log in`() {
+    fun `When user is created then it can log in`() = runBlocking {
         // given
         val dto = createDefaultUserCreationDto()
         val created = userService.createUser(dto)
@@ -52,7 +53,7 @@ internal class UserServiceIntegrationTest {
     }
 
     @Test
-    fun `When user is unknown then it cannot log in`() {
+    fun `When user is unknown then it cannot log in`() = runBlocking {
         // given
 
         // when
@@ -66,7 +67,7 @@ internal class UserServiceIntegrationTest {
     }
 
     @Test
-    fun `When user is created then it can be found`() {
+    fun `When user is created then it can be found`(): Unit = runBlocking {
         // given
         val dto = createDefaultUserCreationDto()
         val defaultUser = createDefaultUser()
@@ -81,7 +82,7 @@ internal class UserServiceIntegrationTest {
     }
 
     @Test
-    fun `When user is deleted then it cannot log in`() {
+    fun `When user is deleted then it cannot log in`() = runBlocking {
         // given
         val dto = createDefaultUserCreationDto()
         userService.createUser(dto)
@@ -98,7 +99,7 @@ internal class UserServiceIntegrationTest {
     }
 
     @Test
-    fun `When 'updateUserInfo' then updates are seen`() {
+    fun `When 'updateUserInfo' then updates are seen`(): Unit = runBlocking {
         // given
         val dto = createDefaultUserCreationDto()
         val user = userService.createUser(dto)

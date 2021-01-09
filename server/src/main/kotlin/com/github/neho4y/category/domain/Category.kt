@@ -5,7 +5,6 @@ import javax.persistence.*
 @Entity
 @Table(name = "category")
 data class Category(
-
     @Column
     var description: String,
 
@@ -15,5 +14,4 @@ data class Category(
 
     @Column(name = "is_deleted")
     var isDeleted: Boolean = false
-
 )

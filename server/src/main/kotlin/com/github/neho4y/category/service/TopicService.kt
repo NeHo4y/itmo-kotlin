@@ -5,10 +5,9 @@ import com.github.neho4y.category.model.TopicCreationDto
 import com.github.neho4y.category.model.TopicDto
 
 interface TopicService {
-
-    fun getAllTopics(): List<Topic>
-    fun createTopic(topicCreationDto: TopicCreationDto): Topic
-    fun getTopic(id: Long): Topic
-    fun updateTopic(topicDto: TopicDto)
-    fun deleteTopic(id: Long): Topic
+    suspend fun getAllTopics(): List<Topic>
+    suspend fun createTopic(topicCreationDto: TopicCreationDto): Topic
+    suspend fun getTopic(id: Long): Topic
+    suspend fun updateTopic(topicDto: TopicDto)
+    suspend fun deleteTopic(id: Long): Topic
 }

@@ -6,6 +6,7 @@ import com.github.neho4y.follower.domain.FeedbackFollowerType
 import com.github.neho4y.follower.model.FollowerDto
 import com.github.neho4y.follower.model.FollowerFilterDto
 import com.github.neho4y.user.domain.User
+import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,7 +25,7 @@ internal class FeedbackFollowerServiceTest {
     private lateinit var service: FeedbackFollowerService
 
     @Test
-    fun `When add follower to feedback then it could be fetched`() {
+    fun `When add follower to feedback then it could be fetched`() = runBlocking {
         // given
         val expected = defaultExpectedFeedbackFollower
 
@@ -41,7 +42,7 @@ internal class FeedbackFollowerServiceTest {
     }
 
     @Test
-    fun `When add follower to feedback multiple times then no duplicates`() {
+    fun `When add follower to feedback multiple times then no duplicates`() = runBlocking {
         // given
         val expected = defaultExpectedFeedbackFollower
 
@@ -60,7 +61,7 @@ internal class FeedbackFollowerServiceTest {
     }
 
     @Test
-    fun `When follower is deleted then it could not be found`() {
+    fun `When follower is deleted then it could not be found`() = runBlocking {
         // given
         val dto = defaultFeedbackDto.copy(followerType = FeedbackFollowerType.ASSIGNEE)
         val follow = service.addFollowerToFeedback(dto)
@@ -76,7 +77,7 @@ internal class FeedbackFollowerServiceTest {
     }
 
     @Test
-    fun `When get without type then return all types`() {
+    fun `When get without type then return all types`(): Unit = runBlocking {
         // given
         service.addFollowerToFeedback(defaultFeedbackDto)
         service.addFollowerToFeedback(defaultFeedbackDto.copy(followerType = FeedbackFollowerType.ASSIGNEE))

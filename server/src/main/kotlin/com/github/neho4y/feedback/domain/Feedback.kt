@@ -6,7 +6,6 @@ import javax.persistence.*
 @Entity
 @Table(name = "feedback")
 data class Feedback(
-
     @Column
     var header: String,
 
@@ -45,5 +44,4 @@ data class Feedback(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Long = 0
-
 )

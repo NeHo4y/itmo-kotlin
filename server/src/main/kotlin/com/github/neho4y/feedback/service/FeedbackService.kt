@@ -8,10 +8,10 @@ import com.github.neho4y.feedback.model.FeedbackDto
 import com.github.neho4y.feedback.model.FeedbackFilter
 
 interface FeedbackService {
-    fun getFeedbackByFilter(feedbackFilter: FeedbackFilter): List<Feedback>
-    fun createFeedback(feedbackCreationDto: FeedbackCreationDto): Feedback
-    fun getFeedback(id: Long): Feedback
-    fun updateFeedback(feedbackDto: FeedbackDto): Feedback
-    fun updateStatus(status: FeedbackStatus, id: Long)
-    fun updatePriority(priority: FeedbackPriority, id: Long)
+    suspend fun getFeedbackByFilter(feedbackFilter: FeedbackFilter): List<Feedback>
+    suspend fun createFeedback(feedbackCreationDto: FeedbackCreationDto): Feedback
+    suspend fun getFeedback(id: Long): Feedback
+    suspend fun updateFeedback(feedbackDto: FeedbackDto): Feedback
+    suspend fun updateStatus(status: FeedbackStatus, id: Long)
+    suspend fun updatePriority(priority: FeedbackPriority, id: Long)
 }

@@ -1,7 +1,8 @@
 package com.github.neho4y.category.service
 
 import com.github.neho4y.category.model.CategoryCreationDto
-import com.github.neho4y.common.exception.BasicException
+import com.github.neho4y.common.exception.AlreadyExistsException
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -17,14 +18,14 @@ internal class CategoryServiceIntegrationTest {
     private lateinit var categoryService: CategoryService
 
     @Test
-    fun `When add category with the same description then fail`() {
+    fun `When add category with the same description then fail`() = runBlocking {
         // given
         val categoryCreationDto = CategoryCreationDto("Test category")
         val sameCategory = categoryCreationDto.copy()
         categoryService.createCategory(categoryCreationDto)
 
         // when
-        val exception = assertThrows<BasicException> {
+        val exception = assertThrows<AlreadyExistsException> {
             categoryService.createCategory(sameCategory)
         }
 

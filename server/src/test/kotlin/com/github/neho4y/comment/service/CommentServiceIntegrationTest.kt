@@ -6,6 +6,7 @@ import com.github.neho4y.comment.createDefaultCommentCreationDto
 import com.github.neho4y.feedback.domain.repository.FeedbackRepository
 import com.github.neho4y.feedback.model.FeedbackCreationDto
 import com.github.neho4y.feedback.service.FeedbackService
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -27,7 +28,7 @@ internal class CommentServiceIntegrationTest {
     private var feedbackId: Long = 0
 
     @BeforeEach
-    fun createCommentService() {
+    fun createCommentService() = runBlocking {
         val feedbackCreationDto = FeedbackCreationDto(
             "Test feedback",
             0, 0, 0, "test comment"
@@ -39,7 +40,7 @@ internal class CommentServiceIntegrationTest {
     }
 
     @Test
-    fun `When comment is added then it can be found`() {
+    fun `When comment is added then it can be found`() = runBlocking {
         val feedback = feedbackRepository.getOne(feedbackId)
         val commentCreationDto = createDefaultCommentCreationDto(feedback.id)
         commentService.addComment(commentCreationDto)
@@ -51,7 +52,7 @@ internal class CommentServiceIntegrationTest {
     }
 
     @Test
-    fun `When deleted then deleted`() {
+    fun `When deleted then deleted`() = runBlocking {
         val feedback = feedbackRepository.getOne(feedbackId)
         val commentCreationDto = createDefaultCommentCreationDto(feedback.id)
         commentService.addComment(commentCreationDto)
@@ -62,7 +63,7 @@ internal class CommentServiceIntegrationTest {
     }
 
     @Test
-    fun `When mark read then check read`() {
+    fun `When mark read then check read`() = runBlocking {
         val feedback = feedbackRepository.getOne(feedbackId)
         val commentCreationDto = createDefaultCommentCreationDto(feedback.id)
         commentService.addComment(commentCreationDto)

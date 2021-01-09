@@ -15,13 +15,15 @@ class FeedbackFollowerServiceImpl(
     private val followerRepository: FeedbackFollowerSpecificationRepository
 ) : FeedbackFollowerService {
 
-    private val log = LoggerFactory.getLogger(this::class.java)
+    companion object {
+        private val log = LoggerFactory.getLogger(this::class.java)
+    }
 
-    override fun findFollowsByFilter(filter: FollowerFilterDto): List<FeedbackFollower> {
+    override suspend fun findFollowsByFilter(filter: FollowerFilterDto): List<FeedbackFollower> {
         return followerRepository.findAll(FollowerSearchSpecification(filter))
     }
 
-    override fun addFollowerToFeedback(creationDto: FollowerDto): FeedbackFollower {
+    override suspend fun addFollowerToFeedback(creationDto: FollowerDto): FeedbackFollower {
         val filter = FollowerFilterDto(creationDto.feedback.id, creationDto.user.id, creationDto.followerType)
         val existed = followerRepository.findOne(FollowerSearchSpecification(filter))
         if (existed.isPresent) {
@@ -35,7 +37,7 @@ class FeedbackFollowerServiceImpl(
         return follower
     }
 
-    override fun removeFollowerFromFeedback(followId: Long) {
+    override suspend fun removeFollowerFromFeedback(followId: Long) {
         val existed = followerRepository.findById(followId)
             .orElseThrow { NotFoundException("User is not a follower") }
         followerRepository.deleteById(followId)

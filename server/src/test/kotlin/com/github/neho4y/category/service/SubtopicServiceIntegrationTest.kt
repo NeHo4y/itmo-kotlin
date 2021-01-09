@@ -5,7 +5,8 @@ import com.github.neho4y.category.domain.Topic
 import com.github.neho4y.category.domain.repository.CategoryRepository
 import com.github.neho4y.category.domain.repository.TopicRepository
 import com.github.neho4y.category.model.SubtopicCreationDto
-import com.github.neho4y.common.exception.BasicException
+import com.github.neho4y.common.exception.AlreadyExistsException
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -42,14 +43,14 @@ internal class SubtopicServiceIntegrationTest {
     }
 
     @Test
-    fun `When add subtopic with the same description then fail`() {
+    fun `When add subtopic with the same description then fail`() = runBlocking {
         // given
         val subtopicCreationDto = SubtopicCreationDto("Test subtopic", topicId)
         val sameCategory = subtopicCreationDto.copy()
         subtopicService.createSubtopic(subtopicCreationDto)
 
         // when
-        val exception = assertThrows<BasicException> {
+        val exception = assertThrows<AlreadyExistsException> {
             subtopicService.createSubtopic(sameCategory)
         }
 

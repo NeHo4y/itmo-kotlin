@@ -6,7 +6,7 @@ import com.github.neho4y.file.model.FileSendDto
 import java.util.*
 
 interface FileService {
-    fun addFile(fileCreationDto: FileCreationDto): UUID
-    fun deleteFile(fileRetrieveDto: FileRetrieveDto)
-    fun getFileRepresentation(fileRetrieveDto: FileRetrieveDto): FileSendDto
+    suspend fun addFile(fileCreationDto: FileCreationDto): UUID
+    suspend fun deleteFile(fileRetrieveDto: FileRetrieveDto)
+    suspend fun getFileRepresentation(fileRetrieveDto: FileRetrieveDto): FileSendDto
 }

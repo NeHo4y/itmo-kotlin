@@ -18,13 +18,15 @@ class FeedbackServiceImpl(
     private val feedbackRepository: FeedbackRepository
 ) : FeedbackService {
 
-    private val log = LoggerFactory.getLogger(this::class.java)
+    companion object {
+        private val log = LoggerFactory.getLogger(this::class.java)
+    }
 
-    override fun getFeedbackByFilter(feedbackFilter: FeedbackFilter): List<Feedback> {
+    override suspend fun getFeedbackByFilter(feedbackFilter: FeedbackFilter): List<Feedback> {
         return feedbackRepository.findAll()
     }
 
-    override fun createFeedback(feedbackCreationDto: FeedbackCreationDto): Feedback {
+    override suspend fun createFeedback(feedbackCreationDto: FeedbackCreationDto): Feedback {
         val currentDateTime = LocalDateTime.now()
         val newFeedback = Feedback(
             feedbackCreationDto.header,
@@ -39,11 +41,11 @@ class FeedbackServiceImpl(
         return savedFeedback
     }
 
-    override fun getFeedback(id: Long): Feedback {
+    override suspend fun getFeedback(id: Long): Feedback {
         return feedbackRepository.findById(id).orElseThrow { NotFoundException("Unable to find feedback") }
     }
 
-    override fun updateFeedback(feedbackDto: FeedbackDto): Feedback {
+    override suspend fun updateFeedback(feedbackDto: FeedbackDto): Feedback {
         val feedback = feedbackRepository.findById(feedbackDto.id)
             .orElseThrow { NotFoundException("Unable to find feedback") }
         feedback.apply {
@@ -59,7 +61,7 @@ class FeedbackServiceImpl(
         return updatedFeedback
     }
 
-    override fun updateStatus(status: FeedbackStatus, id: Long) {
+    override suspend fun updateStatus(status: FeedbackStatus, id: Long) {
         val feedback = feedbackRepository.findById(id).orElseThrow { NotFoundException("Unable to find feedback") }
         feedback.status = status
         if (FeedbackStatus.CLOSED == status || FeedbackStatus.RESOLVED == status) {
@@ -68,7 +70,7 @@ class FeedbackServiceImpl(
         feedbackRepository.save(feedback)
     }
 
-    override fun updatePriority(priority: FeedbackPriority, id: Long) {
+    override suspend fun updatePriority(priority: FeedbackPriority, id: Long) {
         val feedback = feedbackRepository.findById(id).orElseThrow { NotFoundException("Unable to find feedback") }
         feedback.priority = priority
         feedbackRepository.save(feedback)

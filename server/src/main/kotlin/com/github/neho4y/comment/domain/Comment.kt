@@ -7,7 +7,6 @@ import javax.persistence.*
 @Table(name = "feedback_message")
 @Entity
 data class Comment(
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence")
     @SequenceGenerator(name = "sequence", allocationSize = 1, sequenceName = "feedback_seq")
@@ -34,5 +33,4 @@ data class Comment(
 
     @Column(name = "is_deleted")
     var isDeleted: Boolean = false
-
 )

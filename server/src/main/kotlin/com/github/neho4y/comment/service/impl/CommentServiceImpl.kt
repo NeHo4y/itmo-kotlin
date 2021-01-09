@@ -14,7 +14,7 @@ class CommentServiceImpl(
     private val commentRepository: CommentRepository,
     private val feedbackRepository: FeedbackRepository
 ) : CommentService {
-    override fun addComment(commentCreationDto: CommentCreationDto): Long {
+    override suspend fun addComment(commentCreationDto: CommentCreationDto): Long {
         val feedback = feedbackRepository.findById(commentCreationDto.feedbackId)
             .orElseThrow { NotFoundException("Requested comment not found") }
         val comment = Comment(
@@ -29,20 +29,20 @@ class CommentServiceImpl(
         return commentRepository.save(comment).id
     }
 
-    override fun getComments(feedbackId: Long): List<Comment> {
+    override suspend fun getComments(feedbackId: Long): List<Comment> {
         return commentRepository.findByFeedbackIdAndIsDeletedFalse(
             feedbackRepository.findById(feedbackId).orElseThrow { NotFoundException("Requested comment not found") }
         )
     }
 
-    override fun markRead(commentId: Long) {
+    override suspend fun markRead(commentId: Long) {
         val comment =
             commentRepository.findById(commentId).orElseThrow { NotFoundException("Requested comment not found") }
         comment.isUnread = false
         commentRepository.save(comment)
     }
 
-    override fun markDeleted(commentId: Long) {
+    override suspend fun markDeleted(commentId: Long) {
         val comment =
             commentRepository.findById(commentId).orElseThrow { NotFoundException("Requested comment not found") }
         comment.isDeleted = true

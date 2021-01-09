@@ -3,7 +3,8 @@ package com.github.neho4y.category.service
 import com.github.neho4y.category.domain.Category
 import com.github.neho4y.category.domain.repository.CategoryRepository
 import com.github.neho4y.category.model.TopicCreationDto
-import com.github.neho4y.common.exception.BasicException
+import com.github.neho4y.common.exception.AlreadyExistsException
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -32,14 +33,14 @@ internal class TopicServiceIntegrationTest {
     }
 
     @Test
-    fun `When add topic with the same description then fail`() {
+    fun `When add topic with the same description then fail`() = runBlocking {
         // given
         val topicCreationDto = TopicCreationDto("Test topic", categoryId)
         val sameCategory = topicCreationDto.copy()
         topicService.createTopic(topicCreationDto)
 
         // when
-        val exception = assertThrows<BasicException> {
+        val exception = assertThrows<AlreadyExistsException> {
             topicService.createTopic(sameCategory)
         }
 
