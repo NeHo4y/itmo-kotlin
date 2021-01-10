@@ -1,7 +1,7 @@
 package com.github.neho4y.comment
 
+import com.github.neho4u.shared.model.comment.CommentCreationDto
 import com.github.neho4y.comment.domain.Comment
-import com.github.neho4y.comment.model.CommentCreationDto
 import com.github.neho4y.feedback.domain.Feedback
 import org.assertj.core.api.Assertions
 import java.time.LocalDateTime
