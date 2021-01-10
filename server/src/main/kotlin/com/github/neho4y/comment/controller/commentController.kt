@@ -27,5 +27,4 @@ class commentController(private val commentService: CommentService) {
     suspend fun setCommentToRead(@PathVariable commentId: Long) {
         commentService.markRead(commentId)
     }
-
 }
