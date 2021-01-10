@@ -1,5 +1,5 @@
 // ktlint-disable filename
-package com.github.neho4y.comment.model
+package com.github.neho4u.shared.model.comment
 
 import kotlinx.serialization.Serializable
 

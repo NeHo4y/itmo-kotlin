@@ -6,11 +6,12 @@ plugins {
     kotlin("jvm")
     kotlin("plugin.spring") version "1.4.10"
     kotlin("plugin.jpa") version "1.4.10"
-    kotlin("plugin.serialization") version "1.4.10"
+    kotlin("plugin.serialization")
+
 }
 
 group = "com.github.neho4u"
-version = "0.0.1-SNAPSHOT"
+version = "1.0-SNAPSHOT"
 
 java.sourceCompatibility = JavaVersion.VERSION_11
 
@@ -21,11 +22,16 @@ configurations {
 }
 
 dependencies {
+    implementation(project(":common"))
+    implementation(files("../common/build/libs/common-jvm-${project.version}.jar"))
+
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
 
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2-native-mt")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.4.2-native-mt")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
 
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")

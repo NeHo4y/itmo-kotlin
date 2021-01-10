@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/files")
-class fileController(private val fileService: FileService) {
+class FileController(private val fileService: FileService) {
     @GetMapping("/get/{id}")
     suspend fun getFile(@PathVariable id: Long): FileSendDto {
         return fileService.getFileRepresentation(FileRetrieveDto(id = id))
