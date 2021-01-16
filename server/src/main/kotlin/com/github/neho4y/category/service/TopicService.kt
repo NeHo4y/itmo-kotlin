@@ -1,13 +1,13 @@
 package com.github.neho4y.category.service
 
-import com.github.neho4y.category.domain.Topic
-import com.github.neho4y.category.model.TopicCreationDto
-import com.github.neho4y.category.model.TopicDto
+import com.github.neho4u.shared.model.category.TopicCreationDto
+import com.github.neho4u.shared.model.category.TopicDto
 
 interface TopicService {
-    suspend fun getAllTopics(): List<Topic>
-    suspend fun createTopic(topicCreationDto: TopicCreationDto): Topic
-    suspend fun getTopic(id: Long): Topic
+    suspend fun getAllTopics(): List<TopicDto>
+    suspend fun createTopic(topicCreationDto: TopicCreationDto): TopicDto
+    suspend fun getTopic(id: Long): TopicDto
     suspend fun updateTopic(topicDto: TopicDto)
-    suspend fun deleteTopic(id: Long): Topic
+    suspend fun deleteTopic(id: Long): TopicDto
+    suspend fun getTopicsByCategoryId(categoryId: Long): List<TopicDto>
 }

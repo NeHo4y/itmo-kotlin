@@ -1,4 +1,4 @@
-package com.github.neho4y.feedback.domain
+package com.github.neho4u.shared.model.feedback
 
 enum class FeedbackPriority {
     LOW,

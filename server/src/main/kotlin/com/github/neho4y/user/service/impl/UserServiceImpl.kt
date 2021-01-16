@@ -27,6 +27,9 @@ class UserServiceImpl(
         .findByUsernameAndIsDeletedFalse(username)
         .orNull()
 
+    override suspend fun findById(userId: Long): User = userRepository.findById(userId)
+        .orElseThrow { NotFoundException("User $userId is not found") }
+
     override suspend fun createUser(userCreationDto: UserCreationDto): User {
         if (userRepository.existsByEmailOrUsername(userCreationDto.email, userCreationDto.username)) {
             throw AlreadyExistsException("User ${userCreationDto.username} already exists and cannot be created")

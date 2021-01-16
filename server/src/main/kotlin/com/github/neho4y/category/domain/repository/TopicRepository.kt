@@ -10,4 +10,6 @@ interface TopicRepository : JpaRepository<Topic, Long> {
     fun findAllByIsDeletedFalse(): List<Topic>
 
     fun findByIdAndIsDeletedFalse(id: Long): Optional<Topic>
+
+    fun findAllByCategoryIdAndIsDeletedFalse(categoryId: Long): List<Topic>
 }

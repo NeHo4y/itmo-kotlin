@@ -1,11 +1,12 @@
 package com.github.neho4y.follower.service
 
+import com.github.neho4u.shared.model.follower.FollowerFilterDto
 import com.github.neho4y.follower.domain.FeedbackFollower
 import com.github.neho4y.follower.model.FollowerDto
-import com.github.neho4y.follower.model.FollowerFilterDto
+import com.github.neho4y.user.domain.User
 
 interface FeedbackFollowerService {
     suspend fun findFollowsByFilter(filter: FollowerFilterDto): List<FeedbackFollower>
     suspend fun addFollowerToFeedback(creationDto: FollowerDto): FeedbackFollower
-    suspend fun removeFollowerFromFeedback(followId: Long)
+    suspend fun removeFollowerFromFeedback(user: User, followId: Long)
 }

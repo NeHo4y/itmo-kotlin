@@ -8,6 +8,7 @@ interface UserService {
     suspend fun createUser(userCreationDto: UserCreationDto): User
     suspend fun loginUser(username: String, password: String): User
     suspend fun findByUsername(username: String): User?
+    suspend fun findById(userId: Long): User
     suspend fun deleteUser(username: String)
     suspend fun updateUserInfo(user: User, userUpdateDto: UserUpdateDto): User
 }

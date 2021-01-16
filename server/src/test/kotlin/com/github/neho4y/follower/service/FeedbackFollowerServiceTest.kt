@@ -1,18 +1,24 @@
 package com.github.neho4y.follower.service
 
+import com.github.neho4u.shared.model.follower.FeedbackFollowerType
+import com.github.neho4u.shared.model.follower.FollowerFilterDto
+import com.github.neho4u.shared.model.user.UserRole
 import com.github.neho4y.feedback.domain.Feedback
+import com.github.neho4y.feedback.domain.repository.FeedbackRepository
 import com.github.neho4y.follower.domain.FeedbackFollower
-import com.github.neho4y.follower.domain.FeedbackFollowerType
 import com.github.neho4y.follower.model.FollowerDto
-import com.github.neho4y.follower.model.FollowerFilterDto
 import com.github.neho4y.user.domain.User
+import com.nhaarman.mockitokotlin2.given
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.annotation.DirtiesContext
 import java.time.LocalDateTime
+import java.util.*
 
 private const val FEEDBACK_ID = 1337L
 private const val USER_ID = 420L
@@ -23,6 +29,14 @@ internal class FeedbackFollowerServiceTest {
 
     @Autowired
     private lateinit var service: FeedbackFollowerService
+
+    @MockBean
+    private lateinit var feedbackService: FeedbackRepository
+
+    @BeforeEach
+    fun createCommentService() {
+        given(feedbackService.findById(FEEDBACK_ID)).willReturn(Optional.of(defaultFeedback))
+    }
 
     @Test
     fun `When add follower to feedback then it could be fetched`() = runBlocking {
@@ -67,7 +81,7 @@ internal class FeedbackFollowerServiceTest {
         val follow = service.addFollowerToFeedback(dto)
 
         // when
-        service.removeFollowerFromFeedback(follow.id)
+        service.removeFollowerFromFeedback(defaultUser, follow.id)
         val foundForFeedback = service.findFollowsByFilter(FollowerFilterDto(feedbackId = FEEDBACK_ID))
         val foundForUser = service.findFollowsByFilter(FollowerFilterDto(userId = USER_ID))
 
@@ -99,17 +113,28 @@ internal class FeedbackFollowerServiceTest {
     }
 }
 
+private val defaultFeedback = Feedback(
+    "Test feedback",
+    LocalDateTime.now(),
+    LocalDateTime.now(),
+    0,
+    0,
+    0,
+    authorId = USER_ID,
+    id = FEEDBACK_ID
+)
+
+private val defaultUser = User(
+    "email",
+    "password",
+    "username",
+    id = USER_ID,
+    role = UserRole.ADMIN
+)
+
 private val defaultFeedbackDto = FollowerDto(
-    Feedback(
-        "Test feedback",
-        LocalDateTime.now(),
-        LocalDateTime.now(),
-        FEEDBACK_ID,
-        FEEDBACK_ID,
-        FEEDBACK_ID,
-        id = FEEDBACK_ID
-    ),
-    User("email", "password", "username", id = USER_ID),
+    FEEDBACK_ID,
+    defaultUser,
     FeedbackFollowerType.WATCHER
 )
 

@@ -1,5 +1,6 @@
 package com.github.neho4y.follower.domain
 
+import com.github.neho4u.shared.model.follower.FeedbackFollowerType
 import javax.persistence.*
 
 @Entity
@@ -19,8 +20,3 @@ data class FeedbackFollower(
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Long = 0
 )
-
-enum class FeedbackFollowerType {
-    ASSIGNEE,
-    WATCHER
-}
