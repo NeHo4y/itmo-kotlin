@@ -24,7 +24,7 @@ internal class FileServiceTest {
         val defaultFile = createDefaultFile(fileId)
         assertTrue(file.file == defaultFile.file)
         assertTrue(file.filename == defaultFile.filename)
-        assertTrue(fileId == defaultFile.uuid)
+        assertTrue(fileId == defaultFile.id)
     }
 
     @Test

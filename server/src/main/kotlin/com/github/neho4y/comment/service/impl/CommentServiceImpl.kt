@@ -1,8 +1,8 @@
 package com.github.neho4y.comment.service.impl
 
+import com.github.neho4u.shared.model.comment.CommentCreationDto
 import com.github.neho4y.comment.domain.Comment
 import com.github.neho4y.comment.domain.repository.CommentRepository
-import com.github.neho4y.comment.model.CommentCreationDto
 import com.github.neho4y.comment.service.CommentService
 import com.github.neho4y.common.exception.NotFoundException
 import com.github.neho4y.feedback.domain.repository.FeedbackRepository

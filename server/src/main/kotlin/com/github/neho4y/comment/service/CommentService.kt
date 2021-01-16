@@ -1,7 +1,7 @@
 package com.github.neho4y.comment.service
 
+import com.github.neho4u.shared.model.comment.CommentCreationDto
 import com.github.neho4y.comment.domain.Comment
-import com.github.neho4y.comment.model.CommentCreationDto
 
 interface CommentService {
     suspend fun addComment(commentCreationDto: CommentCreationDto): Long

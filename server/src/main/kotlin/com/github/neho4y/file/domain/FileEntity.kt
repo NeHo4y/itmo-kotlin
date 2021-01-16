@@ -1,16 +1,14 @@
 package com.github.neho4y.file.domain
 
-import java.util.*
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Table
+import javax.persistence.*
 
 @Table(name = "file")
 @Entity
 data class FileEntity(
     @Id
-    var uuid: UUID,
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence")
+    @SequenceGenerator(name = "sequence", allocationSize = 1, sequenceName = "file_seq")
+    val id: Long = 0,
     @Column
     var file: String,
     @Column
