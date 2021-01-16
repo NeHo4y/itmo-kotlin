@@ -4,7 +4,7 @@ import com.github.neho4y.common.exception.AlreadyExistsException
 import com.github.neho4y.common.exception.BasicException
 import com.github.neho4y.common.exception.NotFoundException
 import com.github.neho4y.common.orNull
-import com.github.neho4y.common.sha256
+import com.github.neho4y.security.AuthenticationService
 import com.github.neho4y.user.domain.User
 import com.github.neho4y.user.domain.repository.UserRepository
 import com.github.neho4y.user.model.UserCreationDto
@@ -15,7 +15,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class UserServiceImpl(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val authenticationService: AuthenticationService
 ) : UserService {
 
     companion object {
@@ -31,9 +32,9 @@ class UserServiceImpl(
             throw AlreadyExistsException("User ${userCreationDto.username} already exists and cannot be created")
         }
         val newUser = User(
-            userCreationDto.email,
-            userCreationDto.password.sha256(),
-            userCreationDto.username,
+            email = userCreationDto.email,
+            password = authenticationService.encodePassword(userCreationDto.password),
+            username = userCreationDto.username,
             phone = userCreationDto.phone
         )
         val savedUser = userRepository.save(newUser)
@@ -61,7 +62,9 @@ class UserServiceImpl(
         return userRepository.save(user.copy(phone = userUpdateDto.phone ?: user.phone))
     }
 
-    private fun validatePassword(password: String, user: User) = password.sha256() == user.password
+    private fun validatePassword(password: String, user: User): Boolean {
+        return authenticationService.checkPassword(password, user.password)
+    }
 }
 
 internal class UserLoginException(username: String) : BasicException("User $username cannot be logged in")

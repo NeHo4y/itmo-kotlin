@@ -1,5 +1,6 @@
 package com.github.neho4y.user.domain
 
+import com.github.neho4u.shared.model.user.UserRole
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.time.LocalDateTime
@@ -39,8 +40,3 @@ data class User(
     @CreatedDate
     var createdDate: LocalDateTime? = null
 )
-
-enum class UserRole {
-    USER,
-    ADMIN
-}
