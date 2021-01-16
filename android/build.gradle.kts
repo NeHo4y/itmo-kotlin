@@ -15,10 +15,20 @@ repositories {
 }
 
 dependencies {
+    val ktorVersion = "1.5.0"
+    fun ktorClient(module: String, version: String = ktorVersion) = "io.ktor:ktor-client-$module:$version"
+
     implementation(project(":common"))
     implementation("com.google.android.material:material:1.2.1")
     implementation("androidx.appcompat:appcompat:1.2.0")
     implementation("androidx.constraintlayout:constraintlayout:2.0.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2-native-mt")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2-native-mt")
+
+    implementation(ktorClient("core-jvm"))
+    implementation(ktorClient("json-jvm"))
+    implementation(ktorClient("serialization-jvm"))
+    implementation(ktorClient("okhttp"))
 }
 
 android {

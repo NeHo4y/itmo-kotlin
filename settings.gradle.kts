@@ -15,6 +15,8 @@ pluginManagement {
 }
 rootProject.name = "feedbacKt"
 
+enableFeaturePreview("GRADLE_METADATA")
+
 include(":common")
 include(":server")
 include(":android")

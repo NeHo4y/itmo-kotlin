@@ -38,7 +38,6 @@ class SecurityConfig(private val jwtTokenFilter: JwtTokenFilter) : WebSecurityCo
         val configuration = CorsConfiguration().apply {
             allowedOrigins = listOf("*")
             allowedMethods = listOf("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH")
-            allowCredentials = true
             allowedHeaders = listOf("Authorization", "Cache-Control", "Content-Type")
         }
         return UrlBasedCorsConfigurationSource().apply {

@@ -28,15 +28,31 @@ kotlin {
         }
     }
     sourceSets {
+        val ktorVersion = "1.5.0"
+        fun ktorClient(module: String, version: String = ktorVersion) = "io.ktor:ktor-client-$module:$version"
+
         val commonMain by getting {
             dependencies {
+                implementation(kotlin("stdlib"))
                 implementation(kotlin("reflect"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2-native-mt")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
+                implementation(ktorClient("core"))
+                implementation(ktorClient("json"))
+                implementation(ktorClient("serialization"))
             }
         }
-        val androidMain by getting
+
+        val androidMain by getting {
+            dependencies {
+                implementation(kotlin("stdlib"))
+                implementation(ktorClient("core-jvm"))
+                implementation(ktorClient("okhttp"))
+            }
+        }
+
         val jvmMain by getting
+
         val jsMain by getting
     }
 }
