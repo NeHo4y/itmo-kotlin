@@ -17,6 +17,7 @@ data class FeedbackFollower(
     val followerType: FeedbackFollowerType,
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence")
+    @SequenceGenerator(name = "sequence", allocationSize = 1, sequenceName = "follower_seq")
     val id: Long = 0
 )

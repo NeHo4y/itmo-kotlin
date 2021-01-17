@@ -9,4 +9,5 @@ interface FeedbackService {
     suspend fun updateFeedback(feedbackDto: FeedbackDto, id: Long): FeedbackDto
     suspend fun updateStatus(status: FeedbackStatus, id: Long)
     suspend fun updatePriority(priority: FeedbackPriority, id: Long)
+    suspend fun getFeedbacksByFollower(userId: Long): List<FeedbackDto>
 }

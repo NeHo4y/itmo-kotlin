@@ -35,6 +35,7 @@ dependencies {
     implementation("com.h2database:h2")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("io.jsonwebtoken:jjwt:0.9.1")
+    implementation(files("../common/build/libs/common-jvm-${project.version}.jar"))
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
 

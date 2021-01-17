@@ -1,5 +1,8 @@
 package com.github.neho4y.feedback.service
 
+import com.github.neho4u.shared.model.category.CategoryDto
+import com.github.neho4u.shared.model.category.SubtopicDto
+import com.github.neho4u.shared.model.category.TopicDto
 import com.github.neho4u.shared.model.feedback.FeedbackCreationDto
 import com.github.neho4u.shared.model.feedback.FeedbackDto
 import com.github.neho4u.shared.model.feedback.FeedbackPriority
@@ -10,6 +13,9 @@ import com.github.neho4y.category.domain.Topic
 import com.github.neho4y.category.domain.repository.CategoryRepository
 import com.github.neho4y.category.domain.repository.SubtopicRepository
 import com.github.neho4y.category.domain.repository.TopicRepository
+import com.github.neho4y.category.service.CategoryService
+import com.github.neho4y.category.service.SubtopicService
+import com.github.neho4y.category.service.TopicService
 import com.github.neho4y.user.controller.toUserData
 import com.github.neho4y.user.createDefaultUser
 import com.github.neho4y.user.service.UserService
@@ -26,6 +32,9 @@ import org.springframework.test.annotation.DirtiesContext
 import java.util.*
 
 private const val USER_ID = 1L
+private const val CATEGORY_ID = 3L
+private const val TOPIC_ID = 5L
+private const val SUBTOPIC_ID = 9L
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -36,6 +45,12 @@ internal class FeedbackServiceIntegrationTest {
 
     @MockBean
     private lateinit var userService: UserService
+    @MockBean
+    private lateinit var categoryService: CategoryService
+    @MockBean
+    private lateinit var topicService: TopicService
+    @MockBean
+    private lateinit var subtopicService: SubtopicService
 
     @Autowired
     private lateinit var subtopicRepository: SubtopicRepository
@@ -54,6 +69,18 @@ internal class FeedbackServiceIntegrationTest {
         userService.stub {
             onBlocking { findById(USER_ID) }
                 .doReturn(createDefaultUser())
+        }
+        categoryService.stub {
+            onBlocking { getCategory(CATEGORY_ID) }
+                .doReturn(CategoryDto(CATEGORY_ID, "Test category"))
+        }
+        topicService.stub {
+            onBlocking { getTopic(TOPIC_ID) }
+                .doReturn(TopicDto(TOPIC_ID, "Test topic", CATEGORY_ID))
+        }
+        subtopicService.stub {
+            onBlocking { getSubtopic(SUBTOPIC_ID) }
+                .doReturn(SubtopicDto(SUBTOPIC_ID, "Test subtopic", TOPIC_ID))
         }
         val category = Category("Test category")
         categoryRepository.save(category)
@@ -95,9 +122,6 @@ internal class FeedbackServiceIntegrationTest {
         val updatedFeedback = feedbackService.updateFeedback(feedbackDto, savedFeedback.id)
 
         assertThat(updatedFeedback.header).isEqualTo(feedbackDto.header)
-        assertThat(updatedFeedback.categoryId).isEqualTo(feedbackCreationDto.categoryId)
-        assertThat(updatedFeedback.topicId).isEqualTo(feedbackCreationDto.topicId)
-        assertThat(updatedFeedback.subtopicId).isEqualTo(feedbackCreationDto.subtopicId)
         assertThat(updatedFeedback.status).isEqualTo(feedbackDto.status)
         assertThat(updatedFeedback.priority).isEqualTo(feedbackDto.priority)
     }

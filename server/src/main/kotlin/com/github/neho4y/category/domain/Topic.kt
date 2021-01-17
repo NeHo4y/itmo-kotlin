@@ -12,7 +12,8 @@ data class Topic(
     var categoryId: Long,
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence")
+    @SequenceGenerator(name = "sequence", allocationSize = 1, sequenceName = "topic_seq")
     val id: Long = 0,
 
     @Column(name = "is_deleted")

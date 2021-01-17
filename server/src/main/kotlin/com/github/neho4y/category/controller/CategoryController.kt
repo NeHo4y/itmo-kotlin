@@ -20,7 +20,7 @@ class CategoryController(
     }
 
     @GetMapping("/{id}")
-    suspend fun getCategoryById(@PathVariable id: Long): CategoryDto? {
+    suspend fun getCategoryById(@PathVariable id: Long): CategoryDto {
         return categoryService.getCategory(id)
     }
 
@@ -40,7 +40,7 @@ class CategoryController(
     }
 
     @GetMapping("/topic/{id}")
-    suspend fun getTopicById(@PathVariable id: Long): TopicDto? {
+    suspend fun getTopicById(@PathVariable id: Long): TopicDto {
         return topicService.getTopic(id)
     }
 
@@ -65,7 +65,7 @@ class CategoryController(
     }
 
     @GetMapping("/topic/subtopic/{id}")
-    suspend fun getSubtopicById(@PathVariable id: Long): SubtopicDto? {
+    suspend fun getSubtopicById(@PathVariable id: Long): SubtopicDto {
         return subtopicService.getSubtopic(id)
     }
 

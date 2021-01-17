@@ -44,6 +44,7 @@ data class Feedback(
     var isActual: Boolean = true,
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence")
+    @SequenceGenerator(name = "sequence", allocationSize = 1, sequenceName = "feedback_seq")
     val id: Long = 0
 )

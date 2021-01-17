@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/feedback")
 class FeedbackController(private val feedbackService: FeedbackService) {
 
-    @GetMapping("/filter")
+    @PostMapping("/filter")
     suspend fun getFeedbackByFilter(@RequestBody feedbackFilter: FeedbackFilter): List<FeedbackDto> {
         return feedbackService.getFeedbackByFilter(feedbackFilter)
     }
@@ -41,5 +41,10 @@ class FeedbackController(private val feedbackService: FeedbackService) {
     @PostMapping("/{id}/priority")
     suspend fun updateFeedback(@PathVariable id: Long, @RequestBody feedbackPriority: FeedbackPriority) {
         return feedbackService.updatePriority(feedbackPriority, id)
+    }
+
+    @PostMapping("/feed")
+    suspend fun getAllUserFeedbacks(@AuthenticationPrincipal userId: Long): List<FeedbackDto> {
+        return feedbackService.getFeedbacksByFollower(userId)
     }
 }

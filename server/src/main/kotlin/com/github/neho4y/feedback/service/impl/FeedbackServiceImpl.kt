@@ -1,12 +1,18 @@
 package com.github.neho4y.feedback.service.impl
 
+import com.github.neho4u.shared.model.common.IdName
 import com.github.neho4u.shared.model.feedback.*
+import com.github.neho4u.shared.model.follower.FollowerFilterDto
+import com.github.neho4y.category.service.CategoryService
+import com.github.neho4y.category.service.SubtopicService
+import com.github.neho4y.category.service.TopicService
 import com.github.neho4y.common.exception.NotFoundException
 import com.github.neho4y.feedback.domain.Feedback
 import com.github.neho4y.feedback.domain.repository.FeedbackRepository
 import com.github.neho4y.feedback.domain.repository.FeedbackSearchSpecification
 import com.github.neho4y.feedback.domain.repository.FeedbackSpecificationRepository
 import com.github.neho4y.feedback.service.FeedbackService
+import com.github.neho4y.follower.service.FeedbackFollowerService
 import com.github.neho4y.user.controller.toUserData
 import com.github.neho4y.user.service.UserService
 import org.slf4j.LoggerFactory
@@ -17,7 +23,11 @@ import java.time.LocalDateTime
 class FeedbackServiceImpl(
     private val feedbackSpecificationRepository: FeedbackSpecificationRepository,
     private val feedbackRepository: FeedbackRepository,
-    private val userService: UserService
+    private val userService: UserService,
+    private val followerService: FeedbackFollowerService,
+    private val categoryService: CategoryService,
+    private val topicService: TopicService,
+    private val subtopicService: SubtopicService
 ) : FeedbackService {
 
     companion object {
@@ -27,6 +37,16 @@ class FeedbackServiceImpl(
     override suspend fun getFeedbackByFilter(feedbackFilter: FeedbackFilter): List<FeedbackDto> {
         return feedbackSpecificationRepository.findAll(FeedbackSearchSpecification(feedbackFilter))
             .map { convertToDto(it) }
+    }
+
+    override suspend fun getFeedbacksByFollower(userId: Long): List<FeedbackDto> {
+        val followerFilter = FollowerFilterDto(null, userId, null)
+        val followers = followerService.findFollowsByFilter(followerFilter)
+        return followers.map {
+            val feedback = feedbackRepository.findById(it.feedbackId)
+                .orElseThrow { NotFoundException("Unable to find feedback") }
+            convertToDto(feedback)
+        }
     }
 
     override suspend fun createFeedback(userId: Long, feedbackCreationDto: FeedbackCreationDto): FeedbackDto {
@@ -55,11 +75,14 @@ class FeedbackServiceImpl(
     override suspend fun updateFeedback(feedbackDto: FeedbackDto, id: Long): FeedbackDto {
         val feedback = feedbackRepository.findById(id)
             .orElseThrow { NotFoundException("Unable to find feedback") }
+        val newCategoryId = feedbackDto.category?.id
+        val newTopicId = feedbackDto.topic?.id
+        val newSubtopicId = feedbackDto.subtopic?.id
         feedback.apply {
             header = feedbackDto.header ?: header
-            categoryId = feedbackDto.categoryId ?: categoryId
-            topicId = feedbackDto.topicId ?: topicId
-            subtopicId = feedbackDto.subtopicId ?: subtopicId
+            categoryId = newCategoryId ?: categoryId
+            topicId = newTopicId ?: topicId
+            subtopicId = newSubtopicId ?: subtopicId
             status = feedbackDto.status ?: status
             priority = feedbackDto.priority ?: priority
             updateDate = LocalDateTime.now()
@@ -85,12 +108,15 @@ class FeedbackServiceImpl(
 
     suspend fun convertToDto(feedback: Feedback): FeedbackDto {
         val userData = userService.findById(feedback.authorId).toUserData()
+        val categoryDto = categoryService.getCategory(feedback.categoryId)
+        val topicDto = topicService.getTopic(feedback.topicId)
+        val subtopicDto = subtopicService.getSubtopic(feedback.subtopicId)
         return FeedbackDto(
             id = feedback.id,
             header = feedback.header,
-            categoryId = feedback.categoryId,
-            topicId = feedback.topicId,
-            subtopicId = feedback.subtopicId,
+            category = IdName(categoryDto.id, categoryDto.description),
+            topic = IdName(topicDto.id, topicDto.description),
+            subtopic = IdName(subtopicDto.id, subtopicDto.description),
             status = feedback.status,
             priority = feedback.priority,
             authorData = userData

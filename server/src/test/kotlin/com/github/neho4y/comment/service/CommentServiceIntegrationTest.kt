@@ -1,6 +1,12 @@
 package com.github.neho4y.comment.service
 
+import com.github.neho4u.shared.model.category.CategoryDto
+import com.github.neho4u.shared.model.category.SubtopicDto
+import com.github.neho4u.shared.model.category.TopicDto
 import com.github.neho4u.shared.model.feedback.FeedbackCreationDto
+import com.github.neho4y.category.service.CategoryService
+import com.github.neho4y.category.service.SubtopicService
+import com.github.neho4y.category.service.TopicService
 import com.github.neho4y.comment.assertEquals
 import com.github.neho4y.comment.createDefaultCommentCreationDto
 import com.github.neho4y.comment.createDefaultCommentDto
@@ -23,6 +29,9 @@ import org.springframework.test.annotation.DirtiesContext
 import java.time.LocalDateTime
 
 private const val USER_ID = 1L
+private const val CATEGORY_ID = 1L
+private const val TOPIC_ID = 2L
+private const val SUBTOPIC_ID = 3L
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -32,6 +41,12 @@ internal class CommentServiceIntegrationTest {
 
     @Autowired
     private lateinit var feedbackService: FeedbackService
+    @MockBean
+    private lateinit var categoryService: CategoryService
+    @MockBean
+    private lateinit var topicService: TopicService
+    @MockBean
+    private lateinit var subtopicService: SubtopicService
 
     @MockBean
     private lateinit var userService: UserService
@@ -46,11 +61,31 @@ internal class CommentServiceIntegrationTest {
             onBlocking { findById(USER_ID) }
                 .doReturn(createDefaultUser())
         }
+        categoryService.stub {
+            onBlocking { getCategory(CATEGORY_ID) }
+                .doReturn(CategoryDto(CATEGORY_ID, "Test category"))
+        }
+        topicService.stub {
+            onBlocking { getTopic(TOPIC_ID) }
+                .doReturn(TopicDto(TOPIC_ID, "Test topic", CATEGORY_ID))
+        }
+        subtopicService.stub {
+            onBlocking { getSubtopic(SUBTOPIC_ID) }
+                .doReturn(SubtopicDto(SUBTOPIC_ID, "Test subtopic", TOPIC_ID))
+        }
         val feedbackCreationDto = FeedbackCreationDto(
             "Test feedback",
-            0, 0, 0, "test comment"
+            CATEGORY_ID, TOPIC_ID, SUBTOPIC_ID, "test comment"
         )
-        val feedbackEntity = Feedback("Test feedback", LocalDateTime.now(), LocalDateTime.now(), 0, 0, 0, USER_ID)
+        val feedbackEntity = Feedback(
+            "Test feedback",
+            LocalDateTime.now(),
+            LocalDateTime.now(),
+            USER_ID,
+            CATEGORY_ID,
+            TOPIC_ID,
+            SUBTOPIC_ID
+        )
         val feedback = feedbackService.createFeedback(USER_ID, feedbackCreationDto)
         feedbackRepository.save(feedbackEntity)
         feedbackRepository.flush()
