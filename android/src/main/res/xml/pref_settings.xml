@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- opens a subscreen of settings -->
+    <PreferenceCategory
+        android:key="key_pref_info"
+        android:title="@string/developer_info"
+        >
+        <Preference android:title="@string/string_legal"
+            android:key="key_pref_legal"
+            android:order="99"/>
+        </PreferenceCategory>
+
+</PreferenceScreen>

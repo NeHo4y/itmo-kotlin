@@ -1,0 +1,188 @@
+<resources>
+    <string name="app_name">Help Desk</string>
+    <string name="loading">Loading...</string>
+    <string name="server_name">Server name</string>
+    <string name="get_server_name">Enter the name of your WHD server:</string>
+    <string name="server_hint">helpdesk.company.com</string>
+    <string name="api_key">API Key</string>
+    <string name="get_api_key">Enter your API key:</string>
+    <string name="login">Login</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="err_fields_not_full">All fields must not be empty</string>
+    <string name="init_assure">We never store your password.</string>
+    <string name="tickets_title">Tickets</string>
+    <string name="session_check">Validating session…</string>
+    <string name="new_note">New note</string>
+    <string name="no_notes">No notes</string>
+    <string name="is_visible">Visible to client?</string>
+    <string name="note_hint">Note details</string>
+    <string name="min_worked">Minutes worked</string>
+    <string name="email_c">Email:</string>
+    <string name="tech">Tech</string>
+    <string name="client">Client</string>
+    <string name="search">Search</string>
+    <string name="add_feedback">Add Feedback</string>
+    <string name="message_type">Message Type</string>
+
+    <string name="settings">Settings</string>
+    <string name="menu_change_status">Change status</string>
+    <string-array name="drawer_titles">
+        <item>Tickets</item>
+        <item>Search</item>
+    </string-array>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_social_recommendations">Enable social recommendations</string>
+    <string name="pref_description_social_recommendations">Recommendations for people to contact
+        based on your message history
+    </string>
+
+    <string name="pref_title_display_name">Display name</string>
+    <string name="pref_default_display_name">John Smith</string>
+
+    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
+    <string-array name="pref_example_list_titles">
+        <item>Always</item>
+        <item>When possible</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">Data &amp; sync</string>
+
+    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
+
+    <string name="pref_title_system_sync_settings">System sync settings</string>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Notifications</string>
+
+    <string name="pref_title_new_message_notifications">New message notifications</string>
+
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_ringtone_silent">Silent</string>
+
+    <string name="pref_title_vibrate">Vibrate</string>
+    <string name="disclaimer">This app is not published by Solarwinds Inc. It is developed by an independent developer that has no affiliation with Solarwinds Inc. The only features currently available are viewing tickets and adding notes. More features are on the way. If you have feature requests or suggestions, please contact helwigdev@gmail.com. Thanks for using my app.</string>
+    <string name="string_legal">Attributions</string>
+    <string name="attributions">This app contains the libraries listed below: \n\n\tThe OkHttp library, which is:\n\n
+    Copyright 2016 Square, Inc.\n
+\n
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at\n
+\n\t
+   http://www.apache.org/licenses/LICENSE-2.0\n
+\n
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+
+        \n\nKittinunf\'s Fuel library\n\nunder the MIT license
+    </string>
+    <string name="title_activity_nav_drawer">NavDrawerActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="my_tickets">My Tickets</string>
+    <string name="group_tickets">Group Tickets</string>
+    <string name="drawer_open">Drawer Open</string>
+    <string name="drawer_close">Drawer Close</string>
+    <string name="title_activity_tab">TabActivity</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+
+    <string name="send_feedback">Send feedback</string>
+    <string name="refresh">Refresh</string>
+    <string name="functionality">Functionality</string>
+    <string name="auto_refresh">Auto refresh</string>
+    <string name="auto_refresh_detail">Refresh tickets when navigating back to ticket list. Disable on slow connections.</string>
+    <string name="remove_ads">Remove ads</string>
+    <string name="remove_ads_detail">Pay a small fee to remove ads and help out the developer</string>
+    <string name="developer_info">Developer info</string>
+    <string name="firebase_id_title">Firebase registration token</string>
+    <string name="not_set">Not set</string>
+    <string name="version_name">Version Name</string>
+    <string name="version_id">Version ID</string>
+    <string name="admob_id">AdMob Device ID</string>
+    <string name="model">Model</string>
+    <string name="thanks_billing">Successfuly removed ads. Thanks!</string>
+    <string name="restore_purchase">Restore purchases</string>
+    <string name="restore_purchase_detail">Select to restore previous ad removal purchase</string>
+    <string name="cancelled">Cancelled</string>
+    <string name="already_owned">You\'ve bought this already. Restoring purchase...</string>
+    <string name="notifications">Notifications</string>
+    <string name="pref_notifications_detail">Configure notifications</string>
+    <string name="api_key_instructions"><![CDATA[Your API key can be found in the site desktop interface, under Settings > My Account > API Key.]]></string>
+    <string name="enable_notifications">Validate</string>
+    <string name="user_pass_auth">User/pass auth</string>
+    <string name="enable_userpass_auth">Validate user/pass</string>
+    <string name="user_pass_warning">Are you sure? This is incredibly insecure. It may expose your username and password. It\'s VERY STRONGLY RECOMMENDED to use an API key instead of username and password.\n\n\tPlease don\'t click yes.</string>
+    <string name="no_client">No client</string>
+    <string name="no_creation_record">No creation record</string>
+    <string name="title_activity_login">Sign in</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="use_ssl">Use SSL/TLS</string>
+    <string name="login_invalid_no_sessionkey">Invalid response from server: no sessionKey object</string>
+    <string name="logging_in">Logging in…</string>
+    <string name="flagged_tickets">Flagged Tickets</string>
+    <string name="recent_tickets">Recent Tickets</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="image_icon">Image Icon</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ut varius erat. Integer vitae ex dictum, tincidunt ante sed, facilisis orci. Aliquam sed condimentum mi. Curabitur ultricies sollicitudin augue ac efficitur. Nunc odio turpis, ullamcorper vitae nisl non, scelerisque hendrerit odio. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vestibulum nec enim quis velit tempus euismod. Suspendisse et accumsan dolor. Sed porttitor eros non massa aliquet, ut ultrices tellus semper. Ut porttitor velit felis, eget ultrices ex efficitur at. Etiam finibus velit mi, a blandit augue viverra ut. Nullam viverra tincidunt libero, quis volutpat urna sodales et.</string>
+    <string name="resolution">Resolution</string>
+    <string name="bcc">bcc@organization.com</string>
+    <string name="email_bcc">Email bcc</string>
+    <string name="email_cc">Email cc</string>
+    <string name="email_client">Email client</string>
+    <string name="email_grouplevel">Email group level</string>
+    <string name="email_groupmanager">Email group manager</string>
+    <string name="email_tech">Email tech</string>
+    <string name="email_tech_grouplevel">Email tech group level</string>
+    <string name="is_solution">Is solution</string>
+    <string name="hide_note">Hide note</string>
+</resources>
