@@ -1,10 +1,10 @@
 package com.github.neho4y.category.service
 
+import com.github.neho4u.shared.model.category.SubtopicCreationDto
 import com.github.neho4y.category.domain.Category
 import com.github.neho4y.category.domain.Topic
 import com.github.neho4y.category.domain.repository.CategoryRepository
 import com.github.neho4y.category.domain.repository.TopicRepository
-import com.github.neho4y.category.model.SubtopicCreationDto
 import com.github.neho4y.common.exception.AlreadyExistsException
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions

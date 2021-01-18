@@ -23,6 +23,7 @@ data class UserToken(
 
 @Serializable
 data class UserData(
+    val id: Long,
     val username: String,
     val email: String,
     val phone: String?,

@@ -1,6 +1,6 @@
 package com.github.neho4y.category.service
 
-import com.github.neho4y.category.model.CategoryCreationDto
+import com.github.neho4u.shared.model.category.CategoryCreationDto
 import com.github.neho4y.common.exception.AlreadyExistsException
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions

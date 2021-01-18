@@ -1,5 +1,7 @@
 package com.github.neho4y.feedback.domain
 
+import com.github.neho4u.shared.model.feedback.FeedbackPriority
+import com.github.neho4u.shared.model.feedback.FeedbackStatus
 import java.time.LocalDateTime
 import javax.persistence.*
 
@@ -24,6 +26,9 @@ data class Feedback(
     @Column(name = "subtopic_id")
     var subtopicId: Long,
 
+    @Column(name = "author_id")
+    var authorId: Long,
+
     @Column(name = "end_date")
     var endDate: LocalDateTime? = null,
 
@@ -35,13 +40,11 @@ data class Feedback(
     @Enumerated(EnumType.STRING)
     var priority: FeedbackPriority = FeedbackPriority.MEDIUM,
 
-    @Column(name = "author_id")
-    var authorId: Long = 0,
-
     @Column(name = "is_actual")
     var isActual: Boolean = true,
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence")
+    @SequenceGenerator(name = "sequence", allocationSize = 1, sequenceName = "feedback_seq")
     val id: Long = 0
 )

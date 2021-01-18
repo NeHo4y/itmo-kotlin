@@ -28,4 +28,9 @@ class UserController(private val userService: UserService, private val jwtServic
     suspend fun me(@AuthenticationPrincipal user: User): UserData {
         return user.toUserData()
     }
+
+    @GetMapping("/{id}")
+    suspend fun userData(@PathVariable id: Long): UserData {
+        return userService.findById(id).toUserData()
+    }
 }

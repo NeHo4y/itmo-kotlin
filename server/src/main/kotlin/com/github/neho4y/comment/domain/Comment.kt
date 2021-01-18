@@ -9,7 +9,7 @@ import javax.persistence.*
 data class Comment(
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence")
-    @SequenceGenerator(name = "sequence", allocationSize = 1, sequenceName = "feedback_seq")
+    @SequenceGenerator(name = "sequence", allocationSize = 1, sequenceName = "feedback_message_seq")
     val id: Long = 0,
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -25,6 +25,7 @@ data class Comment(
     @Column(name = "message_date")
     var messageDate: LocalDateTime,
 
+    @Lob
     @Column(name = "message_text")
     var messageText: String,
 

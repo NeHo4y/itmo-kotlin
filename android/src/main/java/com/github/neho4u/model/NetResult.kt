@@ -1,3 +1,5 @@
 package com.github.neho4u.model
 
-class NetResult(val result: String, val responseCode: Int, val error: Boolean, val cookie: String)
+import io.ktor.http.*
+
+class NetResult<T>(val result: T, val responseCode: HttpStatusCode, val error: Boolean)

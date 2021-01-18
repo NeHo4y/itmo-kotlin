@@ -36,6 +36,7 @@ internal class UserRepositoryTest {
     @Test
     fun `When save multiple users then get all of them`() {
         // given
+        userRepository.deleteAll()
         for (userNumber in 1..3) {
             val user = User(
                 email = "user$userNumber@example.com",
@@ -67,6 +68,7 @@ internal class UserRepositoryTest {
     @Test
     fun `When update then retrieve updated user`() {
         // given
+        userRepository.deleteAll()
         val initialUser = createDefaultUser()
         val id = userRepository.save(initialUser).id
 
@@ -84,6 +86,7 @@ internal class UserRepositoryTest {
     @Test
     fun `When delete user then no users are found`() {
         // given
+        userRepository.deleteAll()
         val initialUser = createDefaultUser()
         val id = userRepository.saveAndFlush(initialUser).id
 

@@ -1,98 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Use DrawerLayout as root container for activity -->
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+    <data>
 
-    <!-- Layout to contain contents of main body of screen (drawer will slide over this) -->
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/content_frame_parent"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <FrameLayout
-            android:id="@+id/search_frame"
+    </data>
+    <android.support.v4.widget.DrawerLayout
+            android:id="@+id/drawer_layout"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            app:layout_constraintBottom_toTopOf="@id/content_frame"
-            app:layout_constraintTop_toBottomOf="@id/drawer_toolbar">
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true">
 
-            <SearchView
-                android:id="@+id/searchView"
+        <!-- Layout to contain contents of main body of screen (drawer will slide over this) -->
+        <android.support.constraint.ConstraintLayout
+                android:id="@+id/content_frame_parent"
                 android:layout_width="match_parent"
-                android:layout_height="50dp" />
-        </FrameLayout>
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/drawer_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            android:theme="@style/AppTheme.AppBarOverlay"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            <FrameLayout
+                    android:id="@+id/search_frame"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    app:layout_constraintBottom_toTopOf="@id/content_frame"
+                    app:layout_constraintTop_toBottomOf="@id/drawer_toolbar">
+
+                <SearchView
+                        android:id="@+id/searchView"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"/>
+            </FrameLayout>
+
+            <android.support.v7.widget.Toolbar
+                    android:id="@+id/drawer_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="?attr/colorPrimary"
+                    android:theme="@style/AppTheme.AppBarOverlay"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="end"
+                        android:layout_marginEnd="12dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight=".30"
+                        android:fitsSystemWindows="true"
+                        android:gravity="end"
+                        android:orientation="horizontal">
+
+                    <ProgressBar
+                            android:id="@+id/pb_main_drawer"
+                            style="@android:style/Widget.Holo.ProgressBar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+            </android.support.v7.widget.Toolbar>
+
+
+            <FrameLayout
+                    android:id="@+id/content_frame"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toTopOf="@id/av_tickets_bottom"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/search_frame">
+
+            </FrameLayout>
 
             <LinearLayout
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="end"
-                android:layout_marginEnd="12dp"
-                android:layout_marginRight="10dp"
-                android:layout_weight=".30"
-                android:fitsSystemWindows="true"
-                android:gravity="end"
-                android:orientation="horizontal">
-
-                <ProgressBar
-                    android:id="@+id/pb_main_drawer"
-                    style="@android:style/Widget.Holo.ProgressBar"
+                    android:id="@+id/av_tickets_bottom"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
 
-            </LinearLayout>
+        </android.support.constraint.ConstraintLayout>
 
-        </android.support.v7.widget.Toolbar>
-
-
-        <FrameLayout
-            android:id="@+id/content_frame"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@id/av_tickets_bottom"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/search_frame">
-
-        </FrameLayout>
-
-        <LinearLayout
-            android:id="@+id/av_tickets_bottom"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-    </android.support.constraint.ConstraintLayout>
-
-    <!-- Container for contents of drawer - use NavigationView to make configuration easier -->
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:menu="@menu/menu_drawer"
-        app:headerLayout="@layout/drawer_header"/>
+        <!-- Container for contents of drawer - use NavigationView to make configuration easier -->
+        <android.support.design.widget.NavigationView
+                android:id="@+id/nav_view"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:fitsSystemWindows="true"
+                app:menu="@menu/menu_drawer"
+                app:headerLayout="@layout/drawer_header"/>
 
 
-
-</android.support.v4.widget.DrawerLayout>
+    </android.support.v4.widget.DrawerLayout>
+</layout>

@@ -4,5 +4,6 @@
         <item
             android:id="@+id/dm_my_tickets"
             android:title="@string/my_tickets" />
+        <item android:title="@string/all_tickets" android:id="@+id/dm_all_tickets"/>
     </group>
 </menu>

@@ -14,23 +14,24 @@ import android.view.MenuItem
 import android.view.View
 import android.view.animation.TranslateAnimation
 import android.widget.SearchView
-import android.widget.Toast
-import com.github.kittinunf.fuel.core.FuelManager
-import com.github.kittinunf.fuel.httpGet
+import androidx.databinding.DataBindingUtil
 import com.github.neho4u.R
-import com.github.neho4u.model.AuthModel
+import com.github.neho4u.controller.UserDataController
+import com.github.neho4u.databinding.AMainDrawerBinding
+import com.github.neho4u.databinding.DrawerHeaderBinding
 import com.github.neho4u.model.Ticket
-import kotlinx.android.synthetic.main.a_main_drawer.*
-import kotlinx.android.synthetic.main.drawer_header.*
-import org.jetbrains.anko.doAsync
-import org.json.JSONException
-import org.json.JSONObject
-
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteractionListener {
 
     private var menuRefresh: MenuItem? = null
     private var menuAddFeedback: MenuItem? = null
+    private lateinit var mainDrawerBinding: AMainDrawerBinding
+    private lateinit var drawerHeaderBinding: DrawerHeaderBinding
+    private val userDataController = UserDataController()
 
     override fun onListFragmentInteraction(ticket: Ticket?) {
         val i = Intent(this, TicketView::class.java)
@@ -40,24 +41,23 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
 
     override fun setProgressVisibility(visible: Boolean) {
         menuRefresh?.isVisible = !visible
-        menuAddFeedback?.isVisible = !visible
+//        menuAddFeedback?.isVisible = !visible
 
         if (visible) {
-            pb_main_drawer?.visibility = View.VISIBLE
+            mainDrawerBinding.pbMainDrawer.visibility = View.VISIBLE
         } else {
-            pb_main_drawer?.visibility = View.GONE
+            mainDrawerBinding.pbMainDrawer.visibility = View.GONE
         }
     }
 
     private lateinit var preferences: SharedPreferences
     private var lastTranslate = 0.0f
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.a_main_drawer)
-
-        setSupportActionBar(drawer_toolbar)
+        drawerHeaderBinding = DataBindingUtil.setContentView(this, R.layout.drawer_header)
+        mainDrawerBinding = DataBindingUtil.setContentView(this, R.layout.a_main_drawer)
+        setSupportActionBar(mainDrawerBinding.drawerToolbar)
 
         val actionbar: ActionBar? = supportActionBar
         actionbar?.apply {
@@ -67,67 +67,57 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this)
 
-        nav_view.setNavigationItemSelectedListener { menuItem ->
+        mainDrawerBinding.navView.setNavigationItemSelectedListener { menuItem ->
             // set item as selected to persist highlight
             menuItem.isChecked = true
             // close drawer when item is tapped
-            drawer_layout.closeDrawers()
+            mainDrawerBinding.drawerLayout.closeDrawers()
 
             // update the UI based on the item selected
             handleNavSelection(menuItem)
         }
-        searchView.setOnQueryTextListener(
-                object: SearchView.OnQueryTextListener {
-                    override fun onQueryTextChange(p0: String?): Boolean {
-                        return false
-                    }
-
-                    override fun onQueryTextSubmit(p0: String?): Boolean {
-                        searchView.setQuery("gfus", false)
-                        return true
-                    }
+        mainDrawerBinding.searchView.setOnQueryTextListener(
+            object : SearchView.OnQueryTextListener {
+                override fun onQueryTextChange(p0: String?): Boolean {
+                    return false
                 }
+
+                override fun onQueryTextSubmit(p0: String?): Boolean {
+                    return true
+                }
+            }
         )
 
-        searchView.setOnCloseListener {
-            val text = "Hello toast!"
-            val duration = Toast.LENGTH_SHORT
+        mainDrawerBinding.drawerLayout.addDrawerListener(
+            object : DrawerLayout.DrawerListener {
+                override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+                    // Respond when the drawer's position changes
+                    val moveFactor = mainDrawerBinding.drawerLayout.width * slideOffset / 4
+                    val anim = TranslateAnimation(lastTranslate, moveFactor, 0.0f, 0.0f)
+                    anim.duration = 0
+                    anim.fillAfter = true
+                    mainDrawerBinding.contentFrameParent.startAnimation(anim)
 
-            val toast = Toast.makeText(applicationContext, text, duration)
-            toast.show()
-            true
-        }
-
-        drawer_layout.addDrawerListener(
-                object : DrawerLayout.DrawerListener {
-                    override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
-                        // Respond when the drawer's position changes
-                        val moveFactor = drawer_layout.width * slideOffset / 4
-                        val anim = TranslateAnimation(lastTranslate, moveFactor, 0.0f, 0.0f)
-                        anim.duration = 0
-                        anim.fillAfter = true
-                        content_frame_parent.startAnimation(anim)
-
-                        lastTranslate = moveFactor
-                    }
-
-                    override fun onDrawerOpened(drawerView: View) {
-                        // Respond when the drawer is opened
-                    }
-
-                    override fun onDrawerClosed(drawerView: View) {
-                        // Respond when the drawer is closed
-                    }
-
-                    override fun onDrawerStateChanged(newState: Int) {
-                        // Respond when the drawer motion state changes
-                    }
+                    lastTranslate = moveFactor
                 }
+
+                override fun onDrawerOpened(drawerView: View) {
+                    // Respond when the drawer is opened
+                }
+
+                override fun onDrawerClosed(drawerView: View) {
+                    // Respond when the drawer is closed
+                }
+
+                override fun onDrawerStateChanged(newState: Int) {
+                    // Respond when the drawer motion state changes
+                }
+            }
         )
 
         updateTechInfo()
-        nav_view.setCheckedItem(R.id.dm_my_tickets)
-        handleNavSelection(nav_view.checkedItem)
+        mainDrawerBinding.navView.setCheckedItem(R.id.dm_my_tickets)
+        handleNavSelection(mainDrawerBinding.navView.checkedItem)
     }
 
     override fun onResume() {
@@ -135,16 +125,22 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
         updateTechInfo()
     }
 
-
     private fun handleNavSelection(item: MenuItem?): Boolean {
         Log.d("DrawerViewLog", "Selected item " + item?.title)
 
         return when (item?.itemId) {
             R.id.dm_my_tickets -> {
-                drawer_toolbar.title = getString(R.string.my_tickets)
+                mainDrawerBinding.drawerToolbar.title = getString(R.string.my_tickets)
                 supportFragmentManager.beginTransaction()
-                        .replace(R.id.content_frame, TicketFragment.newInstance(TicketFragment.TYPE_MY))
-                        .commit()
+                    .replace(R.id.content_frame, TicketFragment.newInstance(TicketFragment.TYPE_FOLLOWED))
+                    .commit()
+                true
+            }
+            R.id.dm_all_tickets -> {
+                mainDrawerBinding.drawerToolbar.title = getString(R.string.all_tickets)
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.content_frame, TicketFragment.newInstance(TicketFragment.TYPE_ALL))
+                    .commit()
                 true
             }
 
@@ -162,11 +158,11 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
-                drawer_layout.openDrawer(GravityCompat.START)
+                mainDrawerBinding.drawerLayout.openDrawer(GravityCompat.START)
                 true
             }
             R.id.menu_dv_refresh -> {
-                val currentFragment: TicketFragment = supportFragmentManager.findFragmentById(R.id.content_frame) as TicketFragment
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.content_frame) as TicketFragment
                 currentFragment.startTicketRefresh()
                 true
             }
@@ -178,40 +174,17 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
     }
 
     private fun updateTechInfo() {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        doAsync {
-            val prefix = if (prefs.getBoolean(AuthModel.PREF_USE_SSL, true)) "https://" else "http://"
-            val cookie = prefs.getString(AuthModel.PREF_COOKIE, "")
-            val tech = prefs.getString(AuthModel.PREF_TECH_ID, "")
-            val s = "/helpdesk/WebObjects/Helpdesk.woa/ra/Techs/" + tech + "?sessionKey=" +
-                    prefs.getString(AuthModel.PREF_SESSION_KEY, "")
-            FuelManager.instance.basePath = prefix + prefs.getString(AuthModel.PREF_SERVER, "")
-
-
-            val response = s.httpGet()
-                    .header("Cookie" to cookie)
-                    .responseString()
-            val result = response.third.component1()
-            result ?: return@doAsync
-
-            try {
-                val o = JSONObject(result)
-                val techName = o.getString("displayName")
-                runOnUiThread {
-                    try {
-                        if (tv_header_user != null) {
-                            tv_header_user.text = techName
-                            tv_header_user.visibility = View.VISIBLE
-                        }
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                }
-            } catch (e: JSONException) {
-                e.printStackTrace()
+        GlobalScope.launch(Dispatchers.Default) {
+            val techUserData = try {
+                userDataController.getUserData()
+            } catch (e: Throwable) {
+                return@launch
             }
 
+            withContext(Dispatchers.Main) {
+                drawerHeaderBinding.tvHeaderUser.text = techUserData.username
+                drawerHeaderBinding.tvHeaderUser.visibility = View.VISIBLE
+            }
         }
     }
-
 }
