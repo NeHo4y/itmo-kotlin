@@ -11,9 +11,6 @@ version = "1.0-SNAPSHOT"
 android {
     compileSdkVersion(28)
     buildToolsVersion = "30.0.3"
-    buildFeatures {
-        viewBinding = true
-    }
     defaultConfig {
         applicationId = "com.github.neho4u"
         minSdkVersion(24)
@@ -26,9 +23,6 @@ android {
         getByName("release") {
             isMinifyEnabled = false
         }
-    }
-    lintOptions {
-        isAbortOnError = false
     }
     buildFeatures {
         dataBinding = true
