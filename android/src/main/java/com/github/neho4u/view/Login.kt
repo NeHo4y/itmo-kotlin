@@ -19,7 +19,6 @@ class Login : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.a_login)
         binding.loginToolbar.title = getString(R.string.login)
 
-
         // initialize method variables
         auth = AuthController(
             applicationContext,

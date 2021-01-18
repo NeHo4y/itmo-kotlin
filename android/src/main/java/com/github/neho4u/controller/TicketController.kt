@@ -51,9 +51,10 @@ class TicketController(
                     id = it.id,
                     type = it.messageType,
                     mobileNoteText = it.messageText,
-                    prettyUpdatedString = "${it.creationDate.toString()} by ${it.authorData.username}"
+                    prettyUpdatedString = "${it.creationDate} by ${it.authorData.username}"
                 )
-            })
+            }
+        )
     }
 
     suspend fun sendComment(commentDto: CommentCreationDto) {

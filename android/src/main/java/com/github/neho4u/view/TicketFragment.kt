@@ -92,9 +92,7 @@ class TicketFragment : Fragment(), TicketInterface {
         inner_binding.list.adapter = MyTicketRecyclerViewAdapter(ticketArray, listener)
         inner_binding.list.layoutManager = LinearLayoutManager(inner_binding.list.context)
         return inner_binding.root
-
     }
-
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

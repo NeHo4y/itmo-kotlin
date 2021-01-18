@@ -26,7 +26,6 @@ import com.github.neho4u.shared.model.comment.CommentCreationDto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 
 class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
 
@@ -58,8 +57,6 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
         }
         GlobalScope.launch(Dispatchers.Default) {
             ticketLoadResult(ticketController.loadFullTicket(ticketId))
-
-
         }
     }
 
