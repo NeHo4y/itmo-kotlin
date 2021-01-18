@@ -5,20 +5,17 @@ import com.github.neho4u.shared.model.follower.FollowerFilterDto
 import com.github.neho4u.shared.model.user.UserRole
 import com.github.neho4y.common.exception.NotAllowedException
 import com.github.neho4y.common.exception.NotFoundException
-import com.github.neho4y.feedback.domain.repository.FeedbackRepository
 import com.github.neho4y.follower.domain.FeedbackFollower
 import com.github.neho4y.follower.domain.repository.FeedbackFollowerSpecificationRepository
 import com.github.neho4y.follower.domain.repository.FollowerSearchSpecification
 import com.github.neho4y.follower.model.FollowerDto
 import com.github.neho4y.follower.service.FeedbackFollowerService
-import com.github.neho4y.user.domain.User
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
 class FeedbackFollowerServiceImpl(
     private val followerRepository: FeedbackFollowerSpecificationRepository,
-    private val feedbackRepository: FeedbackRepository
 ) : FeedbackFollowerService {
 
     companion object {
@@ -44,28 +41,18 @@ class FeedbackFollowerServiceImpl(
         return follower
     }
 
-    override suspend fun removeFollowerFromFeedback(user: User, followId: Long) {
-        val existed = followerRepository.findById(followId)
-            .orElseThrow { NotFoundException("User is not a follower") }
-        if (existed.userId != user.id) {
-            throw NotAllowedException("User ${user.id} cannot remove follow of ${existed.userId}")
-        }
-        followerRepository.deleteById(followId)
+    override suspend fun removeFollowerFromFeedback(follow: FollowerDto) {
+        val existed = findFollowsByFilter(FollowerFilterDto(follow.feedbackId, follow.user.id, follow.followerType))
+            .firstOrNull() ?: throw NotFoundException("User is not a follower")
+        followerRepository.deleteById(existed.id)
         log.info("Feedback follower deleted: $existed")
     }
 
     private suspend fun checkFollowerConstraints(creationDto: FollowerDto) {
         val user = creationDto.user
-        val feedback = feedbackRepository.findById(creationDto.feedbackId)
-            .orElseThrow { NotFoundException("Feedback ${creationDto.feedbackId} does not exist") }
         val type = creationDto.followerType
-        if (user.role == UserRole.USER) {
-            if (feedback.authorId != user.id) {
-                throw NotAllowedException("User ${user.id} can only follow it's feedbacks")
-            }
-            if (type == FeedbackFollowerType.ASSIGNEE) {
-                throw NotAllowedException("User ${user.id} cannot be an assignee")
-            }
+        if (user.role == UserRole.USER && type == FeedbackFollowerType.ASSIGNEE) {
+            throw NotAllowedException("User ${user.id} cannot be an assignee")
         }
     }
 }

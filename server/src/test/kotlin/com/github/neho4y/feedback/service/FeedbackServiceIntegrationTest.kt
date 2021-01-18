@@ -22,6 +22,7 @@ import com.github.neho4y.user.service.UserService
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.stub
 import kotlinx.coroutines.runBlocking
+import kotlinx.datetime.toKotlinLocalDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -29,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.annotation.DirtiesContext
+import java.time.LocalDateTime
 import java.util.*
 
 private const val USER_ID = 1L
@@ -116,7 +118,8 @@ internal class FeedbackServiceIntegrationTest {
             null,
             FeedbackStatus.OPEN,
             FeedbackPriority.GODLIKE,
-            userData
+            LocalDateTime.now().toKotlinLocalDateTime(),
+            userData,
         )
 
         val updatedFeedback = feedbackService.updateFeedback(feedbackDto, savedFeedback.id)

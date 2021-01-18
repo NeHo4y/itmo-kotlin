@@ -1,46 +1,38 @@
 import components.app
+import connected.react.router.connectedRouter
 import kotlinx.browser.document
-import middlewares.localStorageMiddleware
 import middlewares.loggerMiddleware
-import react.dom.div
 import react.dom.render
 import react.redux.provider
-import react.router.dom.browserRouter
-import react.router.dom.route
-import react.router.dom.switch
+import react.router.connected.routerMiddleware
+import reducers.CustomLocationState
 import reducers.State
 import reducers.combinedReducers
-import redux.RAction
-import redux.compose
-import redux.createStore
-import redux.rEnhancer
+import redux.*
+import utils.composeWithDevTools
+import utils.customEnhancer
+import wrappers.history.createBrowserHistory
+
+val browserHistory = createBrowserHistory<CustomLocationState>()
 
 @Suppress("UnsafeCastFromDynamic")
-val store = createStore<State, RAction, dynamic>(
-    combinedReducers(), State(),
-    compose(
-        rEnhancer(),
-        loggerMiddleware(),
-        localStorageMiddleware(),
-        js(
-            """if(window.__REDUX_DEVTOOLS_EXTENSION__ )
-                window.__REDUX_DEVTOOLS_EXTENSION__ ();
-                else(function(f){return f;});"""
-        )
+val store = createStore(
+    combinedReducers(browserHistory),
+    State(),
+    composeWithDevTools(
+        applyMiddleware(
+            routerMiddleware(browserHistory),
+            loggerMiddleware(),
+        ),
+        customEnhancer(),
     )
 )
 
 fun main() {
     render(document.getElementById("root")) {
         provider(store) {
-            browserRouter {
-                switch {
-                    route("/") {
-                        div {
-                            app {}
-                        }
-                    }
-                }
+            connectedRouter(browserHistory) {
+                app {}
             }
         }
     }

@@ -12,6 +12,7 @@ repositories {
     google()
     mavenCentral()
     jcenter()
+    maven("https://kotlin.bintray.com/kotlinx/")
 }
 
 dependencies {
@@ -22,8 +23,8 @@ dependencies {
     implementation("com.google.android.material:material:1.2.1")
     implementation("androidx.appcompat:appcompat:1.2.0")
     implementation("androidx.constraintlayout:constraintlayout:2.0.4")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2-native-mt")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2-native-mt")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2")
 
     implementation(ktorClient("core-jvm"))
     implementation(ktorClient("json-jvm"))

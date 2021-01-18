@@ -15,6 +15,7 @@ import com.github.neho4y.feedback.service.FeedbackService
 import com.github.neho4y.follower.service.FeedbackFollowerService
 import com.github.neho4y.user.controller.toUserData
 import com.github.neho4y.user.service.UserService
+import kotlinx.datetime.toKotlinLocalDateTime
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
@@ -42,11 +43,13 @@ class FeedbackServiceImpl(
     override suspend fun getFeedbacksByFollower(userId: Long): List<FeedbackDto> {
         val followerFilter = FollowerFilterDto(null, userId, null)
         val followers = followerService.findFollowsByFilter(followerFilter)
-        return followers.map {
-            val feedback = feedbackRepository.findById(it.feedbackId)
+        val myFeedbacksFilter = FeedbackFilter(authorId = userId)
+        val myFeedbacks = feedbackSpecificationRepository.findAll(FeedbackSearchSpecification(myFeedbacksFilter))
+        val followed = followers.map {
+            feedbackRepository.findById(it.feedbackId)
                 .orElseThrow { NotFoundException("Unable to find feedback") }
-            convertToDto(feedback)
         }
+        return myFeedbacks.union(followed).map { convertToDto(it) }
     }
 
     override suspend fun createFeedback(userId: Long, feedbackCreationDto: FeedbackCreationDto): FeedbackDto {
@@ -119,7 +122,8 @@ class FeedbackServiceImpl(
             subtopic = IdName(subtopicDto.id, subtopicDto.description),
             status = feedback.status,
             priority = feedback.priority,
-            authorData = userData
+            authorData = userData,
+            creationDate = feedback.creationDate.toKotlinLocalDateTime()
         )
     }
 }

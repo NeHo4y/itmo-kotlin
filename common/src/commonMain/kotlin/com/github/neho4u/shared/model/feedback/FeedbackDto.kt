@@ -1,7 +1,9 @@
 package com.github.neho4u.shared.model.feedback
 
+import com.github.neho4u.shared.model.LocalDateTimeSerializer
 import com.github.neho4u.shared.model.common.IdName
 import com.github.neho4u.shared.model.user.UserData
+import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -22,5 +24,7 @@ data class FeedbackDto(
     val subtopic: IdName?,
     val status: FeedbackStatus?,
     val priority: FeedbackPriority?,
+    @Serializable(with = LocalDateTimeSerializer::class)
+    val creationDate: LocalDateTime?,
     val authorData: UserData
 )

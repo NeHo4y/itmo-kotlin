@@ -9,6 +9,7 @@ import com.github.neho4y.common.exception.NotFoundException
 import com.github.neho4y.feedback.domain.repository.FeedbackRepository
 import com.github.neho4y.user.controller.toUserData
 import com.github.neho4y.user.service.UserService
+import kotlinx.datetime.toKotlinLocalDateTime
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
@@ -61,7 +62,8 @@ class CommentServiceImpl(
             feedbackId = comment.feedbackId.id,
             messageType = comment.messageType,
             messageText = comment.messageText,
-            authorData = userData
+            authorData = userData,
+            creationDate = comment.messageDate.toKotlinLocalDateTime()
         )
     }
 }

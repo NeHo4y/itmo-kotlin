@@ -1,36 +1,15 @@
 package middlewares
 
-import actions.Login
-import actions.Logout
-import kotlinx.browser.window
 import reducers.State
-import redux.Enhancer
-import redux.WrapperAction
-import redux.applyMiddleware
+import redux.Middleware
 
 @Suppress("UnsafeCastFromDynamic")
-fun loggerMiddleware(): Enhancer<State, WrapperAction, State, dynamic, dynamic> = applyMiddleware(
-    {
-        { actionFun ->
+fun <A1, R1> loggerMiddleware(): Middleware<State, A1, R1, A1, R1> =
+    { _ ->
+        { next ->
             { action ->
                 console.log(action)
-                actionFun(action)
+                next(action)
             }
         }
     }
-)
-
-fun localStorageMiddleware(): Enhancer<State, WrapperAction, State, dynamic, dynamic> = applyMiddleware(
-    {
-        { actionFun ->
-            { action ->
-                when (val rAction = action.action) {
-                    is Login -> window.localStorage.setItem("jwt", rAction.payload.token)
-                    is Logout -> window.localStorage.removeItem("jwt")
-                }
-                @Suppress("UnsafeCastFromDynamic")
-                actionFun(action)
-            }
-        }
-    }
-)

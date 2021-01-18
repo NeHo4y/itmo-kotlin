@@ -4,6 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class FeedbackFilter(
-    val number: String,
-    val header: String
+    val number: String? = null,
+    val header: String? = null,
+    val authorId: Long? = null
 )

@@ -16,8 +16,9 @@ class FeedbackSearchSpecification(private val feedbackFilter: FeedbackFilter) : 
         criteriaBuilder: CriteriaBuilder
     ): Predicate {
         val predicates = mutableListOf<Predicate>()
-        feedbackFilter.number.addOptionalFilter(root.get("id"), predicates, criteriaBuilder)
-        feedbackFilter.header.addOptionalFilter(root.get("header"), predicates, criteriaBuilder)
+        feedbackFilter.number?.addOptionalFilter(root.get("id"), predicates, criteriaBuilder)
+        feedbackFilter.header?.addOptionalFilter(root.get("header"), predicates, criteriaBuilder)
+        feedbackFilter.authorId?.addOptionalFilter(root.get("authorId"), predicates, criteriaBuilder)
         return criteriaBuilder.and(*predicates.toTypedArray())
     }
 }

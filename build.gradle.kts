@@ -34,5 +34,9 @@ subprojects {
         enableExperimentalRules.set(true)
         verbose.set(true)
         outputToConsole.set(true)
+
+        filter {
+            exclude("**/wrappers/**")
+        }
     }
 }

@@ -9,5 +9,5 @@ interface SubtopicService {
     suspend fun getSubtopic(id: Long): SubtopicDto
     suspend fun updateSubtopic(subtopicDto: SubtopicDto)
     suspend fun deleteSubtopic(id: Long): SubtopicDto
-    suspend fun getSubtopicByTopicId(categoryId: Long): List<SubtopicDto>
+    suspend fun getSubtopicByTopicId(topicId: Long): List<SubtopicDto>
 }

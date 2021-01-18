@@ -7,10 +7,8 @@ import com.github.neho4u.shared.model.user.UserToken
 import com.github.neho4y.security.JwtService
 import com.github.neho4y.user.domain.User
 import com.github.neho4y.user.service.UserService
-import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.server.ResponseStatusException
 
 @RestController
 @RequestMapping("/users")
@@ -33,7 +31,6 @@ class UserController(private val userService: UserService, private val jwtServic
 
     @GetMapping("/{id}")
     suspend fun userData(@PathVariable id: Long): UserData {
-        return userService.findById(id)?.toUserData()
-            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "User $id is not found")
+        return userService.findById(id).toUserData()
     }
 }

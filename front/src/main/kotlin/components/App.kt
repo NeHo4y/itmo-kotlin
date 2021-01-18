@@ -2,43 +2,36 @@ package components
 
 import Client
 import actions.AppLoad
-import actions.Login
-import actions.Logout
-import com.github.neho4u.shared.model.user.LoginParams
 import com.github.neho4u.shared.model.user.UserData
-import com.github.neho4u.shared.model.user.UserToken
+import components.feedback.FeedbackViewRouterProps
+import components.feedback.feedbackView
+import components.home.home
 import io.ktor.utils.io.core.*
 import kotlinx.browser.window
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import kotlinx.html.js.onClickFunction
 import react.*
-import react.dom.button
-import react.dom.div
-import react.dom.h1
 import react.redux.rConnect
+import react.router.dom.route
+import react.router.dom.switch
 import reducers.State
 import redux.RAction
 import redux.WrapperAction
 
 interface AppProps : RProps {
     var appName: String
-    var onClickLogin: (userToken: UserToken) -> Unit
-    var onClickLogout: () -> Unit
     var onLoad: (currentUser: UserData?, token: String?) -> Unit
-    var jwt: String?
     var currentUser: UserData?
+    var appLoaded: Boolean
 }
 
 private interface AppStateProps : RProps {
     var appName: String
-    var jwt: String?
     var currentUser: UserData?
+    var appLoaded: Boolean
 }
 
 private interface AppDispatchProps : RProps {
-    var onClickLogin: (userToken: UserToken) -> Unit
-    var onClickLogout: () -> Unit
     var onLoad: (currentUser: UserData?, token: String?) -> Unit
 }
 
@@ -49,45 +42,33 @@ class App(props: AppProps) : RComponent<AppProps, RState>(props) {
             this@App.props.onLoad(null, null)
         } else {
             MainScope().launch {
-                this@App.props.onLoad(Client().use { it.user().getMe() }, token)
+                try {
+                    this@App.props.onLoad(Client().use { it.user().getMe() }, token)
+                } catch (e: Exception) {
+                    window.localStorage.removeItem("jwt")
+                    this@App.props.onLoad(null, null)
+                }
             }
         }
-    }
-
-    private fun doOnClickLogin() {
-        MainScope().launch {
-            Client().use { client ->
-                val token = client.user().login(LoginParams("user", "123"))
-                window.localStorage.setItem("jwt", token.token)
-                this@App.props.onClickLogin(token)
-                this@App.props.onLoad(client.user().getMe(), token.token)
-            }
-        }
-    }
-
-    private fun doOnClickLogout() {
-        this.props.onClickLogout()
     }
 
     override fun RBuilder.render() {
-        h1 {
-            +props.appName
+        child(Header::class) {
+            attrs.appName = props.appName
+            attrs.currentUser = props.currentUser
         }
-        div {
-            +(props.jwt ?: "No jwt!")
-        }
-        div {
-            +(props.currentUser?.toString() ?: "No user loaded")
-        }
-        button {
-            attrs.onClickFunction = {
-                if (props.jwt == null) {
-                    doOnClickLogin()
-                } else {
-                    doOnClickLogout()
+        if (props.appLoaded) {
+            switch {
+                route("/", exact = true) { home {} }
+                route<FeedbackViewRouterProps>("/feedback/:id") { props ->
+                    feedbackView {
+                        attrs.id = props.match.params.id
+                    }
                 }
+                route("/editor") { editorView {} }
+                route("/login") { login {} }
+                route("/register") { register {} }
             }
-            +(if (props.jwt == null) "Login" else "Logout")
         }
     }
 }
@@ -96,12 +77,10 @@ val app: RClass<RProps> =
     rConnect<State, RAction, WrapperAction, RProps, AppStateProps, AppDispatchProps, AppProps>(
         { state, _ ->
             appName = state.common.appName
-            jwt = state.auth.jwt
             currentUser = state.auth.currentUser
+            appLoaded = state.common.appLoaded
         },
         { dispatch, _ ->
-            onClickLogin = { userToken -> dispatch(Login(userToken)) }
-            onClickLogout = { dispatch(Logout()) }
             onLoad = { currentUser, token ->
                 dispatch(AppLoad(currentUser, token))
             }

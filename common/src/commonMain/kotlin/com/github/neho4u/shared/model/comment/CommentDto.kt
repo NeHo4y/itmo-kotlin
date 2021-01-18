@@ -1,7 +1,9 @@
 // ktlint-disable filename
 package com.github.neho4u.shared.model.comment
 
+import com.github.neho4u.shared.model.LocalDateTimeSerializer
 import com.github.neho4u.shared.model.user.UserData
+import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -18,5 +20,7 @@ data class CommentDto(
     val feedbackId: Long,
     val authorData: UserData,
     val messageType: String,
-    val messageText: String
+    val messageText: String,
+    @Serializable(with = LocalDateTimeSerializer::class)
+    val creationDate: LocalDateTime
 )

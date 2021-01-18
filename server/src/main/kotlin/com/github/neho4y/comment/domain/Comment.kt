@@ -25,6 +25,7 @@ data class Comment(
     @Column(name = "message_date")
     var messageDate: LocalDateTime,
 
+    @Lob
     @Column(name = "message_text")
     var messageText: String,
 

@@ -16,9 +16,6 @@ class AndroidHttpClientProvider : HttpClientProvider {
             port = 8000
             contentType(ContentType.Application.Json)
         }
-        install(JsonFeature) {
-            serializer = KotlinxSerializer()
-        }
         tokenAuth {
             tokenProvider = AndroidTokenProvider
         }

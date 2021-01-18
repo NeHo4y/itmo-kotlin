@@ -9,7 +9,8 @@ internal fun User.toUserData() = UserData(
     username = username,
     email = email,
     phone = phone,
-    role = role
+    role = role,
+    id = id
 )
 
 internal fun RegisterParams.toCreationDto() = UserCreationDto(

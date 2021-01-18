@@ -33,12 +33,17 @@ class FollowerController(private val followerService: FeedbackFollowerService) {
         return followerService.addFollowerToFeedback(dto).toDto()
     }
 
-    @PutMapping("/{followId}/remove")
+    @PostMapping("/remove")
     suspend fun removeFollowerFromFeedback(
-        @PathVariable followId: Long,
+        @RequestBody follow: FollowerCreateDto,
         @AuthenticationPrincipal user: User
     ) {
-        followerService.removeFollowerFromFeedback(user, followId)
+        val dto = FollowerDto(
+            user = user,
+            followerType = follow.followerType,
+            feedbackId = follow.feedbackId
+        )
+        followerService.removeFollowerFromFeedback(dto)
     }
 }
 

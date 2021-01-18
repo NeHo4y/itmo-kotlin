@@ -81,7 +81,7 @@ internal class FeedbackFollowerServiceTest {
         val follow = service.addFollowerToFeedback(dto)
 
         // when
-        service.removeFollowerFromFeedback(defaultUser, follow.id)
+        service.removeFollowerFromFeedback(FollowerDto(follow.feedbackId, defaultUser, follow.followerType))
         val foundForFeedback = service.findFollowsByFilter(FollowerFilterDto(feedbackId = FEEDBACK_ID))
         val foundForUser = service.findFollowsByFilter(FollowerFilterDto(userId = USER_ID))
 

@@ -1,6 +1,7 @@
 package com.github.neho4y.security
 
 import com.github.neho4y.security.impl.JwtTokenFilter
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -17,8 +18,17 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfig(private val jwtTokenFilter: JwtTokenFilter) : WebSecurityConfigurerAdapter() {
+class SecurityConfig(
+    private val jwtTokenFilter: JwtTokenFilter,
+    @Value("\${spring.h2.console.enabled:false}") private val h2ConsoleEnabled: Boolean
+) : WebSecurityConfigurerAdapter() {
+
     override fun configure(http: HttpSecurity) {
+        if (h2ConsoleEnabled) http.authorizeRequests()
+            .antMatchers("/h2-console", "/h2-console/**").permitAll()
+            .and()
+            .headers().frameOptions().sameOrigin()
+
         http.csrf().disable()
             .cors()
         http.httpBasic()

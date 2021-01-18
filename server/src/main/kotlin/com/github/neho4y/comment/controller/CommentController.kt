@@ -23,12 +23,12 @@ class CommentController(private val commentService: CommentService) {
         return commentService.addComment(user.id, commentCreationDto)
     }
 
-    @GetMapping("/delete/{commentId}")
+    @PutMapping("/delete/{commentId}")
     suspend fun setCommentToDeleted(@PathVariable commentId: Long) {
         commentService.markDeleted(commentId)
     }
 
-    @GetMapping("/read/{commentId}")
+    @PutMapping("/read/{commentId}")
     suspend fun setCommentToRead(@PathVariable commentId: Long) {
         commentService.markRead(commentId)
     }
