@@ -5,9 +5,10 @@ import com.github.neho4y.user.model.UserCreationDto
 import com.github.neho4y.user.model.UserUpdateDto
 
 interface UserService {
-    fun createUser(userCreationDto: UserCreationDto): User
-    fun loginUser(username: String, password: String): User
-    fun findByUsername(username: String): User?
-    fun deleteUser(username: String)
-    fun updateUserInfo(user: User, userUpdateDto: UserUpdateDto): User
+    suspend fun createUser(userCreationDto: UserCreationDto): User
+    suspend fun loginUser(username: String, password: String): User
+    suspend fun findByUsername(username: String): User?
+    suspend fun findById(userId: Long): User
+    suspend fun deleteUser(username: String)
+    suspend fun updateUserInfo(user: User, userUpdateDto: UserUpdateDto): User
 }

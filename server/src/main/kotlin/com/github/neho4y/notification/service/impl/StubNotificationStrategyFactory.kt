@@ -15,7 +15,9 @@ class StubNotificationStrategyFactory : NotificationStrategyFactory {
 }
 
 class StubNotificationStrategy(private val message: String) : NotificationStrategy {
-    private val log = LoggerFactory.getLogger(StubNotificationStrategy::class.java)
+    companion object {
+        private val log = LoggerFactory.getLogger(this::class.java)
+    }
 
     override suspend fun notify(user: User) {
         log.info("Send \"$message\" to user ${user.username}")

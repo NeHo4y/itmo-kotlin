@@ -3,7 +3,7 @@ package com.github.neho4y.file.service
 import com.github.neho4y.file.createDefaultFile
 import com.github.neho4y.file.createDefaultFileCreationDto
 import com.github.neho4y.file.model.FileRetrieveDto
-import org.junit.jupiter.api.Assertions.assertDoesNotThrow
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -18,20 +18,17 @@ internal class FileServiceTest {
     private lateinit var fileService: FileService
 
     @Test
-    fun `When file is added then it can be retrieved`() {
+    fun `When file is added then it can be retrieved`() = runBlocking {
         val fileId = fileService.addFile(createDefaultFileCreationDto())
-
-        assertDoesNotThrow {
-            val file = fileService.getFileRepresentation(FileRetrieveDto(fileId))
-            val defaultFile = createDefaultFile(fileId)
-            assertTrue(file.file == defaultFile.file)
-            assertTrue(file.filename == defaultFile.filename)
-            assertTrue(fileId == defaultFile.uuid)
-        }
+        val file = fileService.getFileRepresentation(FileRetrieveDto(fileId))
+        val defaultFile = createDefaultFile(fileId)
+        assertTrue(file.file == defaultFile.file)
+        assertTrue(file.filename == defaultFile.filename)
+        assertTrue(fileId == defaultFile.id)
     }
 
     @Test
-    fun `When file is deleted then it can not be found`() {
+    fun `When file is deleted then it can not be found`(): Unit = runBlocking {
         val fileId = fileService.addFile(createDefaultFileCreationDto())
         fileService.deleteFile(FileRetrieveDto(fileId))
         assertThrows<Exception> {

@@ -2,10 +2,10 @@ package com.github.neho4y.file
 
 import com.github.neho4y.file.domain.FileEntity
 import com.github.neho4y.file.model.FileCreationDto
-import java.util.*
 
-internal fun createDefaultFile(uuid: UUID) = FileEntity(
-    uuid = uuid,
+internal fun createDefaultFile(id: Long) = FileEntity(
+
+    id = id,
     file = "teststring",
     filename = "filename test"
 )

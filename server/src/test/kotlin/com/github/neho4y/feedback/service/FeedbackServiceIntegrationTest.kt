@@ -1,21 +1,42 @@
 package com.github.neho4y.feedback.service
 
+import com.github.neho4u.shared.model.category.CategoryDto
+import com.github.neho4u.shared.model.category.SubtopicDto
+import com.github.neho4u.shared.model.category.TopicDto
+import com.github.neho4u.shared.model.feedback.FeedbackCreationDto
+import com.github.neho4u.shared.model.feedback.FeedbackDto
+import com.github.neho4u.shared.model.feedback.FeedbackPriority
+import com.github.neho4u.shared.model.feedback.FeedbackStatus
 import com.github.neho4y.category.domain.Category
 import com.github.neho4y.category.domain.Subtopic
 import com.github.neho4y.category.domain.Topic
 import com.github.neho4y.category.domain.repository.CategoryRepository
 import com.github.neho4y.category.domain.repository.SubtopicRepository
 import com.github.neho4y.category.domain.repository.TopicRepository
-import com.github.neho4y.feedback.domain.FeedbackPriority
-import com.github.neho4y.feedback.domain.FeedbackStatus
-import com.github.neho4y.feedback.model.FeedbackCreationDto
-import com.github.neho4y.feedback.model.FeedbackDto
+import com.github.neho4y.category.service.CategoryService
+import com.github.neho4y.category.service.SubtopicService
+import com.github.neho4y.category.service.TopicService
+import com.github.neho4y.user.controller.toUserData
+import com.github.neho4y.user.createDefaultUser
+import com.github.neho4y.user.service.UserService
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.stub
+import kotlinx.coroutines.runBlocking
+import kotlinx.datetime.toKotlinLocalDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.annotation.DirtiesContext
+import java.time.LocalDateTime
+import java.util.*
+
+private const val USER_ID = 1L
+private const val CATEGORY_ID = 3L
+private const val TOPIC_ID = 5L
+private const val SUBTOPIC_ID = 9L
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -23,6 +44,15 @@ internal class FeedbackServiceIntegrationTest {
 
     @Autowired
     private lateinit var feedbackService: FeedbackService
+
+    @MockBean
+    private lateinit var userService: UserService
+    @MockBean
+    private lateinit var categoryService: CategoryService
+    @MockBean
+    private lateinit var topicService: TopicService
+    @MockBean
+    private lateinit var subtopicService: SubtopicService
 
     @Autowired
     private lateinit var subtopicRepository: SubtopicRepository
@@ -38,6 +68,22 @@ internal class FeedbackServiceIntegrationTest {
 
     @BeforeEach
     fun generateTestData() {
+        userService.stub {
+            onBlocking { findById(USER_ID) }
+                .doReturn(createDefaultUser())
+        }
+        categoryService.stub {
+            onBlocking { getCategory(CATEGORY_ID) }
+                .doReturn(CategoryDto(CATEGORY_ID, "Test category"))
+        }
+        topicService.stub {
+            onBlocking { getTopic(TOPIC_ID) }
+                .doReturn(TopicDto(TOPIC_ID, "Test topic", CATEGORY_ID))
+        }
+        subtopicService.stub {
+            onBlocking { getSubtopic(SUBTOPIC_ID) }
+                .doReturn(SubtopicDto(SUBTOPIC_ID, "Test subtopic", TOPIC_ID))
+        }
         val category = Category("Test category")
         categoryRepository.save(category)
         categoryRepository.flush()
@@ -53,14 +99,16 @@ internal class FeedbackServiceIntegrationTest {
     }
 
     @Test
-    fun `positive update feedback test`() {
+    fun `positive update feedback test`(): Unit = runBlocking {
         // given
+        val user = createDefaultUser().copy(id = USER_ID)
+        val userData = user.toUserData()
 
         val feedbackCreationDto = FeedbackCreationDto(
             "Test feedback",
             categoryId, topicId, subtopicId, "test comment"
         )
-        val savedFeedback = feedbackService.createFeedback(feedbackCreationDto)
+        val savedFeedback = feedbackService.createFeedback(user.id, feedbackCreationDto)
 
         val feedbackDto = FeedbackDto(
             savedFeedback.id,
@@ -69,15 +117,14 @@ internal class FeedbackServiceIntegrationTest {
             null,
             null,
             FeedbackStatus.OPEN,
-            FeedbackPriority.GODLIKE
+            FeedbackPriority.GODLIKE,
+            LocalDateTime.now().toKotlinLocalDateTime(),
+            userData,
         )
 
-        val updatedFeedback = feedbackService.updateFeedback(feedbackDto)
+        val updatedFeedback = feedbackService.updateFeedback(feedbackDto, savedFeedback.id)
 
         assertThat(updatedFeedback.header).isEqualTo(feedbackDto.header)
-        assertThat(updatedFeedback.categoryId).isEqualTo(feedbackCreationDto.categoryId)
-        assertThat(updatedFeedback.topicId).isEqualTo(feedbackCreationDto.topicId)
-        assertThat(updatedFeedback.subtopicId).isEqualTo(feedbackCreationDto.subtopicId)
         assertThat(updatedFeedback.status).isEqualTo(feedbackDto.status)
         assertThat(updatedFeedback.priority).isEqualTo(feedbackDto.priority)
     }

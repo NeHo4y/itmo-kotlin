@@ -5,10 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository
 import java.util.*
 
 interface TopicRepository : JpaRepository<Topic, Long> {
-
     fun existsByDescriptionAndIsDeletedFalseAndCategoryId(description: String, categoryId: Long): Boolean
 
     fun findAllByIsDeletedFalse(): List<Topic>
 
     fun findByIdAndIsDeletedFalse(id: Long): Optional<Topic>
+
+    fun findAllByCategoryIdAndIsDeletedFalse(categoryId: Long): List<Topic>
 }

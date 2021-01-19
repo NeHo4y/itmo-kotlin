@@ -1,11 +1,16 @@
 buildscript {
     repositories {
         gradlePluginPortal()
+        google()
         mavenCentral()
         jcenter()
     }
     dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.10")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.21")
+        classpath("org.jetbrains.kotlin:kotlin-android-extensions:1.3.21")
+        classpath("com.android.tools.build:gradle:4.0.1")
+        classpath("com.google.gms:google-services:4.2.0")
+        classpath(kotlin("serialization", version = "1.4.21"))
     }
 }
 
@@ -30,5 +35,10 @@ subprojects {
         version.set("0.39.0")
         enableExperimentalRules.set(true)
         verbose.set(true)
+        outputToConsole.set(true)
+
+        filter {
+            exclude("**/wrappers/**")
+        }
     }
 }

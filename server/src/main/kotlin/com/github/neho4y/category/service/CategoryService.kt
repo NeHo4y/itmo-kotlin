@@ -1,13 +1,12 @@
 package com.github.neho4y.category.service
 
-import com.github.neho4y.category.domain.Category
-import com.github.neho4y.category.model.CategoryCreationDto
-import com.github.neho4y.category.model.CategoryDto
+import com.github.neho4u.shared.model.category.CategoryCreationDto
+import com.github.neho4u.shared.model.category.CategoryDto
 
 interface CategoryService {
-    fun getAllCategories(): List<Category>
-    fun createCategory(categoryCreationDto: CategoryCreationDto): Category
-    fun getCategory(id: Long): Category?
-    fun updateCategory(categoryDto: CategoryDto): Category
-    fun deleteCategory(id: Long): Category
+    suspend fun getAllCategories(): List<CategoryDto>
+    suspend fun createCategory(categoryCreationDto: CategoryCreationDto): CategoryDto
+    suspend fun getCategory(id: Long): CategoryDto
+    suspend fun updateCategory(categoryDto: CategoryDto): CategoryDto
+    suspend fun deleteCategory(id: Long): CategoryDto
 }

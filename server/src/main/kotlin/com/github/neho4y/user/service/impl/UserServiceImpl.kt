@@ -1,9 +1,10 @@
 package com.github.neho4y.user.service.impl
 
+import com.github.neho4y.common.exception.AlreadyExistsException
 import com.github.neho4y.common.exception.BasicException
 import com.github.neho4y.common.exception.NotFoundException
 import com.github.neho4y.common.orNull
-import com.github.neho4y.common.sha256
+import com.github.neho4y.security.AuthenticationService
 import com.github.neho4y.user.domain.User
 import com.github.neho4y.user.domain.repository.UserRepository
 import com.github.neho4y.user.model.UserCreationDto
@@ -14,20 +15,29 @@ import org.springframework.stereotype.Service
 
 @Service
 class UserServiceImpl(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val authenticationService: AuthenticationService
 ) : UserService {
-    private val log = LoggerFactory.getLogger(this::class.java)
 
-    override fun findByUsername(username: String) = userRepository.findByUsernameAndIsDeletedFalse(username).orNull()
+    companion object {
+        private val log = LoggerFactory.getLogger(this::class.java)
+    }
 
-    override fun createUser(userCreationDto: UserCreationDto): User {
+    override suspend fun findByUsername(username: String) = userRepository
+        .findByUsernameAndIsDeletedFalse(username)
+        .orNull()
+
+    override suspend fun findById(userId: Long): User = userRepository.findById(userId)
+        .orElseThrow { NotFoundException("User $userId is not found") }
+
+    override suspend fun createUser(userCreationDto: UserCreationDto): User {
         if (userRepository.existsByEmailOrUsername(userCreationDto.email, userCreationDto.username)) {
-            throw UserCreationException(userCreationDto.username)
+            throw AlreadyExistsException("User ${userCreationDto.username} already exists and cannot be created")
         }
         val newUser = User(
-            userCreationDto.email,
-            userCreationDto.password.sha256(),
-            userCreationDto.username,
+            email = userCreationDto.email,
+            password = authenticationService.encodePassword(userCreationDto.password),
+            username = userCreationDto.username,
             phone = userCreationDto.phone
         )
         val savedUser = userRepository.save(newUser)
@@ -35,7 +45,7 @@ class UserServiceImpl(
         return savedUser
     }
 
-    override fun loginUser(username: String, password: String): User {
+    override suspend fun loginUser(username: String, password: String): User {
         val foundUser = userRepository.findByUsernameAndIsDeletedFalse(username)
             .orElseThrow { UserLoginException(username) }
         if (!validatePassword(password, foundUser) || foundUser.isDeleted) {
@@ -45,18 +55,19 @@ class UserServiceImpl(
         return foundUser
     }
 
-    override fun deleteUser(username: String) {
+    override suspend fun deleteUser(username: String) {
         val user = userRepository.findByUsernameAndIsDeletedFalse(username)
             .orElseThrow { NotFoundException("User $username is not found") }
         userRepository.save(user.copy(isDeleted = true))
     }
 
-    override fun updateUserInfo(user: User, userUpdateDto: UserUpdateDto): User {
+    override suspend fun updateUserInfo(user: User, userUpdateDto: UserUpdateDto): User {
         return userRepository.save(user.copy(phone = userUpdateDto.phone ?: user.phone))
     }
 
-    private fun validatePassword(password: String, user: User) = password.sha256() == user.password
+    private fun validatePassword(password: String, user: User): Boolean {
+        return authenticationService.checkPassword(password, user.password)
+    }
 }
 
 internal class UserLoginException(username: String) : BasicException("User $username cannot be logged in")
-internal class UserCreationException(username: String) : BasicException("User $username cannot be created")

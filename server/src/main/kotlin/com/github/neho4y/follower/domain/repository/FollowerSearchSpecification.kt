@@ -1,8 +1,8 @@
 package com.github.neho4y.follower.domain.repository
 
+import com.github.neho4u.shared.model.follower.FollowerFilterDto
 import com.github.neho4y.common.addOptionalFilter
 import com.github.neho4y.follower.domain.FeedbackFollower
-import com.github.neho4y.follower.model.FollowerFilterDto
 import org.springframework.data.jpa.domain.Specification
 import javax.persistence.criteria.CriteriaBuilder
 import javax.persistence.criteria.CriteriaQuery

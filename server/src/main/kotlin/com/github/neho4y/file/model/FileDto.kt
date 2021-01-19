@@ -1,17 +1,21 @@
 package com.github.neho4y.file.model
 
+import kotlinx.serialization.Serializable
 import java.util.*
 
-class FileCreationDto(
+@Serializable
+data class FileCreationDto(
     val file: String,
     val filename: String
 )
 
-class FileRetrieveDto(
-    val uuid: UUID
+@Serializable
+data class FileRetrieveDto(
+    val id: Long
 )
 
-class FileSendDto(
+@Serializable
+data class FileSendDto(
     val file: String,
     val filename: String
 )

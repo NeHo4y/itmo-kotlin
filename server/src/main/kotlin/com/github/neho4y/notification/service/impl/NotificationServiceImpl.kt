@@ -18,7 +18,7 @@ class NotificationServiceImpl(
     private val notificationDispatcher = taskExecutor.asCoroutineDispatcher()
     private val coroutineScope = CoroutineScope(SupervisorJob())
 
-    override fun notify(notification: Notification, user: User): List<Job> {
+    override suspend fun notify(notification: Notification, user: User): List<Job> {
         return strategyFactories.map {
             coroutineScope.launch(notificationDispatcher) {
                 it.createIfCanSendNotification(notification, user)?.notify(user)

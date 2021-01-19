@@ -1,5 +1,6 @@
 package com.github.neho4y.user.domain
 
+import com.github.neho4u.shared.model.user.UserRole
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.time.LocalDateTime
@@ -23,7 +24,8 @@ data class User(
     val role: UserRole = UserRole.USER,
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence")
+    @SequenceGenerator(name = "sequence", allocationSize = 1, sequenceName = "user_seq")
     val id: Long = 0,
 
     @Column(name = "is_deleted")
@@ -39,8 +41,3 @@ data class User(
     @CreatedDate
     var createdDate: LocalDateTime? = null
 )
-
-enum class UserRole {
-    USER,
-    ADMIN
-}
