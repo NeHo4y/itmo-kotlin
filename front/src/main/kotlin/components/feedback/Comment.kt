@@ -28,7 +28,7 @@ val Comment = functionalComponent<CommentProps> { props ->
                 img("comment-author-img") {
                     attrs {
                         src = "https://cdn4.iconfinder.com/data/icons/small-n-flat/24/user-alt-512.png"
-                        alt = props.currentUser.username
+                        alt = comment.authorData.username
                         width = "128"
                         height = "128"
                         classes = setOf("comment-author-img")
@@ -36,7 +36,7 @@ val Comment = functionalComponent<CommentProps> { props ->
                 }
             }
             +" "
-            div("comment-author") { +props.currentUser.username }
+            div("comment-author") { +comment.authorData.username }
             span("date-posted") {
                 +(comment.creationDate.toString())
             }

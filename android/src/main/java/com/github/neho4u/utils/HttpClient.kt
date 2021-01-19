@@ -1,13 +1,15 @@
-package com.github.neho4u
+package com.github.neho4u.utils
 
-import com.github.neho4u.shared.client.*
+import com.github.neho4u.shared.client.Client
+import com.github.neho4u.shared.client.HttpClientProvider
+import com.github.neho4u.shared.client.TokenProvider
+import com.github.neho4u.shared.client.tokenAuth
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.features.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import java.util.concurrent.atomic.AtomicReference
 
 class AndroidHttpClientProvider : HttpClientProvider {
     override fun getHttpClient() = HttpClient(OkHttp) {
@@ -19,20 +21,21 @@ class AndroidHttpClientProvider : HttpClientProvider {
         tokenAuth {
             tokenProvider = AndroidTokenProvider
         }
+        install(HttpTimeout) {
+            // timeout config
+            requestTimeoutMillis = 5000
+        }
     }
 }
 
 object AndroidTokenProvider : TokenProvider {
-    @Volatile
-    private var tokenPrivate: String? = null
+    private val tokenPrivate: AtomicReference<String?> = AtomicReference(null)
 
-    @Synchronized
     fun setToken(token: String?) {
-        tokenPrivate = token
+        tokenPrivate.set(token)
     }
 
-    @Synchronized
-    override fun provideToken() = tokenPrivate
+    override fun provideToken() = tokenPrivate.get()
 }
 
 fun Client() = Client(AndroidHttpClientProvider())
