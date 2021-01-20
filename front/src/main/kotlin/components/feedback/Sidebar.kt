@@ -51,6 +51,15 @@ val Sidebar = functionalComponent<SidebarProps> { props ->
         li {
             attrs["style"] = verticalListStyle
             div("pull-xs-right") {
+                child(AssignButton) {
+                    attrs.feedback = feedback
+                    attrs.currentUser = currentUser
+                }
+            }
+        }
+        li {
+            attrs["style"] = verticalListStyle
+            div("pull-xs-right") {
                 child(FollowButton) {
                     attrs.feedback = feedback
                     attrs.currentUser = currentUser
