@@ -38,7 +38,7 @@ val FollowButton = functionalComponent<FollowButtonProps> { props ->
                     )
                     val follows = client.follower().getFilter(filter)
                     setNumberOfFollows(follows.count())
-                    setFollowed(follows.any { it.userId == props.currentUser.id })
+                    setFollowed(follows.any { it.user.id == props.currentUser.id })
                 }
             } catch (e: Exception) {
                 console.error(e.message)

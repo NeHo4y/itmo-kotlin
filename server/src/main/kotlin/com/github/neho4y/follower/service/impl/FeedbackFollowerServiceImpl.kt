@@ -1,7 +1,9 @@
 package com.github.neho4y.follower.service.impl
 
 import com.github.neho4u.shared.model.follower.FeedbackFollowerType
+import com.github.neho4u.shared.model.follower.FollowerData
 import com.github.neho4u.shared.model.follower.FollowerFilterDto
+import com.github.neho4u.shared.model.user.UserData
 import com.github.neho4u.shared.model.user.UserRole
 import com.github.neho4y.common.exception.NotAllowedException
 import com.github.neho4y.common.exception.NotFoundException
@@ -10,35 +12,39 @@ import com.github.neho4y.follower.domain.repository.FeedbackFollowerSpecificatio
 import com.github.neho4y.follower.domain.repository.FollowerSearchSpecification
 import com.github.neho4y.follower.model.FollowerDto
 import com.github.neho4y.follower.service.FeedbackFollowerService
+import com.github.neho4y.user.model.toUserData
+import com.github.neho4y.user.service.UserService
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
 class FeedbackFollowerServiceImpl(
     private val followerRepository: FeedbackFollowerSpecificationRepository,
+    private val userService: UserService
 ) : FeedbackFollowerService {
 
     companion object {
         private val log = LoggerFactory.getLogger(this::class.java)
     }
 
-    override suspend fun findFollowsByFilter(filter: FollowerFilterDto): List<FeedbackFollower> {
+    override suspend fun findFollowsByFilter(filter: FollowerFilterDto): List<FollowerData> {
         return followerRepository.findAll(FollowerSearchSpecification(filter))
+            .mapNotNull { f -> f.toDto() }
     }
 
-    override suspend fun addFollowerToFeedback(creationDto: FollowerDto): FeedbackFollower {
+    override suspend fun addFollowerToFeedback(creationDto: FollowerDto): FollowerData {
         val filter = FollowerFilterDto(creationDto.feedbackId, creationDto.user.id, creationDto.followerType)
         val existed = followerRepository.findOne(FollowerSearchSpecification(filter))
         if (existed.isPresent) {
             log.info("Try to add already existed follower")
-            return existed.get()
+            return existed.get().toDto()
         }
         checkFollowerConstraints(creationDto)
         val follower = followerRepository.save(
             FeedbackFollower(creationDto.feedbackId, creationDto.user.id, creationDto.followerType)
         )
         log.info("New feedback follower: $follower")
-        return follower
+        return follower.toDto()
     }
 
     override suspend fun removeFollowerFromFeedback(follow: FollowerDto) {
@@ -54,5 +60,13 @@ class FeedbackFollowerServiceImpl(
         if (user.role == UserRole.USER && type == FeedbackFollowerType.ASSIGNEE) {
             throw NotAllowedException("User ${user.id} cannot be an assignee")
         }
+    }
+
+    private suspend fun getUserData(userId: Long): UserData {
+        return userService.findById(userId).toUserData()
+    }
+
+    private suspend fun FeedbackFollower.toDto(): FollowerData {
+        return FollowerData(feedbackId, getUserData(userId), followerType, id)
     }
 }

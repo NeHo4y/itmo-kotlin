@@ -1,5 +1,6 @@
 package com.github.neho4u.shared.model.follower
 
+import com.github.neho4u.shared.model.user.UserData
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -11,7 +12,7 @@ data class FollowerCreateDto(
 @Serializable
 data class FollowerData(
     val feedbackId: Long,
-    val userId: Long,
+    val user: UserData,
     val followerType: FeedbackFollowerType,
     val id: Long
 )
