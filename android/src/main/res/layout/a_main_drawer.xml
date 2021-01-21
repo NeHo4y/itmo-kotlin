@@ -18,21 +18,6 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-            <FrameLayout
-                android:id="@+id/search_frame"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:visibility="gone"
-                app:layout_constraintBottom_toTopOf="@id/content_frame"
-                app:layout_constraintTop_toBottomOf="@id/drawer_toolbar">
-
-                <SearchView
-                    android:id="@+id/searchView"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    tools:visibility="gone" />
-            </FrameLayout>
-
             <android.support.v7.widget.Toolbar
                     android:id="@+id/drawer_toolbar"
                     android:layout_width="match_parent"
@@ -63,6 +48,23 @@
                 </LinearLayout>
 
             </android.support.v7.widget.Toolbar>
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    app:layout_constraintTop_toBottomOf="@id/drawer_toolbar"
+                    app:layout_constraintBottom_toTopOf="@id/content_frame" android:id="@+id/search_bar"
+                    tools:layout_editor_absoluteX="0dp">
+                <SearchView
+                        android:id="@+id/searchView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp" tools:visibility="@string/is_visible">
+                </SearchView>
+                <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" app:srcCompat="@drawable/ic_menu"
+                        android:id="@+id/imageButton" android:layout_weight="1"/>
+            </LinearLayout>
 
 
             <FrameLayout
@@ -72,7 +74,7 @@
                     app:layout_constraintBottom_toTopOf="@id/av_tickets_bottom"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/search_frame">
+                    app:layout_constraintTop_toBottomOf="@id/search_bar">
 
             </FrameLayout>
 
