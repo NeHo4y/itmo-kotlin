@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Smoke Tests</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+    <h1>Feedback stats for <span th:text="${admin}">ERROR</span></h1>
+    <div th:text="${reportTime}"></div>
+
+    <br/>
+
+    <div th:if="${#lists.isEmpty(feedbackStatusCounts)}">
+        <span th:text="${admin}">ERROR</span> is not assigned to any feedback
+    </div>
+    <table border="1" style="width:300px" th:if="${not #lists.isEmpty(feedbackStatusCounts)}">
+        <tr>
+            <th>STATUS</th>
+            <th>COUNT</th>
+        </tr>
+        <tr th:each="statusCount : ${feedbackStatusCounts}">
+            <td th:text="${statusCount.status}">ERROR</td>
+            <td th:text="${statusCount.count}">0</td>
+        </tr>
+    </table>
+</body>
+</html>

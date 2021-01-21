@@ -14,7 +14,6 @@ class JsHttpClientProvider : HttpClientProvider {
         defaultRequest {
             host = "localhost"
             port = 8000
-            contentType(ContentType.Application.Json)
         }
         tokenAuth {
             tokenProvider = JsTokenProvider

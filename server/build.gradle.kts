@@ -49,6 +49,9 @@ dependencies {
     implementation("com.h2database:h2")
 
     implementation("io.jsonwebtoken:jjwt:0.9.1")
+    implementation("org.thymeleaf:thymeleaf:3.0.12.RELEASE")
+    implementation("com.itextpdf:itextpdf:5.5.13.2")
+    implementation("com.itextpdf.tool:xmlworker:5.5.13.2")
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
 

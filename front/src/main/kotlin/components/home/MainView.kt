@@ -119,6 +119,15 @@ val MainView = functionalComponent<MainViewProps> { props ->
             }
         }
     }
+    div("col-md-3") {
+        if (props.currentUser?.role == UserRole.ADMIN) {
+            div {
+                child(DownloadReportButton) {
+                    attrs.currentUser = props.currentUser
+                }
+            }
+        }
+    }
 }
 
 val mainView =
