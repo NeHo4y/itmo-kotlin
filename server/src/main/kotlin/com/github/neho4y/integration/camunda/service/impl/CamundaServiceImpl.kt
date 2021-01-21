@@ -1,5 +1,6 @@
 package com.github.neho4y.integration.camunda.service.impl
 
+import com.github.neho4u.shared.model.feedback.FeedbackStatus
 import com.github.neho4y.integration.camunda.endpoint.*
 import com.github.neho4y.integration.camunda.endpoint.ProcessEndpoint
 import com.github.neho4y.integration.camunda.endpoint.TaskEndpoint
@@ -51,12 +52,15 @@ internal class CamundaServiceImpl(
         }
     }
 
-    override suspend fun closeFeedback(feedbackId: Long, admin: User): CamundaResult {
+    override suspend fun closeFeedback(feedbackId: Long, admin: User, status: FeedbackStatus): CamundaResult {
         return when (val processId = processes[feedbackId]) {
             is String -> {
                 when (val currentTask = task.getCurrentTaskId(processId)) {
                     is Success -> {
-                        val vars = mapOf("adminId" to VariableValue(admin.username, "String"))
+                        val vars = mapOf(
+                            "adminId" to VariableValue(admin.username, "String"),
+                            "STATUS" to VariableValue(status.name, "String")
+                        )
                         task.completeTask(currentTask.data, vars, admin)
                     }
                     is Fail -> Fail

@@ -33,7 +33,7 @@ data class StartProcessResponse(
 internal class ProcessEndpoint : CamundaEndpoint() {
     override val resourceUrl = "process-definition"
 
-    private val processDefinition = "Process_1ntbond:1:a3a64e99-5b62-11eb-8bac-0242ac110002"
+    private val processDefinition = "Process_0ul48m8:1:72eee144-5c0d-11eb-afc4-0242ac110002"
 
     suspend fun startRouteProcess(id: Long): CamundaResult {
         val urlPart = "$processDefinition/start"

@@ -100,9 +100,9 @@ class FeedbackServiceImpl(
     override suspend fun updateStatus(status: FeedbackStatus, id: Long, user: User) {
         val feedback = feedbackRepository.findById(id).orElseThrow { NotFoundException("Unable to find feedback") }
         feedback.status = status
+        fireFeedbackChangeStatus(id, user, status)
         if (FeedbackStatus.CLOSED == status || FeedbackStatus.RESOLVED == status) {
             feedback.endDate = LocalDateTime.now()
-            fireFeedbackClosed(id, user)
         }
         feedbackRepository.save(feedback)
     }
@@ -113,9 +113,9 @@ class FeedbackServiceImpl(
         feedbackRepository.save(feedback)
     }
 
-    private suspend fun fireFeedbackClosed(id: Long, user: User) {
+    private suspend fun fireFeedbackChangeStatus(id: Long, user: User, status: FeedbackStatus) {
         if (camundaService.isEnabled()) {
-            camundaService.closeFeedback(id, user)
+            camundaService.closeFeedback(id, user, status)
         }
     }
 
