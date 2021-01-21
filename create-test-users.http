@@ -47,10 +47,3 @@ Content-Type: application/json
   "email": "user4@qwe.xyz",
   "phone": "+15551234567"
 }
-
-###
-
-POST http://192.168.99.100:8080/engine-rest/user/create
-Content-Type: application/json
-
-{"profile":{"id":"user4","firstName":"user4","lastName":"user4","email":"user4@qwe.xyz"},"credentials":{"password":"demo"}}
