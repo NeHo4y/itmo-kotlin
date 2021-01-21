@@ -4,6 +4,7 @@ import com.github.neho4y.common.exception.AlreadyExistsException
 import com.github.neho4y.common.exception.BasicException
 import com.github.neho4y.common.exception.NotFoundException
 import com.github.neho4y.common.orNull
+import com.github.neho4y.integration.camunda.service.CamundaService
 import com.github.neho4y.security.AuthenticationService
 import com.github.neho4y.user.domain.User
 import com.github.neho4y.user.domain.repository.UserRepository
@@ -16,7 +17,8 @@ import org.springframework.stereotype.Service
 @Service
 class UserServiceImpl(
     private val userRepository: UserRepository,
-    private val authenticationService: AuthenticationService
+    private val authenticationService: AuthenticationService,
+    private val camundaService: CamundaService,
 ) : UserService {
 
     companion object {
@@ -38,11 +40,19 @@ class UserServiceImpl(
             email = userCreationDto.email,
             password = authenticationService.encodePassword(userCreationDto.password),
             username = userCreationDto.username,
-            phone = userCreationDto.phone
+            phone = userCreationDto.phone,
+            role = userCreationDto.role
         )
         val savedUser = userRepository.save(newUser)
         log.info("User ${savedUser.username} is saved under id ${savedUser.id}")
+        fireUserCreated(savedUser)
         return savedUser
+    }
+
+    private suspend fun fireUserCreated(user: User) {
+        if (camundaService.isEnabled()) {
+            camundaService.syncUser(user)
+        }
     }
 
     override suspend fun loginUser(username: String, password: String): User {

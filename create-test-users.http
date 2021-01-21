@@ -1,0 +1,56 @@
+POST http://localhost:8000/users
+Content-Type: application/json
+
+{
+  "username": "admin1",
+  "password": "123",
+  "role": "ADMIN",
+  "email": "admin1@qwe.xyz",
+  "phone": "+15551234567"
+}
+
+###
+
+POST http://localhost:8000/users
+Content-Type: application/json
+
+{
+  "username": "admin2",
+  "password": "123",
+  "role": "ADMIN",
+  "email": "admin2@qwe.xyz",
+  "phone": "+15551234567"
+}
+
+###
+
+POST http://localhost:8000/users
+Content-Type: application/json
+
+{
+  "username": "user3",
+  "password": "123",
+  "role": "USER",
+  "email": "user3@qwe.xyz",
+  "phone": "+15551234567"
+}
+
+###
+
+POST http://localhost:8000/users
+Content-Type: application/json
+
+{
+  "username": "user4",
+  "password": "123",
+  "role": "USER",
+  "email": "user4@qwe.xyz",
+  "phone": "+15551234567"
+}
+
+###
+
+POST http://192.168.99.100:8080/engine-rest/user/create
+Content-Type: application/json
+
+{"profile":{"id":"user4","firstName":"user4","lastName":"user4","email":"user4@qwe.xyz"},"credentials":{"password":"demo"}}

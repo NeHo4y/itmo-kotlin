@@ -34,8 +34,12 @@ class FeedbackController(private val feedbackService: FeedbackService) {
     }
 
     @PostMapping("/{id}/status")
-    suspend fun updateFeedback(@PathVariable id: Long, @RequestBody feedbackStatus: FeedbackStatus) {
-        return feedbackService.updateStatus(feedbackStatus, id)
+    suspend fun updateFeedback(
+        @PathVariable id: Long,
+        @RequestBody feedbackStatus: FeedbackStatus,
+        @AuthenticationPrincipal user: User
+    ) {
+        return feedbackService.updateStatus(feedbackStatus, id, user)
     }
 
     @PostMapping("/{id}/priority")

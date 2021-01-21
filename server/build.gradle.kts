@@ -20,6 +20,8 @@ configurations {
     }
 }
 
+val ktorClientVersion: String by extra
+
 repositories {
     jcenter()
     mavenCentral()
@@ -27,6 +29,8 @@ repositories {
 }
 
 dependencies {
+    fun ktorClient(module: String, version: String = ktorClientVersion) = "io.ktor:ktor-client-$module:$version"
+
     implementation(project(":common"))
     implementation(files("../common/build/libs/common-jvm-${project.version}.jar"))
 
@@ -52,6 +56,12 @@ dependencies {
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
+
+    implementation(ktorClient("core-jvm"))
+    implementation(ktorClient("cio"))
+    implementation(ktorClient("auth"))
+    implementation(ktorClient("json-jvm"))
+    implementation(ktorClient("serialization-jvm"))
 }
 
 tasks.withType<KotlinCompile> {

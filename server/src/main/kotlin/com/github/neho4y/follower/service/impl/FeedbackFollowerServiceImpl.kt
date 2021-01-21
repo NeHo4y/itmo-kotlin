@@ -12,6 +12,8 @@ import com.github.neho4y.follower.domain.repository.FeedbackFollowerSpecificatio
 import com.github.neho4y.follower.domain.repository.FollowerSearchSpecification
 import com.github.neho4y.follower.model.FollowerDto
 import com.github.neho4y.follower.service.FeedbackFollowerService
+import com.github.neho4y.integration.camunda.service.CamundaService
+import com.github.neho4y.user.domain.User
 import com.github.neho4y.user.model.toUserData
 import com.github.neho4y.user.service.UserService
 import org.slf4j.LoggerFactory
@@ -20,7 +22,8 @@ import org.springframework.stereotype.Service
 @Service
 class FeedbackFollowerServiceImpl(
     private val followerRepository: FeedbackFollowerSpecificationRepository,
-    private val userService: UserService
+    private val userService: UserService,
+    private val camundaService: CamundaService
 ) : FeedbackFollowerService {
 
     companion object {
@@ -43,8 +46,17 @@ class FeedbackFollowerServiceImpl(
         val follower = followerRepository.save(
             FeedbackFollower(creationDto.feedbackId, creationDto.user.id, creationDto.followerType)
         )
+        if (creationDto.followerType == FeedbackFollowerType.ASSIGNEE) {
+            fireFeedbackAssign(creationDto.feedbackId, creationDto.user)
+        }
         log.info("New feedback follower: $follower")
         return follower.toDto()
+    }
+
+    private suspend fun fireFeedbackAssign(feedbackId: Long, user: User) {
+        if (camundaService.isEnabled()) {
+            camundaService.assignFeedback(feedbackId, user)
+        }
     }
 
     override suspend fun removeFollowerFromFeedback(follow: FollowerDto) {

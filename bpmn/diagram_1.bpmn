@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0gu15hg" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.5.0">
+  <bpmn:process id="Process_1ntbond" name="Feedback Closed By Admin" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1" name="Feedback created">
+      <bpmn:outgoing>Flow_13eiysa</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_13eiysa" sourceRef="StartEvent_1" targetRef="Activity_assign" />
+    <bpmn:sequenceFlow id="Flow_1fvzsfs" sourceRef="Activity_assign" targetRef="Activity_close" />
+    <bpmn:endEvent id="Event_end">
+      <bpmn:incoming>Flow_0wzsetv</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0wzsetv" sourceRef="Activity_close" targetRef="Event_end" />
+    <bpmn:userTask id="Activity_assign" name="Assign Feedback To Admin" camunda:candidateGroups="admins">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="adminId" />
+          <camunda:outputParameter name="adminId" />
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_13eiysa</bpmn:incoming>
+      <bpmn:outgoing>Flow_1fvzsfs</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="DataOutputAssociation_1k0jzwl">
+        <bpmn:targetRef>DataObjectReference_adminid</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:userTask>
+    <bpmn:userTask id="Activity_close" name="Feedback Closed By Admin" camunda:assignee="${adminId}">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="adminId" />
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1fvzsfs</bpmn:incoming>
+      <bpmn:outgoing>Flow_0wzsetv</bpmn:outgoing>
+      <bpmn:property id="Property_1twb0rp" name="__targetRef_placeholder" />
+      <bpmn:dataInputAssociation id="DataInputAssociation_0n1fn1j">
+        <bpmn:sourceRef>DataObjectReference_adminid</bpmn:sourceRef>
+        <bpmn:targetRef>Property_1twb0rp</bpmn:targetRef>
+      </bpmn:dataInputAssociation>
+    </bpmn:userTask>
+    <bpmn:dataObjectReference id="DataObjectReference_adminid" name="Admin Data" dataObjectRef="DataObject_1in8azu" />
+    <bpmn:dataObject id="DataObject_1in8azu" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1ntbond">
+      <bpmndi:BPMNEdge id="Flow_13eiysa_di" bpmnElement="Flow_13eiysa">
+        <di:waypoint x="198" y="120" />
+        <di:waypoint x="280" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1fvzsfs_di" bpmnElement="Flow_1fvzsfs">
+        <di:waypoint x="380" y="120" />
+        <di:waypoint x="470" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0wzsetv_di" bpmnElement="Flow_0wzsetv">
+        <di:waypoint x="570" y="120" />
+        <di:waypoint x="652" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Activity_0l23fhm_di" bpmnElement="Activity_assign">
+        <dc:Bounds x="280" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjectReference_0eclpum_di" bpmnElement="DataObjectReference_adminid">
+        <dc:Bounds x="402" y="215" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="393" y="272" width="57" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0h50anm_di" bpmnElement="Activity_close">
+        <dc:Bounds x="470" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1xgml9f_di" bpmnElement="Event_end">
+        <dc:Bounds x="652" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="162" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="137" y="145" width="89" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="DataOutputAssociation_1k0jzwl_di" bpmnElement="DataOutputAssociation_1k0jzwl">
+        <di:waypoint x="359" y="160" />
+        <di:waypoint x="402" y="218" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataInputAssociation_0n1fn1j_di" bpmnElement="DataInputAssociation_0n1fn1j">
+        <di:waypoint x="438" y="218" />
+        <di:waypoint x="487" y="160" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

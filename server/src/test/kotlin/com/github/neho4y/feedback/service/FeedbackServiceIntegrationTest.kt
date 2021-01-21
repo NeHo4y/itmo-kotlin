@@ -31,7 +31,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.annotation.DirtiesContext
 import java.time.LocalDateTime
-import java.util.*
 
 private const val USER_ID = 1L
 private const val CATEGORY_ID = 3L

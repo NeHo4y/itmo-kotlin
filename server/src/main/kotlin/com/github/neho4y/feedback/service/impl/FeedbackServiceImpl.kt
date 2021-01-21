@@ -13,6 +13,8 @@ import com.github.neho4y.feedback.domain.repository.FeedbackSearchSpecification
 import com.github.neho4y.feedback.domain.repository.FeedbackSpecificationRepository
 import com.github.neho4y.feedback.service.FeedbackService
 import com.github.neho4y.follower.service.FeedbackFollowerService
+import com.github.neho4y.integration.camunda.service.CamundaService
+import com.github.neho4y.user.domain.User
 import com.github.neho4y.user.model.toUserData
 import com.github.neho4y.user.service.UserService
 import kotlinx.datetime.toKotlinLocalDateTime
@@ -28,7 +30,8 @@ class FeedbackServiceImpl(
     private val followerService: FeedbackFollowerService,
     private val categoryService: CategoryService,
     private val topicService: TopicService,
-    private val subtopicService: SubtopicService
+    private val subtopicService: SubtopicService,
+    private val camundaService: CamundaService,
 ) : FeedbackService {
 
     companion object {
@@ -94,11 +97,12 @@ class FeedbackServiceImpl(
         return convertToDto(updatedFeedback)
     }
 
-    override suspend fun updateStatus(status: FeedbackStatus, id: Long) {
+    override suspend fun updateStatus(status: FeedbackStatus, id: Long, user: User) {
         val feedback = feedbackRepository.findById(id).orElseThrow { NotFoundException("Unable to find feedback") }
         feedback.status = status
         if (FeedbackStatus.CLOSED == status || FeedbackStatus.RESOLVED == status) {
             feedback.endDate = LocalDateTime.now()
+            fireFeedbackClosed(id, user)
         }
         feedbackRepository.save(feedback)
     }
@@ -107,6 +111,12 @@ class FeedbackServiceImpl(
         val feedback = feedbackRepository.findById(id).orElseThrow { NotFoundException("Unable to find feedback") }
         feedback.priority = priority
         feedbackRepository.save(feedback)
+    }
+
+    private suspend fun fireFeedbackClosed(id: Long, user: User) {
+        if (camundaService.isEnabled()) {
+            camundaService.closeFeedback(id, user)
+        }
     }
 
     suspend fun convertToDto(feedback: Feedback): FeedbackDto {

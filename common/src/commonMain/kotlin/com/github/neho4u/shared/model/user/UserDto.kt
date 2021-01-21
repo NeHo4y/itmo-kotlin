@@ -7,7 +7,8 @@ data class RegisterParams(
     val email: String,
     val password: String,
     val username: String,
-    val phone: String? = null
+    val phone: String? = null,
+    val role: UserRole = UserRole.USER
 )
 
 @Serializable

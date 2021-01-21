@@ -16,5 +16,6 @@ fun RegisterParams.toCreationDto() = UserCreationDto(
     email = email,
     username = username,
     password = password,
-    phone = phone
+    phone = phone,
+    role = role
 )
