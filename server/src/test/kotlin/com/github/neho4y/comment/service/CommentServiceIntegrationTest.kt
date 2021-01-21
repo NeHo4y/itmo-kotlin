@@ -13,8 +13,8 @@ import com.github.neho4y.comment.createDefaultCommentDto
 import com.github.neho4y.feedback.domain.Feedback
 import com.github.neho4y.feedback.domain.repository.FeedbackRepository
 import com.github.neho4y.feedback.service.FeedbackService
-import com.github.neho4y.user.controller.toUserData
 import com.github.neho4y.user.createDefaultUser
+import com.github.neho4y.user.model.toUserData
 import com.github.neho4y.user.service.UserService
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.stub

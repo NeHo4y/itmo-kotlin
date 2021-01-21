@@ -1,6 +1,7 @@
 package com.github.neho4y.follower.service
 
 import com.github.neho4u.shared.model.follower.FeedbackFollowerType
+import com.github.neho4u.shared.model.follower.FollowerData
 import com.github.neho4u.shared.model.follower.FollowerFilterDto
 import com.github.neho4u.shared.model.user.UserRole
 import com.github.neho4y.feedback.domain.Feedback
@@ -8,7 +9,9 @@ import com.github.neho4y.feedback.domain.repository.FeedbackRepository
 import com.github.neho4y.follower.domain.FeedbackFollower
 import com.github.neho4y.follower.model.FollowerDto
 import com.github.neho4y.user.domain.User
+import com.github.neho4y.user.service.UserService
 import com.nhaarman.mockitokotlin2.given
+import com.nhaarman.mockitokotlin2.stub
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -33,9 +36,17 @@ internal class FeedbackFollowerServiceTest {
     @MockBean
     private lateinit var feedbackService: FeedbackRepository
 
+    @MockBean
+    private lateinit var userService: UserService
+
     @BeforeEach
     fun createCommentService() {
         given(feedbackService.findById(FEEDBACK_ID)).willReturn(Optional.of(defaultFeedback))
+        userService.stub {
+            onBlocking {
+                userService.findById(USER_ID)
+            }.thenReturn(defaultUser)
+        }
     }
 
     @Test
@@ -140,8 +151,8 @@ private val defaultFeedbackDto = FollowerDto(
 
 private val defaultExpectedFeedbackFollower = FeedbackFollower(FEEDBACK_ID, USER_ID, FeedbackFollowerType.WATCHER)
 
-private fun FeedbackFollower.assertEquals(other: FeedbackFollower?) {
+private fun FeedbackFollower.assertEquals(other: FollowerData?) {
     assertThat(feedbackId).isEqualTo(other?.feedbackId)
-    assertThat(userId).isEqualTo(other?.userId)
+    assertThat(userId).isEqualTo(other?.user?.id)
     assertThat(followerType).isEqualTo(other?.followerType)
 }

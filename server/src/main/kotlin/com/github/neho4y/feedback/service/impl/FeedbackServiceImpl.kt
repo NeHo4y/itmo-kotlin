@@ -13,7 +13,7 @@ import com.github.neho4y.feedback.domain.repository.FeedbackSearchSpecification
 import com.github.neho4y.feedback.domain.repository.FeedbackSpecificationRepository
 import com.github.neho4y.feedback.service.FeedbackService
 import com.github.neho4y.follower.service.FeedbackFollowerService
-import com.github.neho4y.user.controller.toUserData
+import com.github.neho4y.user.model.toUserData
 import com.github.neho4y.user.service.UserService
 import kotlinx.datetime.toKotlinLocalDateTime
 import org.slf4j.LoggerFactory

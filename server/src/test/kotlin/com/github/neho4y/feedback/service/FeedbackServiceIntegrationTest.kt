@@ -16,8 +16,8 @@ import com.github.neho4y.category.domain.repository.TopicRepository
 import com.github.neho4y.category.service.CategoryService
 import com.github.neho4y.category.service.SubtopicService
 import com.github.neho4y.category.service.TopicService
-import com.github.neho4y.user.controller.toUserData
 import com.github.neho4y.user.createDefaultUser
+import com.github.neho4y.user.model.toUserData
 import com.github.neho4y.user.service.UserService
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.stub

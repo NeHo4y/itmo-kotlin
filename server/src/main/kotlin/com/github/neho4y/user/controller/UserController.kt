@@ -6,6 +6,8 @@ import com.github.neho4u.shared.model.user.UserData
 import com.github.neho4u.shared.model.user.UserToken
 import com.github.neho4y.security.JwtService
 import com.github.neho4y.user.domain.User
+import com.github.neho4y.user.model.toCreationDto
+import com.github.neho4y.user.model.toUserData
 import com.github.neho4y.user.service.UserService
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*

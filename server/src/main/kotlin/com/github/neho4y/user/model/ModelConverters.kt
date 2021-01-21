@@ -1,11 +1,10 @@
-package com.github.neho4y.user.controller
+package com.github.neho4y.user.model
 
 import com.github.neho4u.shared.model.user.RegisterParams
 import com.github.neho4u.shared.model.user.UserData
 import com.github.neho4y.user.domain.User
-import com.github.neho4y.user.model.UserCreationDto
 
-internal fun User.toUserData() = UserData(
+fun User.toUserData() = UserData(
     username = username,
     email = email,
     phone = phone,
@@ -13,7 +12,7 @@ internal fun User.toUserData() = UserData(
     id = id
 )
 
-internal fun RegisterParams.toCreationDto() = UserCreationDto(
+fun RegisterParams.toCreationDto() = UserCreationDto(
     email = email,
     username = username,
     password = password,

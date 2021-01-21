@@ -7,7 +7,7 @@ import com.github.neho4y.comment.domain.repository.CommentRepository
 import com.github.neho4y.comment.service.CommentService
 import com.github.neho4y.common.exception.NotFoundException
 import com.github.neho4y.feedback.domain.repository.FeedbackRepository
-import com.github.neho4y.user.controller.toUserData
+import com.github.neho4y.user.model.toUserData
 import com.github.neho4y.user.service.UserService
 import kotlinx.datetime.toKotlinLocalDateTime
 import org.springframework.stereotype.Service

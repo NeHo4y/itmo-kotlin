@@ -32,3 +32,9 @@ fun onChangeSetState(
     }
     setStateHandler(value)
 }
+
+suspend fun withInProgress(inProgressSetter: RSetState<Boolean>, action: suspend () -> Unit) {
+    inProgressSetter(true)
+    action()
+    inProgressSetter(false)
+}
