@@ -2,7 +2,7 @@ package com.github.neho4u.view
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.view.inputmethod.EditorInfo
 import androidx.databinding.DataBindingUtil
 import com.github.neho4u.R

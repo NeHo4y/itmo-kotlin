@@ -2,8 +2,8 @@ package com.github.neho4u.view
 
 import android.app.Dialog
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity
+import com.google.android.material.snackbar.Snackbar
+import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
@@ -223,7 +223,7 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
         }
         noteBinding.pbTicketView.visibility = View.GONE
         Snackbar.make(noteBinding.ticketViewParent, error, Snackbar.LENGTH_INDEFINITE).apply {
-            view.findViewById<TextView>(android.support.design.R.id.snackbar_text).apply {
+            view.findViewById<TextView>(R.id.snackbar_text).apply {
                 setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_error, 0, 0, 0)
                 compoundDrawablePadding = resources.getDimensionPixelOffset(R.dimen.snackbar_icon_padding)
             }

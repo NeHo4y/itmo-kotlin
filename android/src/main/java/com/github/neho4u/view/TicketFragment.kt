@@ -2,10 +2,11 @@ package com.github.neho4u.view
 
 import android.content.Context
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
+import androidx.fragment.app.Fragment
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +21,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
+
 /**
  * A fragment representing a list of Items.
  * Activities containing this fragment MUST implement the
@@ -27,6 +29,7 @@ import kotlinx.coroutines.launch
  */
 class TicketFragment : Fragment(), TicketInterface {
     private var _binding: FragmentTicketListBinding? = null
+
     // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
 
@@ -35,7 +38,7 @@ class TicketFragment : Fragment(), TicketInterface {
             listener?.setProgressVisibility(false)
             Log.d("TicketFragment", "Failed to load ticket: $error")
             Snackbar.make(binding.list, error, Snackbar.LENGTH_LONG).apply {
-                view.findViewById<TextView>(android.support.design.R.id.snackbar_text).apply {
+                view.findViewById<TextView>(R.id.snackbar_text).apply {
                     setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_error, 0, 0, 0)
                     compoundDrawablePadding = resources.getDimensionPixelOffset(R.dimen.snackbar_icon_padding)
                 }
@@ -55,6 +58,7 @@ class TicketFragment : Fragment(), TicketInterface {
     private lateinit var tController: TicketController
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
 
         arguments?.let {
@@ -68,11 +72,9 @@ class TicketFragment : Fragment(), TicketInterface {
     fun startTicketRefresh() {
         listener?.setProgressVisibility(true)
         if (this.view != null) {
-            with(this.view as RecyclerView) {
-                with(adapter as MyTicketRecyclerViewAdapter) {
-                    updateData(listOf())
-                    Log.d("TicketFragment", "Updated data in adapter")
-                }
+            with(binding.list.adapter as MyTicketRecyclerViewAdapter) {
+                updateData(listOf())
+                Log.d("TicketFragment", "Updated data in adapter")
             }
         }
         when (ticketType) {
@@ -87,6 +89,12 @@ class TicketFragment : Fragment(), TicketInterface {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentTicketListBinding.inflate(inflater, container, false)
+
+        val pullToRefresh: SwipeRefreshLayout = binding.pullToRefresh
+        pullToRefresh.setOnRefreshListener {
+            startTicketRefresh() // your code
+            pullToRefresh.isRefreshing = false
+        }
         return with(binding) {
             list.adapter = MyTicketRecyclerViewAdapter(ticketArray, listener)
             list.layoutManager = LinearLayoutManager(list.context)
@@ -116,11 +124,11 @@ class TicketFragment : Fragment(), TicketInterface {
     override fun ticketRefreshResult(result: List<Ticket>) {
         activity?.runOnUiThread {
             listener?.setProgressVisibility(false)
-            with(this.view as RecyclerView) {
-                with(adapter as MyTicketRecyclerViewAdapter) {
-                    updateData(result)
-                    Log.d("TicketFragment", "Updated data in adapter")
-                }
+            with(
+                binding.list.adapter as MyTicketRecyclerViewAdapter
+            ) {
+                updateData(result)
+                Log.d("TicketFragment", "Updated data in adapter")
             }
         }
         this.ticketArray = result

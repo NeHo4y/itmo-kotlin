@@ -8,7 +8,7 @@ buildscript {
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.21")
         classpath("org.jetbrains.kotlin:kotlin-android-extensions:1.3.21")
-        classpath("com.android.tools.build:gradle:4.0.1")
+        classpath("com.android.tools.build:gradle:4.1.2")
         classpath("com.google.gms:google-services:4.2.0")
         classpath(kotlin("serialization", version = "1.4.21"))
     }
@@ -21,6 +21,7 @@ allprojects {
     repositories {
         jcenter()
         mavenCentral()
+        google()
     }
 }
 
