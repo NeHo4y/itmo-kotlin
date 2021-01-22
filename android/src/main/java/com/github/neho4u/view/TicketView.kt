@@ -81,9 +81,17 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
             noteBinding.tvSeverity.visibility = View.VISIBLE
             noteBinding.tvSeverity.text = getString(R.string.severity_text, ticket.priority)
         }
+
         if (ticket.subject != null) {
             noteBinding.tvTicketViewSubject.visibility = View.VISIBLE
             noteBinding.tvTicketViewSubject.text = ticket.subject
+        }
+
+        if (ticket.assignee != null) {
+            with(noteBinding.tvTicketViewAssignedTech) {
+                visibility = View.VISIBLE
+                text = ticket.assignee
+            }
         }
 
         noteBinding.vTicketViewLine2.visibility = View.VISIBLE
@@ -102,7 +110,8 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
 
                 NoteDetailBinding.bind(noteView).apply {
                     tvNoteDetailResolution.visibility = View.GONE
-                    tvNoteDetailPrettyLastUpdated.text = note.prettyUpdatedString
+                    tvNoteDetailPrettyLastUpdated.text =
+                        getString(R.string.pretty_updated_string, note.creationDate, note.userData?.username)
                     tvNoteDetailDetail.text = note.mobileNoteText
                 }
 

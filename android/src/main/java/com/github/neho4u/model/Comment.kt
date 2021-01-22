@@ -6,5 +6,6 @@ internal fun CommentDto.toNote(): Note = Note(
     id = id,
     type = messageType,
     mobileNoteText = messageText,
-    prettyUpdatedString = "$creationDate by ${authorData.username}"
+    userData = authorData,
+    creationDate = creationDate
 )

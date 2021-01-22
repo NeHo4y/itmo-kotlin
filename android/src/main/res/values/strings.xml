@@ -16,4 +16,6 @@
     <string name="image_icon">Image Icon</string>
     <string name="last_updated">Updated: %1$s</string>
     <string name="severity_text">Priority: %1$s</string>
+    <string name="pretty_updated_string">%1$s by %2$s</string>
+    <string name="assigned_to">Assigned to %1$s</string>
 </resources>

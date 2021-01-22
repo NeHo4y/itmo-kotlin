@@ -6,6 +6,8 @@ import com.github.neho4u.model.toTicket
 import com.github.neho4u.shared.model.comment.CommentCreationDto
 import com.github.neho4u.shared.model.feedback.FeedbackDto
 import com.github.neho4u.shared.model.feedback.FeedbackFilter
+import com.github.neho4u.shared.model.follower.FeedbackFollowerType
+import com.github.neho4u.shared.model.follower.FollowerFilterDto
 import com.github.neho4u.utils.Client
 import io.ktor.client.features.*
 
@@ -50,9 +52,13 @@ class TicketController(
                 val (body, comments) = client.comment()
                     .getForFeedback(t.id)
                     .partition { it.messageType == "body" }
+                val assignee = client.follower()
+                    .getFilter(FollowerFilterDto(ticketId, followerType = FeedbackFollowerType.ASSIGNEE))
+                    .firstOrNull()
                 t.copy(
                     detail = body.firstOrNull()?.messageText,
-                    notes = comments.map { it.toNote() }
+                    notes = comments.map { it.toNote() },
+                    assignee = assignee?.user?.username
                 )
             }
         }
