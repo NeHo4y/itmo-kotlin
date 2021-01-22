@@ -19,6 +19,9 @@ class FeedbackSearchSpecification(private val feedbackFilter: FeedbackFilter) : 
         feedbackFilter.number?.addOptionalFilter(root.get("id"), predicates, criteriaBuilder)
         feedbackFilter.header?.addOptionalFilter(root.get("header"), predicates, criteriaBuilder)
         feedbackFilter.authorId?.addOptionalFilter(root.get("authorId"), predicates, criteriaBuilder)
+        feedbackFilter.categoryId?.addOptionalFilter(root.get("categoryId"), predicates, criteriaBuilder)
+        feedbackFilter.topicId?.addOptionalFilter(root.get("topicId"), predicates, criteriaBuilder)
+        feedbackFilter.subtopicId?.addOptionalFilter(root.get("subtopicId"), predicates, criteriaBuilder)
         return criteriaBuilder.and(*predicates.toTypedArray())
     }
 }
