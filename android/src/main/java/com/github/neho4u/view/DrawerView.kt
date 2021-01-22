@@ -13,7 +13,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.TranslateAnimation
-import android.widget.SearchView
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import com.github.neho4u.R
@@ -78,17 +77,6 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
             // update the UI based on the item selected
             handleNavSelection(menuItem)
         }
-        mainDrawerBinding.searchView.setOnQueryTextListener(
-            object : SearchView.OnQueryTextListener {
-                override fun onQueryTextChange(p0: String?): Boolean {
-                    return false
-                }
-
-                override fun onQueryTextSubmit(p0: String?): Boolean {
-                    return true
-                }
-            }
-        )
 
         mainDrawerBinding.drawerLayout.addDrawerListener(
             object : DrawerLayout.DrawerListener {
