@@ -1,3 +1,5 @@
+val INCLUDE_ANDROID = "true"
+
 pluginManagement {
     repositories {
         gradlePluginPortal()
