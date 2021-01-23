@@ -1,9 +1,7 @@
 package com.github.neho4u.view
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -53,7 +51,6 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
             if (visible) View.VISIBLE else View.GONE
     }
 
-    private lateinit var preferences: SharedPreferences
     private var lastTranslate = 0.0f
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,8 +63,6 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.ic_menu)
         }
-
-        preferences = PreferenceManager.getDefaultSharedPreferences(this)
 
         mainDrawerBinding.navView.setNavigationItemSelectedListener { menuItem ->
             // set item as selected to persist highlight

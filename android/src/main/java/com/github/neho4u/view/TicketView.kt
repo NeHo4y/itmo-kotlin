@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.github.neho4u.R
 import com.github.neho4u.controller.NoteInterface
 import com.github.neho4u.controller.TicketController
@@ -24,6 +25,7 @@ import io.noties.markwon.Markwon
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
 
@@ -34,6 +36,7 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
     private var menuNewNote: MenuItem? = null
     private lateinit var markdown: Markwon
     private lateinit var noteBinding: ATicketViewBinding
+    private lateinit var pullToRefresh: SwipeRefreshLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,17 +50,23 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
 
         markdown = Markwon.create(applicationContext)
 
+        pullToRefresh = noteBinding.ticketPullRefresh.apply {
+            setOnRefreshListener {
+                startRefresh()
+            }
+        }
+
         startRefresh()
     }
 
     private fun startRefresh() {
-        noteBinding.pbTicketView.visibility = View.VISIBLE
-        menuRefresh?.apply {
-            isVisible = false
-        }
+        menuNewNote?.isVisible = false
         GlobalScope.launch(Dispatchers.Default) {
             ticketController.loadFullTicket(ticketId)?.let {
                 ticketLoadResult(it)
+            }
+            withContext(Dispatchers.Main) {
+                pullToRefresh.isRefreshing = false
             }
         }
     }
@@ -190,13 +199,9 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
         Log.d("TicketView", "Got ticket result: $result")
         this.ticket = result
         this.runOnUiThread {
-            menuRefresh?.apply {
-                isVisible = true
-            }
             menuNewNote?.apply {
                 isVisible = true
             }
-            noteBinding.pbTicketView.visibility = View.GONE
             inflateTicket(result)
         }
     }
