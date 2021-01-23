@@ -41,7 +41,6 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         noteBinding = DataBindingUtil.setContentView(this, R.layout.a_ticket_view)
-
         ticketId = intent.getLongExtra(ARG_TICKET_ID, -1L)
         ticketController = TicketController(this)
 
@@ -184,7 +183,7 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_drawer_view, menu)
+//        menuInflater.inflate(R.menu.menu_drawer_view, menu)
         menuInflater.inflate(R.menu.menu_ticket_view, menu)
         menuRefresh = menu?.findItem(R.id.menu_dv_refresh)
         menuNewNote = menu?.findItem(R.id.menu_add_note)
