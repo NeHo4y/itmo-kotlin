@@ -58,6 +58,9 @@ class SearchFilterDialogWrapper(
                 onClickListener(it)
                 dialog.dismiss()
             }
+            bNoteReset.setOnClickListener {
+                initWithFilter(FeedbackFilter())
+            }
         }
     }
 
@@ -85,9 +88,7 @@ class SearchFilterDialogWrapper(
         categories.initWith(filter.category, topics)
         topics.initWith(filter.topic, subtopics)
         subtopics.initWith(filter.subtopic, null)
-        filter.header?.let {
-            layoutBinding.searchView2.setText(it)
-        }
+        layoutBinding.searchView2.setText(filter.header ?: "")
     }
 
     private fun onClickListener(v: View) {
@@ -140,12 +141,10 @@ class SearchFilterDialogWrapper(
         }
 
         fun initWith(item: IdWithName?, childHolder: SpinnerHolder?) {
-            if (item != null) {
-                val pos = adapter.find(item)
-                if (pos >= -1) {
-                    choice = adapter.getItem(pos + 1)
-                    spinner.setSelection(pos + 1, true)
-                }
+            val pos = adapter.find(item)
+            if (pos >= -1) {
+                choice = adapter.getItem(pos + 1)
+                spinner.setSelection(pos + 1, true)
             }
             childHolder?.let {
                 val newData = it.data.filter { id -> id.isMyParent(choice) }

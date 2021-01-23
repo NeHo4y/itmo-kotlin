@@ -30,8 +30,8 @@ class SpinnerAdapterWithInitialText(
         notifyDataSetChanged()
     }
 
-    fun find(item: IdWithName): Int {
-        return objects.indexOfFirst { it.id == item.id }
+    fun find(item: IdWithName?): Int {
+        return objects.indexOfFirst { it.id == item?.id }
     }
 
     override fun getItem(position: Int): IdWithName {

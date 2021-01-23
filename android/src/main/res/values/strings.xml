@@ -23,4 +23,5 @@
     <string name="choose_topic">Select Topic</string>
     <string name="choose_subtopic">Select Subtopic</string>
     <string name="header">Feedback Header</string>
+    <string name="reset_filter">Reset</string>
 </resources>

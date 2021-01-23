@@ -24,7 +24,6 @@
             app:layout_constraintHorizontal_bias="0.027"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:autofillHints=""
             android:inputType="textMultiLine" />
 
         <Spinner
@@ -71,8 +70,20 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:text="@android:string/cancel"
-            app:layout_constraintEnd_toStartOf="@+id/b_note_ok"
+            app:layout_constraintEnd_toStartOf="@+id/b_note_reset"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/subtopic_spinner" />
+
+        <Button
+            android:id="@+id/b_note_reset"
+            style='@style/Widget.AppCompat.Button.Borderless'
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/reset_filter"
+            app:layout_constraintEnd_toStartOf="@+id/b_note_ok"
+            app:layout_constraintStart_toEndOf="@id/b_note_cancel"
             app:layout_constraintTop_toBottomOf="@id/subtopic_spinner" />
 
         <Button
@@ -80,10 +91,11 @@
             style='@style/Widget.AppCompat.Button.Borderless'
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:text="@android:string/ok"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/b_note_cancel"
+            app:layout_constraintStart_toEndOf="@+id/b_note_reset"
             app:layout_constraintTop_toTopOf="@id/b_note_cancel"
             tools:layout_constraintTop_toBottomOf="@id/et_note_text" />
 
