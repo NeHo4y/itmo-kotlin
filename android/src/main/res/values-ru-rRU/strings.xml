@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="loading">Загрузка...</string>
+    <string name="loading">Загрузка…</string>
     <string name="login">Войти</string>
     <string name="username">Логин</string>
     <string name="password">Пароль</string>
@@ -9,7 +9,7 @@
     <string name="my_tickets">Мои обращения</string>
     <string name="add_feedback">Создать обращение</string>
     <string name="session_check">Проверка сессии</string>
-    <string name="logging_in">Вход...</string>
+    <string name="logging_in">Вход…</string>
     <string name="refresh">Обновить</string>
     <string name="last_updated">Обновлено: %1$s</string>
     <string name="severity_text">%1$s</string>

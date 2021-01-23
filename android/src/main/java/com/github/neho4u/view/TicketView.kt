@@ -82,6 +82,11 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
             noteBinding.tvSeverity.text = getString(R.string.severity_text, ticket.priority)
         }
 
+        if (ticket.status != null) {
+            noteBinding.tvStatus.visibility = View.VISIBLE
+            noteBinding.tvStatus.text = ticket.status
+        }
+
         if (ticket.subject != null) {
             noteBinding.tvTicketViewSubject.visibility = View.VISIBLE
             noteBinding.tvTicketViewSubject.text = ticket.subject

@@ -10,5 +10,6 @@ data class Ticket(
     val displayClient: String? = null,
     val priority: String? = null,
     val notes: List<Note>? = null,
-    val assignee: String? = null
+    val assignee: String? = null,
+    val status: String? = null
 )
