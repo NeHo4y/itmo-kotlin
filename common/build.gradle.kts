@@ -3,8 +3,6 @@ val INCLUDE_ANDROID: String by extra
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
-    id("com.android.library")
-    id("kotlin-android-extensions")
 }
 
 group = "com.github.neho4u"
@@ -19,9 +17,6 @@ repositories {
 }
 
 kotlin {
-    if (INCLUDE_ANDROID == "true") {
-        android()
-    }
     jvm {
         compilations.all {
             kotlinOptions.jvmTarget = "11"
@@ -51,16 +46,6 @@ kotlin {
             }
         }
 
-        if (INCLUDE_ANDROID == "true") {
-            val androidMain by getting {
-                dependencies {
-                    implementation(kotlin("stdlib"))
-                    implementation(ktorClient("core-jvm"))
-                    implementation(ktorClient("okhttp"))
-                }
-            }
-        }
-
         val jvmMain by getting
 
         val jsMain by getting {
@@ -75,26 +60,6 @@ kotlin {
                 implementation(npm("connected-react-router", "5.0.1"))
                 implementation(npm("markdown-it", "10.0.0"))
                 implementation(npm("sanitize-html", "1.23.0"))
-            }
-        }
-    }
-}
-
-if (INCLUDE_ANDROID == "true") {
-
-
-    android {
-        compileSdkVersion(28)
-        sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-        defaultConfig {
-            minSdkVersion(24)
-            targetSdkVersion(28)
-            versionCode = 1
-            versionName = "1.0"
-        }
-        buildTypes {
-            getByName("release") {
-                isMinifyEnabled = false
             }
         }
     }
