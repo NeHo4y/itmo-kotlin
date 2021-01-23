@@ -16,7 +16,8 @@ class HierarchyIdWithName(id: Long, name: String, val parent: Long) : IdWithName
     override fun isMyParent(idWithName: IdWithName) = parent == idWithName.id
 }
 
-object Placeholder : IdWithName(-1, "Placeholder")
+private const val PLACEHOLDER_ID = -1L
+class Placeholder(name: String) : IdWithName(PLACEHOLDER_ID, name)
 
 internal fun CategoryDto.toIdWithName(): IdWithName = SimpleIdWithName(id, description)
 internal fun TopicDto.toIdWithName(): IdWithName = HierarchyIdWithName(id, description, categoryId)

@@ -18,10 +18,11 @@ import com.github.neho4u.model.Placeholder
 class SpinnerAdapterWithInitialText(
     context: Context,
     private val resource: Int,
-    objects: List<IdWithName>,
-    private val initialText: String = "Please select"
+    private val objects: List<IdWithName>,
+    private val initialText: String
 ) : ArrayAdapter<IdWithName>(context, resource, objects) {
     private var initialTextWasShown = false
+    private val placeholder = Placeholder(initialText)
 
     fun update(list: List<IdWithName>) {
         clear()
@@ -29,12 +30,15 @@ class SpinnerAdapterWithInitialText(
         notifyDataSetChanged()
     }
 
-    override fun getItem(position: Int): IdWithName? {
-//        Log.w("SpinnerAdapterWithInitialText", "getItem: $position")
+    fun find(item: IdWithName): Int {
+        return objects.indexOfFirst { it.id == item.id }
+    }
+
+    override fun getItem(position: Int): IdWithName {
         return if (position == 0) {
-            Placeholder
+            placeholder
         } else {
-            super.getItem(position - 1)
+            super.getItem(position - 1) ?: placeholder
         }
     }
 
@@ -43,7 +47,6 @@ class SpinnerAdapterWithInitialText(
     }
 
     override fun getView(position: Int, recycle: View?, container: ViewGroup): View {
-//        Log.w("SpinnerAdapterWithInitialText", "position: $position")
         return if (position != 0) {
             super.getView(position, recycle, container)
         } else {

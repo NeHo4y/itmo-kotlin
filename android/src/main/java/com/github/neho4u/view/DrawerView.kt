@@ -18,8 +18,8 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.github.neho4u.R
 import com.github.neho4u.controller.UserDataController
 import com.github.neho4u.databinding.AMainDrawerBinding
+import com.github.neho4u.model.FeedbackFilter
 import com.github.neho4u.model.Ticket
-import com.github.neho4u.shared.model.feedback.FeedbackFilter
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -166,7 +166,9 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
                     runOnUiThread {
                         feedbackFilter = it
                     }
-                }.show()
+                }.also {
+                    it.show(feedbackFilter)
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)
