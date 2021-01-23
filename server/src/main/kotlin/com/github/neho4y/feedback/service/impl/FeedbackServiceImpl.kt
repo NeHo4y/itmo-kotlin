@@ -40,10 +40,10 @@ class FeedbackServiceImpl(
             .map { convertToDto(it) }
     }
 
-    override suspend fun getFeedbacksByFollower(userId: Long): List<FeedbackDto> {
+    override suspend fun getFeedbacksByFollower(userId: Long, filter: FeedbackFilter): List<FeedbackDto> {
         val followerFilter = FollowerFilterDto(null, userId, null)
         val followers = followerService.findFollowsByFilter(followerFilter)
-        val myFeedbacksFilter = FeedbackFilter(authorId = userId)
+        val myFeedbacksFilter = filter.copy(authorId = userId)
         val myFeedbacks = feedbackSpecificationRepository.findAll(FeedbackSearchSpecification(myFeedbacksFilter))
         val followed = followers.map {
             feedbackRepository.findById(it.feedbackId)

@@ -14,6 +14,7 @@ import com.github.neho4u.R
 import com.github.neho4u.controller.TicketController
 import com.github.neho4u.controller.TicketInterface
 import com.github.neho4u.databinding.FragmentTicketListBinding
+import com.github.neho4u.model.FeedbackFilter
 import com.github.neho4u.model.Ticket
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
@@ -63,10 +64,10 @@ class TicketFragment : Fragment(), TicketInterface {
         }
 
         tController = TicketController(this)
-        startTicketRefresh()
+        startTicketRefresh(listener?.getFilter() ?: FeedbackFilter())
     }
 
-    fun startTicketRefresh() {
+    fun startTicketRefresh(filter: FeedbackFilter) {
         listener?.setProgressVisibility(true)
         if (this.view != null) {
             with(binding.list.adapter as MyTicketRecyclerViewAdapter) {
@@ -75,8 +76,8 @@ class TicketFragment : Fragment(), TicketInterface {
             }
         }
         when (ticketType) {
-            TYPE_FOLLOWED -> GlobalScope.launch(Dispatchers.Default) { tController.refreshMyTickets() }
-            TYPE_ALL -> GlobalScope.launch(Dispatchers.Default) { tController.refreshAllTickets() }
+            TYPE_FOLLOWED -> GlobalScope.launch(Dispatchers.Default) { tController.refreshMyTickets(filter) }
+            TYPE_ALL -> GlobalScope.launch(Dispatchers.Default) { tController.refreshAllTickets(filter) }
         }
     }
 
@@ -89,7 +90,7 @@ class TicketFragment : Fragment(), TicketInterface {
 
         val pullToRefresh: SwipeRefreshLayout = binding.pullToRefresh
         pullToRefresh.setOnRefreshListener {
-            startTicketRefresh() // your code
+            startTicketRefresh(listener?.getFilter() ?: FeedbackFilter()) // your code
             pullToRefresh.isRefreshing = false
         }
         return with(binding) {
@@ -147,6 +148,7 @@ class TicketFragment : Fragment(), TicketInterface {
     interface OnListFragmentInteractionListener {
         fun onListFragmentInteraction(ticket: Ticket?)
         fun setProgressVisibility(visible: Boolean)
+        fun getFilter(): FeedbackFilter
     }
 
     companion object {

@@ -91,11 +91,12 @@ class SearchFilterDialogWrapper(
     }
 
     private fun onClickListener(v: View) {
+        val header = layoutBinding.searchView2.text.toString()
         val filter = FeedbackFilter(
             category = categories.choice.getOrNull(),
             topic = topics.choice.getOrNull(),
             subtopic = subtopics.choice.getOrNull(),
-            header = layoutBinding.searchView2.text.toString()
+            header = if (header.isNotEmpty()) header else null
         )
         onApplyFilterCallback(filter)
     }

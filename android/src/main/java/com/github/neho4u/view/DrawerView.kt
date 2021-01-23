@@ -36,6 +36,8 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
     private val userDataController = UserDataController()
     private var feedbackFilter = FeedbackFilter()
 
+    override fun getFilter() = feedbackFilter
+
     override fun onListFragmentInteraction(ticket: Ticket?) {
         val i = Intent(this, TicketView::class.java)
         i.putExtra(TicketView.ARG_TICKET_ID, ticket?.id)
@@ -153,11 +155,6 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
                 mainDrawerBinding.drawerLayout.openDrawer(GravityCompat.START)
                 true
             }
-            R.id.menu_dv_refresh -> {
-                val currentFragment = supportFragmentManager.findFragmentById(R.id.content_frame) as TicketFragment
-                currentFragment.startTicketRefresh()
-                true
-            }
             R.id.menu_add_feedback -> {
                 true
             }
@@ -165,6 +162,9 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
                 SearchFilterDialogWrapper(this) {
                     runOnUiThread {
                         feedbackFilter = it
+                        with(supportFragmentManager.findFragmentById(R.id.content_frame) as TicketFragment) {
+                            startTicketRefresh(feedbackFilter)
+                        }
                     }
                 }.also {
                     it.show(feedbackFilter)

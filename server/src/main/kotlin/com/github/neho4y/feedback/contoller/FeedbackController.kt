@@ -43,8 +43,11 @@ class FeedbackController(private val feedbackService: FeedbackService) {
         return feedbackService.updatePriority(feedbackPriority, id)
     }
 
-    @GetMapping("/feed")
-    suspend fun getAllUserFeedbacks(@AuthenticationPrincipal user: User): List<FeedbackDto> {
-        return feedbackService.getFeedbacksByFollower(user.id)
+    @PostMapping("/feed")
+    suspend fun getAllUserFeedbacks
+            (@RequestBody feedbackFilter: FeedbackFilter,
+             @AuthenticationPrincipal user: User
+    ): List<FeedbackDto> {
+        return feedbackService.getFeedbacksByFollower(user.id, feedbackFilter)
     }
 }

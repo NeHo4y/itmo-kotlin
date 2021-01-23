@@ -55,7 +55,7 @@ private fun RBuilder.myFeedTab(props: MainViewProps) {
         if (props.currentTab != Tab.MY_FEED) {
             MainScope().launch {
                 val feedbacks = Client().use {
-                    it.feedback().getFeed()
+                    it.feedback().getFeed(FeedbackFilter())
                 }.filter {
                     props.currentUser?.role != UserRole.USER ||
                         it.authorData.id == props.currentUser?.id

@@ -9,8 +9,10 @@ class FeedbackClient(private val httpClient: HttpClient) {
         return httpClient.get("/feedback/$id")
     }
 
-    suspend fun getFeed(): List<FeedbackDto> {
-        return httpClient.get("/feedback/feed")
+    suspend fun getFeed(filter: FeedbackFilter): List<FeedbackDto> {
+        return httpClient.post("/feedback/feed") {
+            body = filter
+        }
     }
 
     suspend fun getFilter(feedbackFilter: FeedbackFilter): List<FeedbackDto> {

@@ -1,11 +1,12 @@
 package com.github.neho4u.controller
 
+import android.util.Log
+import com.github.neho4u.model.FeedbackFilter
 import com.github.neho4u.model.Ticket
 import com.github.neho4u.model.toNote
 import com.github.neho4u.model.toTicket
 import com.github.neho4u.shared.model.comment.CommentCreationDto
 import com.github.neho4u.shared.model.feedback.FeedbackDto
-import com.github.neho4u.shared.model.feedback.FeedbackFilter
 import com.github.neho4u.shared.model.follower.FeedbackFollowerType
 import com.github.neho4u.shared.model.follower.FollowerFilterDto
 import com.github.neho4u.utils.Client
@@ -31,15 +32,15 @@ class TicketController(
         handleErrors { ticketInterface.ticketRefreshResult(fetchFeedbacks().map { it.toTicket() }) }
     }
 
-    suspend fun refreshMyTickets() {
+    suspend fun refreshMyTickets(filter: FeedbackFilter) {
         genericRefreshTickets {
-            Client().use { it.feedback().getFeed() }
+            Client().use { it.feedback().getFeed(filter.toDto()) }
         }
     }
 
-    suspend fun refreshAllTickets() {
+    suspend fun refreshAllTickets(filter: FeedbackFilter) {
         genericRefreshTickets {
-            Client().use { it.feedback().getFilter(FeedbackFilter()) }
+            Client().use { it.feedback().getFilter(filter.toDto()) }
         }
     }
 

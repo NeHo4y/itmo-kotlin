@@ -3,6 +3,7 @@ package components.home
 import Client
 import actions.FeedbacksLoad
 import com.github.neho4u.shared.model.feedback.FeedbackDto
+import com.github.neho4u.shared.model.feedback.FeedbackFilter
 import com.github.neho4u.shared.model.user.UserData
 import com.github.neho4u.shared.model.user.UserRole
 import enums.Tab
@@ -35,7 +36,7 @@ class Home(props: HomeProps) : RComponent<HomeProps, RState>(props) {
             MainScope().launch {
                 try {
                     val feedbacks = Client().use {
-                        it.feedback().getFeed()
+                        it.feedback().getFeed(FeedbackFilter())
                     }.filter {
                         props.currentUser?.role != UserRole.USER ||
                             it.authorData.id == props.currentUser?.id
