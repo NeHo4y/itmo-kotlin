@@ -1,9 +1,9 @@
 package com.github.neho4u.view
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.github.neho4u.databinding.FragmentTicketBinding
 import com.github.neho4u.model.Ticket
 import com.github.neho4u.view.TicketFragment.OnListFragmentInteractionListener

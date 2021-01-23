@@ -14,7 +14,10 @@
     <string name="last_updated">Обновлено: %1$s</string>
     <string name="severity_text">%1$s</string>
     <string name="pretty_updated_string">%1$s от %2$s</string>
-    <string name="assigned_to">Назначено на</string>
+    <string name="assigned_to">Назначено на %1$s</string>
     <string name="search_filer">Фильтр поиска</string>
     <string name="resolution">Решение</string>
+    <string name="category">Категория</string>
+    <string name="topic">Тема</string>
+    <string name="subtopic">Подтема</string>
 </resources>

@@ -2,25 +2,23 @@ package com.github.neho4u.view
 
 import android.content.Context
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
-import androidx.fragment.app.Fragment
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.github.neho4u.R
 import com.github.neho4u.controller.TicketController
 import com.github.neho4u.controller.TicketInterface
 import com.github.neho4u.databinding.FragmentTicketListBinding
 import com.github.neho4u.model.Ticket
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-
 
 /**
  * A fragment representing a list of Items.
@@ -58,7 +56,6 @@ class TicketFragment : Fragment(), TicketInterface {
     private lateinit var tController: TicketController
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
 
         arguments?.let {

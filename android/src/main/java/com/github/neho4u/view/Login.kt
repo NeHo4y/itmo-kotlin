@@ -2,8 +2,8 @@ package com.github.neho4u.view
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.view.inputmethod.EditorInfo
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.github.neho4u.R
 import com.github.neho4u.controller.AuthController

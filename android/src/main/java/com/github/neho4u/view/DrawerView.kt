@@ -4,22 +4,23 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.ActionBar
-import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.TranslateAnimation
 import android.widget.TextView
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
+import androidx.drawerlayout.widget.DrawerLayout
 import com.github.neho4u.R
 import com.github.neho4u.controller.UserDataController
 import com.github.neho4u.databinding.AMainDrawerBinding
-import com.github.neho4u.databinding.DrawerHeaderBinding
 import com.github.neho4u.model.Ticket
+import com.github.neho4u.shared.model.feedback.FeedbackFilter
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -29,10 +30,11 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
 
     private var menuRefresh: MenuItem? = null
     private var menuAddFeedback: MenuItem? = null
+    private var menuSearchFilter: MenuItem? = null
     private lateinit var mainDrawerBinding: AMainDrawerBinding
-    private lateinit var drawerHeaderBinding: DrawerHeaderBinding
     private lateinit var tvHeaderUser: TextView
     private val userDataController = UserDataController()
+    private var feedbackFilter = FeedbackFilter()
 
     override fun onListFragmentInteraction(ticket: Ticket?) {
         val i = Intent(this, TicketView::class.java)
@@ -41,14 +43,11 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
     }
 
     override fun setProgressVisibility(visible: Boolean) {
-        menuRefresh?.isVisible = !visible
+//        menuRefresh?.isVisible = !visible
 //        menuAddFeedback?.isVisible = !visible
-
-        if (visible) {
-            mainDrawerBinding.pbMainDrawer.visibility = View.VISIBLE
-        } else {
-            mainDrawerBinding.pbMainDrawer.visibility = View.GONE
-        }
+        menuSearchFilter?.isVisible = !visible
+        mainDrawerBinding.pbMainDrawer.visibility =
+            if (visible) View.VISIBLE else View.GONE
     }
 
     private lateinit var preferences: SharedPreferences
@@ -56,7 +55,6 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        drawerHeaderBinding = DataBindingUtil.setContentView(this, R.layout.drawer_header)
         mainDrawerBinding = DataBindingUtil.setContentView(this, R.layout.a_main_drawer)
         setSupportActionBar(mainDrawerBinding.drawerToolbar)
 
@@ -145,6 +143,7 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
         menuInflater.inflate(R.menu.menu_drawer_view, menu)
         menuRefresh = menu?.findItem(R.id.menu_dv_refresh)
         menuAddFeedback = menu?.findItem(R.id.menu_add_feedback)
+        menuSearchFilter = menu?.findItem(R.id.menu_filter)
         return true
     }
 
@@ -160,6 +159,14 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
                 true
             }
             R.id.menu_add_feedback -> {
+                true
+            }
+            R.id.menu_filter -> {
+                SearchFilterDialogWrapper(this) {
+                    runOnUiThread {
+                        feedbackFilter = it
+                    }
+                }.show()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -178,6 +185,18 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
                 tvHeaderUser.text = techUserData.username
                 tvHeaderUser.visibility = View.VISIBLE
             }
+        }
+    }
+
+    fun showError(error: String) {
+        runOnUiThread {
+            Log.d("TicketFragment", "Failed to load ticket: $error")
+            Snackbar.make(mainDrawerBinding.contentFrame, error, Snackbar.LENGTH_LONG).apply {
+                view.findViewById<TextView>(R.id.snackbar_text).apply {
+                    setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_error, 0, 0, 0)
+                    compoundDrawablePadding = resources.getDimensionPixelOffset(R.dimen.snackbar_icon_padding)
+                }
+            }.show()
         }
     }
 }

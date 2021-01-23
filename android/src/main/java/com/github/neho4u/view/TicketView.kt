@@ -2,14 +2,13 @@ package com.github.neho4u.view
 
 import android.app.Dialog
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.github.neho4u.R
 import com.github.neho4u.controller.NoteInterface
@@ -20,6 +19,7 @@ import com.github.neho4u.databinding.DialogNoteLayoutBinding
 import com.github.neho4u.databinding.NoteDetailBinding
 import com.github.neho4u.model.Ticket
 import com.github.neho4u.shared.model.comment.CommentCreationDto
+import com.google.android.material.snackbar.Snackbar
 import io.noties.markwon.Markwon
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -90,7 +90,7 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
         if (ticket.assignee != null) {
             with(noteBinding.tvTicketViewAssignedTech) {
                 visibility = View.VISIBLE
-                text = ticket.assignee
+                text = getString(R.string.assigned_to, ticket.assignee)
             }
         }
 
@@ -121,8 +121,8 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             android.R.id.home -> {
                 finish()
                 true

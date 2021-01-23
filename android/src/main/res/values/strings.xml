@@ -19,4 +19,7 @@
     <string name="pretty_updated_string">%1$s by %2$s</string>
     <string name="assigned_to">Assigned to %1$s</string>
     <string name="search_filer">Search Filter</string>
+    <string name="category">Category</string>
+    <string name="topic">Topic</string>
+    <string name="subtopic">Subtopic</string>
 </resources>
