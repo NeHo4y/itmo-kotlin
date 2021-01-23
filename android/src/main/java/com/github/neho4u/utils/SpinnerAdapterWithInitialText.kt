@@ -1,7 +1,6 @@
 package com.github.neho4u.utils
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,6 @@ import android.widget.TextView
 import com.github.neho4u.R
 import com.github.neho4u.model.IdWithName
 import com.github.neho4u.model.Placeholder
-import com.github.neho4u.model.SimpleIdWithName
 
 /**
  * A SpinnerAdapter which does not show the value of the initial selection initially,
