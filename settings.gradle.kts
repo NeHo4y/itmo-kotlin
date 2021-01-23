@@ -19,7 +19,9 @@ rootProject.name = "feedbacKt"
 
 enableFeaturePreview("GRADLE_METADATA")
 
+if (INCLUDE_ANDROID == "true") {
+    include( ":android")
+}
 include(":common")
 include(":server")
-include(":android")
 include(":front")
