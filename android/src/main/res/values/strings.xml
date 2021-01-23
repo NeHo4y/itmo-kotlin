@@ -24,4 +24,8 @@
     <string name="choose_subtopic">Select Subtopic</string>
     <string name="header">Feedback Header</string>
     <string name="reset_filter">Reset</string>
+    <string name="functionality">Functionality</string>
+    <string name="logout">Logout</string>
+    <string name="logout_details">Logout from account</string>
+    <string name="action_settings">Settings</string>
 </resources>

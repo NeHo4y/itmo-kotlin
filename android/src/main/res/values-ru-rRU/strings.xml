@@ -22,4 +22,8 @@
     <string name="choose_subtopic">Выберите подтему</string>
     <string name="header">Заголовок обращения</string>
     <string name="reset_filter">Сбросить</string>
+    <string name="functionality">Действия</string>
+    <string name="logout">Выйти</string>
+    <string name="logout_details">Выйти из аккаунта</string>
+    <string name="action_settings">Настройки</string>
 </resources>

@@ -3,9 +3,9 @@ package com.github.neho4u.controller
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
-import android.preference.PreferenceManager
 import android.util.Log
 import android.widget.EditText
+import androidx.preference.PreferenceManager
 import com.github.neho4u.model.NetResult
 import com.github.neho4u.utils.AndroidTokenProvider
 import com.github.neho4u.view.Login

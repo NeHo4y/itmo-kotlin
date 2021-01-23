@@ -17,6 +17,7 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
         <activity android:name="com.github.neho4u.view.TicketView" />
+        <activity android:name=".view.settings.SettingsActivity" />
 
         <activity android:name="com.github.neho4u.view.DrawerView">
             <intent-filter>

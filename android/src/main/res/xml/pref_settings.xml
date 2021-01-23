@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- opens a subscreen of settings -->
+    <PreferenceCategory
+        android:key="pref_key_functionality"
+        android:title="@string/functionality">
+
+
+        <Preference
+            android:key="key_pref_logout"
+            android:summary="@string/logout_details"
+            android:title="@string/logout" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

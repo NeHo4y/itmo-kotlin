@@ -20,6 +20,7 @@ import com.github.neho4u.controller.UserDataController
 import com.github.neho4u.databinding.AMainDrawerBinding
 import com.github.neho4u.model.FeedbackFilter
 import com.github.neho4u.model.Ticket
+import com.github.neho4u.view.settings.SettingsActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -169,6 +170,10 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
                 }.also {
                     it.show(feedbackFilter)
                 }
+                true
+            }
+            R.id.action_settings -> {
+                startActivity(Intent(this, SettingsActivity::class.java))
                 true
             }
             else -> super.onOptionsItemSelected(item)

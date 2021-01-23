@@ -72,4 +72,5 @@ dependencies {
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.21")
     implementation("io.noties.markwon:core:4.6.1")
+    implementation("androidx.preference:preference:1.1.1")
 }

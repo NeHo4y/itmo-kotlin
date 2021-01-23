@@ -33,7 +33,17 @@ class TicketController(
 
     suspend fun refreshMyTickets(filter: FeedbackFilter) {
         genericRefreshTickets {
-            Client().use { it.feedback().getFeed(filter.toDto()) }
+            Client().use { client ->
+                client.feedback()
+                    .getFeed(filter.toDto())
+                    .filter {
+                        true
+//                        filter.category?.id != null && it.category?.id == filter.category.id &&
+//                            filter.topic?.id != null && it.topic?.id == filter.topic.id &&
+//                            filter.subtopic?.id != null && it.subtopic?.id == filter.subtopic.id &&
+//                            filter.header != null && it.header?.contains(filter.header) ?: false
+                    }
+            }
         }
     }
 
