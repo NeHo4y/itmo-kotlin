@@ -45,7 +45,7 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
 
     override fun setProgressVisibility(visible: Boolean) {
 //        menuRefresh?.isVisible = !visible
-//        menuAddFeedback?.isVisible = !visible
+        menuAddFeedback?.isVisible = !visible
         menuSearchFilter?.isVisible = !visible
         mainDrawerBinding.pbMainDrawer.visibility =
             if (visible) View.VISIBLE else View.GONE
@@ -152,6 +152,15 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
                 true
             }
             R.id.menu_add_feedback -> {
+                NewTicketDialogWrapper(this) {
+                    runOnUiThread {
+                        with(supportFragmentManager.findFragmentById(R.id.content_frame) as TicketFragment) {
+                            startTicketRefresh(feedbackFilter)
+                        }
+                    }
+                }.also {
+                    it.show()
+                }
                 true
             }
             R.id.menu_filter -> {
