@@ -44,9 +44,9 @@ class FeedbackController(private val feedbackService: FeedbackService) {
     }
 
     @PostMapping("/feed")
-    suspend fun getAllUserFeedbacks
-            (@RequestBody feedbackFilter: FeedbackFilter,
-             @AuthenticationPrincipal user: User
+    suspend fun getAllUserFeedbacks(
+        @RequestBody feedbackFilter: FeedbackFilter,
+        @AuthenticationPrincipal user: User
     ): List<FeedbackDto> {
         return feedbackService.getFeedbacksByFollower(user.id, feedbackFilter)
     }

@@ -1,6 +1,5 @@
 package com.github.neho4u.controller
 
-import android.util.Log
 import com.github.neho4u.model.FeedbackFilter
 import com.github.neho4u.model.Ticket
 import com.github.neho4u.model.toNote
