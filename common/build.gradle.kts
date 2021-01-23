@@ -1,3 +1,5 @@
+val INCLUDE_ANDROID: String by extra
+
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
@@ -17,7 +19,9 @@ repositories {
 }
 
 kotlin {
-    android()
+    if (INCLUDE_ANDROID == "true") {
+        android()
+    }
     jvm {
         compilations.all {
             kotlinOptions.jvmTarget = "11"
@@ -29,6 +33,7 @@ kotlin {
         }
         useCommonJs()
     }
+
     sourceSets {
         val ktorVersion = "1.5.0"
         fun ktorClient(module: String, version: String = ktorVersion) = "io.ktor:ktor-client-$module:$version"
@@ -46,11 +51,13 @@ kotlin {
             }
         }
 
-        val androidMain by getting {
-            dependencies {
-                implementation(kotlin("stdlib"))
-                implementation(ktorClient("core-jvm"))
-                implementation(ktorClient("okhttp"))
+        if (INCLUDE_ANDROID == "true") {
+            val androidMain by getting {
+                dependencies {
+                    implementation(kotlin("stdlib"))
+                    implementation(ktorClient("core-jvm"))
+                    implementation(ktorClient("okhttp"))
+                }
             }
         }
 
@@ -73,18 +80,22 @@ kotlin {
     }
 }
 
-android {
-    compileSdkVersion(28)
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    defaultConfig {
-        minSdkVersion(24)
-        targetSdkVersion(28)
-        versionCode = 1
-        versionName = "1.0"
-    }
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
+if (INCLUDE_ANDROID == "true") {
+
+
+    android {
+        compileSdkVersion(28)
+        sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+        defaultConfig {
+            minSdkVersion(24)
+            targetSdkVersion(28)
+            versionCode = 1
+            versionName = "1.0"
+        }
+        buildTypes {
+            getByName("release") {
+                isMinifyEnabled = false
+            }
         }
     }
 }

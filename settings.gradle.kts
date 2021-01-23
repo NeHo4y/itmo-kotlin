@@ -1,4 +1,4 @@
-val INCLUDE_ANDROID = "true"
+val INCLUDE_ANDROID: String by extra
 
 pluginManagement {
     repositories {
