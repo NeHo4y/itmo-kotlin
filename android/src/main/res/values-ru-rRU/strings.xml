@@ -20,4 +20,5 @@
     <string name="choose_category">Выберите категорию</string>
     <string name="choose_topic">Выберите тему</string>
     <string name="choose_subtopic">Выберите подтему</string>
+    <string name="header">Заголовок обращения</string>
 </resources>

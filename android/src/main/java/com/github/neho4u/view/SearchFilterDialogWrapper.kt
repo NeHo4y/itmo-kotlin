@@ -17,7 +17,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.concurrent.atomic.AtomicBoolean
 
 class SearchFilterDialogWrapper(
     private val parent: DrawerView,
@@ -33,7 +32,6 @@ class SearchFilterDialogWrapper(
     private val categories = SpinnerHolder(R.id.category_spinner, R.string.choose_category)
     private val topics = SpinnerHolder(R.id.topic_spinner, R.string.choose_topic)
     private val subtopics = SpinnerHolder(R.id.subtopic_spinner, R.string.choose_subtopic)
-    private val userSelection = AtomicBoolean(false)
 
     private val spinnerListener = object : AdapterView.OnItemSelectedListener {
         override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
@@ -54,7 +52,6 @@ class SearchFilterDialogWrapper(
         subtopics.spinner.setOnItemSelectedListener(spinnerListener)
         with(layoutBinding) {
             bNoteCancel.setOnClickListener {
-                onClickListener(it)
                 dialog.dismiss()
             }
             bNoteOk.setOnClickListener {
@@ -75,14 +72,12 @@ class SearchFilterDialogWrapper(
     }
 
     fun show(filter: FeedbackFilter) {
-        userSelection.set(false)
         dialog.show()
         GlobalScope.launch {
             loadData()
             withContext(Dispatchers.Main) {
                 initWithFilter(filter)
             }
-            userSelection.set(true)
         }
     }
 
@@ -90,13 +85,17 @@ class SearchFilterDialogWrapper(
         categories.initWith(filter.category, topics)
         topics.initWith(filter.topic, subtopics)
         subtopics.initWith(filter.subtopic, null)
+        filter.header?.let {
+            layoutBinding.searchView2.setText(it)
+        }
     }
 
     private fun onClickListener(v: View) {
         val filter = FeedbackFilter(
             category = categories.choice.getOrNull(),
             topic = topics.choice.getOrNull(),
-            subtopic = subtopics.choice.getOrNull()
+            subtopic = subtopics.choice.getOrNull(),
+            header = layoutBinding.searchView2.text.toString()
         )
         onApplyFilterCallback(filter)
     }
@@ -130,11 +129,10 @@ class SearchFilterDialogWrapper(
             var parentChoice = choice
             for (holder in childHolder) {
                 holder?.let {
-                    it.adapter.update(
-                        it.data.filter { id -> id.isMyParent(parentChoice) }
-                    )
+                    val newData = it.data.filter { id -> id.isMyParent(parentChoice) }
+                    it.adapter.update(newData)
                     it.spinner.setSelection(0, true)
-                    it.spinner.isEnabled = parentChoice !is Placeholder
+                    it.spinner.isEnabled = newData.isNotEmpty()
                     parentChoice = it.adapter.getItem(0)
                 }
             }
@@ -147,12 +145,11 @@ class SearchFilterDialogWrapper(
                     choice = adapter.getItem(pos + 1)
                     spinner.setSelection(pos + 1, true)
                 }
-                childHolder?.let {
-                    it.adapter.update(
-                        it.data.filter { id -> id.isMyParent(choice) }
-                    )
-                    it.spinner.isEnabled = choice !is Placeholder
-                }
+            }
+            childHolder?.let {
+                val newData = it.data.filter { id -> id.isMyParent(choice) }
+                it.adapter.update(newData)
+                it.spinner.isEnabled = newData.isNotEmpty()
             }
         }
     }
