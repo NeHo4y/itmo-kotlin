@@ -21,6 +21,9 @@ import com.github.neho4u.databinding.DialogNoteLayoutBinding
 import com.github.neho4u.databinding.NoteDetailBinding
 import com.github.neho4u.model.Ticket
 import com.github.neho4u.shared.model.comment.CommentCreationDto
+import com.github.neho4u.shared.model.user.UserData
+import com.github.neho4u.shared.model.user.UserRole
+import com.github.neho4u.utils.AndroidTokenProvider
 import com.google.android.material.snackbar.Snackbar
 import io.noties.markwon.Markwon
 import kotlinx.coroutines.Dispatchers
@@ -40,6 +43,7 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
     private lateinit var pullToRefresh: SwipeRefreshLayout
     private var menuAssign: MenuItem? = null
     private var menuChangeStatus: MenuItem? = null
+    private var currentUser: UserData? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +51,7 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
         ticketId = intent.getLongExtra(ARG_TICKET_ID, -1L)
         ticketController = TicketController(this, this)
         commentController = CommentController(this, this)
+        currentUser = AndroidTokenProvider.getUserData()
 
         setSupportActionBar(noteBinding.ticketViewToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -197,11 +202,14 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-//        menuInflater.inflate(R.menu.menu_drawer_view, menu)
         menuInflater.inflate(R.menu.menu_ticket_view, menu)
         menuNewNote = menu?.findItem(R.id.menu_add_note)
-        menuAssign = menu?.findItem(R.id.menu_assign_to_me)
-        menuChangeStatus = menu?.findItem(R.id.menu_change_status)
+        menuAssign = menu?.findItem(R.id.menu_assign_to_me)?.apply {
+            isVisible = currentUser?.role == UserRole.ADMIN
+        }
+        menuChangeStatus = menu?.findItem(R.id.menu_change_status)?.apply {
+            isVisible = currentUser?.role == UserRole.ADMIN
+        }
         return true
     }
 
@@ -216,7 +224,8 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
             menuNewNote?.isEnabled = true
             menuChangeStatus?.isEnabled = true
             menuAssign?.isEnabled = true
-            menuAssign?.isVisible = result.assignee.isNullOrBlank()
+            menuAssign?.isVisible = result.assignee.isNullOrBlank() &&
+                currentUser?.role == UserRole.ADMIN
             noteBinding.pbTicketView.visibility = View.GONE
             inflateTicket(result)
         }

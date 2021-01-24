@@ -18,6 +18,9 @@ import com.github.neho4u.controller.UserDataController
 import com.github.neho4u.databinding.AMainDrawerBinding
 import com.github.neho4u.model.FeedbackFilter
 import com.github.neho4u.model.Ticket
+import com.github.neho4u.shared.model.user.UserData
+import com.github.neho4u.shared.model.user.UserRole
+import com.github.neho4u.utils.AndroidTokenProvider
 import com.github.neho4u.view.settings.SettingsActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
@@ -33,6 +36,7 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
     private lateinit var tvHeaderUser: TextView
     private val userDataController = UserDataController()
     private var feedbackFilter = FeedbackFilter()
+    private var currentUser: UserData? = null
 
     override fun getFilter() = feedbackFilter
 
@@ -53,6 +57,8 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
         super.onCreate(savedInstanceState)
         mainDrawerBinding = DataBindingUtil.setContentView(this, R.layout.a_main_drawer)
         setSupportActionBar(mainDrawerBinding.drawerToolbar)
+
+        currentUser = AndroidTokenProvider.getUserData()
 
         val actionbar: ActionBar? = supportActionBar
         actionbar?.apply {
@@ -101,6 +107,8 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
             .getHeaderView(0)
             .findViewById(R.id.tv_header_user)
         updateTechInfo()
+        mainDrawerBinding.navView.menu.findItem(R.id.dm_all_tickets)?.isVisible =
+            currentUser?.role == UserRole.ADMIN
         mainDrawerBinding.navView.setCheckedItem(R.id.dm_my_tickets)
         handleNavSelection(mainDrawerBinding.navView.checkedItem)
     }
