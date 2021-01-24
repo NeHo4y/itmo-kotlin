@@ -8,6 +8,7 @@ import com.github.neho4u.model.toNote
 import com.github.neho4u.model.toTicket
 import com.github.neho4u.shared.model.feedback.FeedbackDto
 import com.github.neho4u.shared.model.follower.FeedbackFollowerType
+import com.github.neho4u.shared.model.follower.FollowerCreateDto
 import com.github.neho4u.shared.model.follower.FollowerFilterDto
 import com.github.neho4u.utils.Client
 import io.ktor.client.features.*
@@ -25,8 +26,8 @@ class TicketController(
                     ticketInterface.ticketError(context?.getString(R.string.error_conn) ?: "EГГОГ")
                 }
                 is HttpRequestTimeoutException ->
-                    ticketInterface.ticketError(context?.getString(R.string.error_unknown) ?: "EГГОГ")
-                else -> ticketInterface.ticketError(t.toString())
+                    ticketInterface.ticketError(context?.getString(R.string.error_timeout) ?: "EГГОГ")
+                else -> ticketInterface.ticketError(context?.getString(R.string.error_unknown) ?: "EГГОГ")
             }
             null
         }
@@ -48,6 +49,14 @@ class TicketController(
 //                            filter.subtopic?.id != null && it.subtopic?.id == filter.subtopic.id &&
 //                            filter.header != null && it.header?.contains(filter.header) ?: false
                     }
+            }
+        }
+    }
+
+    suspend fun assignOnMe(feedbackId: Long) {
+        handleErrors {
+            Client().use {
+                it.follower().add(FollowerCreateDto(feedbackId, FeedbackFollowerType.ASSIGNEE))
             }
         }
     }

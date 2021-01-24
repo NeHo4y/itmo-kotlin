@@ -18,8 +18,8 @@ class CommentController(
                 is ResponseException ->
                     noteInterface.noteSendError(context?.getString(R.string.error_conn) ?: "EГГОГ")
                 is HttpRequestTimeoutException ->
-                    noteInterface.noteSendError(context?.getString(R.string.error_unknown) ?: "EГГОГ")
-                else -> noteInterface.noteSendError(t.toString())
+                    noteInterface.noteSendError(context?.getString(R.string.error_timeout) ?: "EГГОГ")
+                else -> noteInterface.noteSendError(context?.getString(R.string.error_unknown) ?: "EГГОГ")
             }
             null
         }

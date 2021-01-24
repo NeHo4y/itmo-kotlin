@@ -163,7 +163,12 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
                 true
             }
             R.id.menu_assign_to_me -> {
-
+                GlobalScope.launch {
+                    ticketController.assignOnMe(ticketId)
+                    withContext(Dispatchers.Main) {
+                        startRefresh()
+                    }
+                }
                 true
             }
             R.id.menu_add_note -> {

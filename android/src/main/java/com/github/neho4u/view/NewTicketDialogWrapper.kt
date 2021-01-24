@@ -8,7 +8,6 @@ import android.widget.AdapterView
 import android.widget.TextView
 import com.github.neho4u.R
 import com.github.neho4u.controller.CategoryController
-import com.github.neho4u.controller.TicketController
 import com.github.neho4u.databinding.DialogTicketLayoutBinding
 import com.github.neho4u.model.IdWithName
 import com.github.neho4u.model.Placeholder
