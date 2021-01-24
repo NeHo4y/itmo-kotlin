@@ -12,8 +12,10 @@ import com.github.neho4u.shared.client.Client as CommonClient
 class JsHttpClientProvider : HttpClientProvider {
     override fun getHttpClient() = HttpClient(Js) {
         defaultRequest {
-            host = "localhost"
-            port = 8000
+            url {
+                protocol = URLProtocol.HTTPS
+                host = "limitless-brook-42512.herokuapp.com"
+            }
         }
         tokenAuth {
             tokenProvider = JsTokenProvider
