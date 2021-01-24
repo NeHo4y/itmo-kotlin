@@ -7,6 +7,8 @@ import com.github.neho4u.model.Ticket
 import com.github.neho4u.model.toNote
 import com.github.neho4u.model.toTicket
 import com.github.neho4u.shared.model.feedback.FeedbackDto
+import com.github.neho4u.shared.model.feedback.FeedbackPriority
+import com.github.neho4u.shared.model.feedback.FeedbackStatus
 import com.github.neho4u.shared.model.follower.FeedbackFollowerType
 import com.github.neho4u.shared.model.follower.FollowerCreateDto
 import com.github.neho4u.shared.model.follower.FollowerFilterDto
@@ -22,9 +24,8 @@ class TicketController(
             action()
         } catch (t: Throwable) {
             when (t) {
-                is ResponseException -> {
+                is ResponseException ->
                     ticketInterface.ticketError(context?.getString(R.string.error_conn) ?: "EГГОГ")
-                }
                 is HttpRequestTimeoutException ->
                     ticketInterface.ticketError(context?.getString(R.string.error_timeout) ?: "EГГОГ")
                 else -> ticketInterface.ticketError(context?.getString(R.string.error_unknown) ?: "EГГОГ")
@@ -38,17 +39,21 @@ class TicketController(
     }
 
     suspend fun refreshMyTickets(filter: FeedbackFilter) {
-        genericRefreshTickets {
-            Client().use { client ->
-                client.feedback()
-                    .getFeed(filter.toDto())
-                    .filter {
-                        true
-//                        filter.category?.id != null && it.category?.id == filter.category.id &&
-//                            filter.topic?.id != null && it.topic?.id == filter.topic.id &&
-//                            filter.subtopic?.id != null && it.subtopic?.id == filter.subtopic.id &&
-//                            filter.header != null && it.header?.contains(filter.header) ?: false
-                    }
+        genericRefreshTickets { Client().use { it.feedback().getFeed(filter.toDto()) } }
+    }
+
+    suspend fun updateTicketStatus(feedbackId: Long, status: FeedbackStatus) {
+        handleErrors {
+            Client().use {
+                it.feedback().updateStatus(feedbackId, status)
+            }
+        }
+    }
+
+    suspend fun updateTicketPriority(feedbackId: Long, priority: FeedbackPriority) {
+        handleErrors {
+            Client().use {
+                it.feedback().updatePriority(feedbackId, priority)
             }
         }
     }

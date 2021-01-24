@@ -9,6 +9,19 @@
         android:layout_width="350dp"
         android:layout_height="wrap_content">
 
+        <Spinner
+            android:id="@+id/priority_spinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toTopOf="@+id/status_spinner"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Spinner
             android:id="@+id/status_spinner"
@@ -18,26 +31,15 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@id/priority_spinner"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toTopOf="@id/b_status_cancel"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/priority_spinner" />
 
-        <Spinner
-            android:id="@+id/priority_spinner"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/b_note_cancel"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/status_spinner" />
 
         <Button
-            android:id="@+id/b_note_cancel"
+            android:id="@+id/b_status_cancel"
             style='@style/Widget.AppCompat.Button.Borderless'
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -45,12 +47,12 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:text="@android:string/cancel"
-            app:layout_constraintEnd_toStartOf="@+id/b_note_ok"
+            app:layout_constraintEnd_toStartOf="@+id/b_status_ok"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/priority_spinner" />
+            app:layout_constraintTop_toBottomOf="@id/status_spinner" />
 
         <Button
-            android:id="@+id/b_note_ok"
+            android:id="@+id/b_status_ok"
             style='@style/Widget.AppCompat.Button.Borderless'
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -60,9 +62,9 @@
             android:text="@android:string/ok"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/b_note_cancel"
-            app:layout_constraintTop_toTopOf="@id/b_note_cancel"
-            tools:layout_constraintTop_toBottomOf="@id/et_note_text" />
+            app:layout_constraintStart_toEndOf="@+id/b_status_cancel"
+            app:layout_constraintTop_toTopOf="@id/b_status_cancel"
+            tools:layout_constraintTop_toBottomOf="@id/status_spinner" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

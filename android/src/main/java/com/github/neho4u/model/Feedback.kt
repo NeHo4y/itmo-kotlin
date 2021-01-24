@@ -8,6 +8,6 @@ internal fun FeedbackDto.toTicket() = Ticket(
     displayClient = authorData.username,
     lastUpdated = creationDate,
     detail = "${category?.name} : ${topic?.name} : ${subtopic?.name}",
-    priority = priority?.name,
-    status = status?.name
+    priority = priority,
+    status = status
 )

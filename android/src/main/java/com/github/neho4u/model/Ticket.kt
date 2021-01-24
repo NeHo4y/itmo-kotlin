@@ -1,5 +1,7 @@
 package com.github.neho4u.model
 
+import com.github.neho4u.shared.model.feedback.FeedbackPriority
+import com.github.neho4u.shared.model.feedback.FeedbackStatus
 import kotlinx.datetime.LocalDateTime
 
 data class Ticket(
@@ -8,8 +10,8 @@ data class Ticket(
     val subject: String? = null,
     val detail: String? = null,
     val displayClient: String? = null,
-    val priority: String? = null,
+    val priority: FeedbackPriority? = null,
     val notes: List<Note>? = null,
     val assignee: String? = null,
-    val status: String? = null
+    val status: FeedbackStatus? = null
 )

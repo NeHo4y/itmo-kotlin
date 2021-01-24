@@ -41,5 +41,7 @@
     <string name="change_status">Change status</string>
     <string name="new_feedback">Feedback header</string>
     <string name="new_feedback_description">Feedback description</string>
+    <string name="choose_priority">Choose Priority</string>
+    <string name="choose_status">Choose Status</string>
 
 </resources>

@@ -27,7 +27,6 @@ import kotlinx.coroutines.withContext
 
 class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteractionListener {
 
-    private var menuRefresh: MenuItem? = null
     private var menuAddFeedback: MenuItem? = null
     private var menuSearchFilter: MenuItem? = null
     private lateinit var mainDrawerBinding: AMainDrawerBinding
@@ -46,8 +45,10 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
     override fun setProgressVisibility(visible: Boolean) {
         menuAddFeedback?.isEnabled = !visible
         menuSearchFilter?.isEnabled = !visible
-        mainDrawerBinding.pbMainDrawer.visibility =
-            if (visible) View.VISIBLE else View.GONE
+        if (::mainDrawerBinding.isInitialized) {
+            mainDrawerBinding.pbMainDrawer.visibility =
+                if (visible) View.VISIBLE else View.GONE
+        }
     }
 
     private var lastTranslate = 0.0f
@@ -138,7 +139,6 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_drawer_view, menu)
-        menuRefresh = menu?.findItem(R.id.menu_dv_refresh)
         menuAddFeedback = menu?.findItem(R.id.menu_add_feedback)
         menuSearchFilter = menu?.findItem(R.id.menu_filter)
         return true

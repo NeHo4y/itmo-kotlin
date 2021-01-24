@@ -17,7 +17,6 @@ import com.github.neho4u.controller.NoteInterface
 import com.github.neho4u.controller.TicketController
 import com.github.neho4u.controller.TicketInterface
 import com.github.neho4u.databinding.ATicketViewBinding
-import com.github.neho4u.databinding.ChangeStatusLayoutBinding
 import com.github.neho4u.databinding.DialogNoteLayoutBinding
 import com.github.neho4u.databinding.NoteDetailBinding
 import com.github.neho4u.model.Ticket
@@ -95,12 +94,12 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
 
         if (ticket.priority != null) {
             noteBinding.tvSeverity.visibility = View.VISIBLE
-            noteBinding.tvSeverity.text = getString(R.string.severity_text, ticket.priority)
+            noteBinding.tvSeverity.text = getString(R.string.severity_text, ticket.priority.name)
         }
 
         if (ticket.status != null) {
             noteBinding.tvStatus.visibility = View.VISIBLE
-            noteBinding.tvStatus.text = ticket.status
+            noteBinding.tvStatus.text = ticket.status.name
         }
 
         if (ticket.subject != null) {
@@ -149,17 +148,9 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
                 true
             }
             R.id.menu_change_status -> {
-                val dialog = Dialog(this)
-                val changeStatusLayoutBinding = ChangeStatusLayoutBinding.inflate(LayoutInflater.from(this))
-                dialog.setContentView(changeStatusLayoutBinding.root)
-                dialog.setTitle(resources.getString(R.string.change_status))
-                changeStatusLayoutBinding.bNoteCancel.setOnClickListener { dialog.dismiss() }
-                changeStatusLayoutBinding.bNoteOk.setOnClickListener { dialog.dismiss() }
-                dialog.show()
-                true
-            }
-            R.id.menu_dv_refresh -> {
-                startRefresh()
+                ChangeStatusDialogWrapper(this, ticketId) {
+                    startRefresh()
+                }.show(ticket?.status, ticket?.priority)
                 true
             }
             R.id.menu_assign_to_me -> {

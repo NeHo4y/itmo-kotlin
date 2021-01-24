@@ -23,7 +23,7 @@ class AndroidHttpClientProvider : HttpClientProvider {
         }
         install(HttpTimeout) {
             // timeout config
-            requestTimeoutMillis = 5000
+            requestTimeoutMillis = 10000
         }
     }
 }

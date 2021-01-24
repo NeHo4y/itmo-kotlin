@@ -69,11 +69,6 @@ class TicketFragment : Fragment(), TicketInterface {
 
     fun startTicketRefresh(filter: FeedbackFilter) {
         listener?.setProgressVisibility(true)
-//        if (this.view != null) {
-//            with(binding.list.adapter as MyTicketRecyclerViewAdapter) {
-//                Log.d("TicketFragment", "Updated data in adapter")
-//            }
-//        }
         when (ticketType) {
             TYPE_FOLLOWED -> GlobalScope.launch(Dispatchers.Default) { tController.refreshMyTickets(filter) }
             TYPE_ALL -> GlobalScope.launch(Dispatchers.Default) { tController.refreshAllTickets(filter) }

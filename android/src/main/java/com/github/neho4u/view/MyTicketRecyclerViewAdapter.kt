@@ -33,8 +33,8 @@ class MyTicketRecyclerViewAdapter(
             mLastUpdated.text = item.lastUpdated.toString()
             mSubject.text = item.subject
             mDetails.text = item.detail
-            mSeverity.text = item.priority
-            mStatus.text = item.status
+            mSeverity.text = item.priority?.name ?: "Priority"
+            mStatus.text = item.status?.name ?: "Status"
         }
 
         with(holder.mView.root) {
