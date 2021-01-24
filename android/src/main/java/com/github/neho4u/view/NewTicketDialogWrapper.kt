@@ -77,22 +77,28 @@ class NewTicketDialogWrapper(
         }
     }
 
-    private suspend fun loadData() {
-        val resp = categoryController.getCategories() ?: return
+    private suspend fun loadData(): Boolean {
+        val resp = categoryController.getCategories() ?: return false
         val (categoriesData, topicsData, subtopicsData) = resp
         withContext(Dispatchers.Main) {
             categories.updateData(categoriesData.map { it.toIdWithName() })
             topics.updateData(topicsData.map { it.toIdWithName() })
             subtopics.updateData(subtopicsData.map { it.toIdWithName() })
         }
+        return true
     }
 
     fun show() {
         dialog.show()
         GlobalScope.launch {
-            loadData()
-            withContext(Dispatchers.Main) {
-                initWithFilter()
+            if (!loadData()) {
+                withContext(Dispatchers.Main) {
+                    dialog.dismiss()
+                }
+            } else {
+                withContext(Dispatchers.Main) {
+                    initWithFilter()
+                }
             }
         }
     }
@@ -101,22 +107,18 @@ class NewTicketDialogWrapper(
         listOf(layoutBinding.etTicketHead, layoutBinding.etTicketBody).forEach { view ->
             view.setText(view.text.trim())
             if (view.text.isEmpty()) {
-                view.error = "Cannot be empty"
+                view.error = parent.getString(R.string.error_not_empty)
                 view.requestFocus()
                 return@validate false
             }
         }
 
-        listOf(
-            categories to "categories",
-            topics to "topics",
-            subtopics to "subtopics"
-        ).forEach { (holder, name) ->
+        listOf(categories, topics, subtopics).forEach { holder ->
             if (holder.choice is Placeholder) {
                 with(holder.spinner.getSpinner().selectedView as TextView) {
                     error = ""
                     setTextColor(Color.RED) // just to highlight that this is an error
-                    text = "Choose $name" // changes the selected item text to this
+                    text = holder.defaultText // changes the selected item text to this
                 }
                 return@validate false
             }
@@ -163,6 +165,7 @@ class NewTicketDialogWrapper(
         var choice: IdWithName = Placeholder("")
         val spinner: SpinnerHelper = SpinnerHelper(dialog.findViewById(spinnerId))
         val adapter = createAdapter(spinner, defaultTextId)
+        val defaultText = parent.getString(defaultTextId)
 
         fun updateData(list: List<IdWithName>) {
             data = list

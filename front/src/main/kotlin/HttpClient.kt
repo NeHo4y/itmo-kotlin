@@ -4,7 +4,6 @@ import com.github.neho4u.shared.client.tokenAuth
 import io.ktor.client.*
 import io.ktor.client.engine.js.*
 import io.ktor.client.features.*
-import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.browser.window
 import com.github.neho4u.shared.client.Client as CommonClient
@@ -12,8 +11,11 @@ import com.github.neho4u.shared.client.Client as CommonClient
 class JsHttpClientProvider : HttpClientProvider {
     override fun getHttpClient() = HttpClient(Js) {
         defaultRequest {
-            host = "localhost"
-            port = 8000
+            url {
+                protocol = URLProtocol.HTTP
+                host = "localhost"
+                port = 8000
+            }
         }
         tokenAuth {
             tokenProvider = JsTokenProvider

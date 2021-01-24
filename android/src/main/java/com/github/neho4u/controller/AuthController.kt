@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.util.Log
 import android.widget.EditText
 import androidx.preference.PreferenceManager
+import com.github.neho4u.R
 import com.github.neho4u.model.NetResult
 import com.github.neho4u.utils.AndroidTokenProvider
 import com.github.neho4u.view.Login
@@ -34,7 +35,7 @@ class AuthController(
         for (view in views) {
             view.setText(view.text.trim())
             if (view.text.isEmpty()) {
-                view.error = "Cannot be empty"
+                view.error = parent.getString(R.string.error_not_empty)
                 view.requestFocus()
                 parent.setLoading(false)
                 return
@@ -51,27 +52,29 @@ class AuthController(
         }
     }
 
+    private fun getString(id: Int, vararg str: String) = parent.getString(id, str)
+
     @SuppressLint("ApplySharedPref")
     private fun sessionKeyResult(result: NetResult<String>) {
         if (result.error) {
             parent.runOnUiThread {
                 when (result.responseCode) {
                     HttpStatusCode.Unauthorized -> with(password) {
-                        error = "Username or password incorrect: 401 Unauthorized"
+                        error = getString(R.string.error_password)
                         setText("")
                         requestFocus()
                     }
                     HttpStatusCode.NotFound -> with(username) {
-                        error = "Can't find a compatible API: 404 Not Found"
+                        error = getString(R.string.error_api)
                         requestFocus()
                     }
                     HttpStatusCode.RequestTimeout -> with(username) {
-                        error = "Timeout: 408 Timeout"
+                        error = getString(R.string.error_timeout)
                         requestFocus()
                     }
                     else -> with(username) {
                         Log.e("AuthController", "Unhandled net error", Throwable(result.result))
-                        error = result.result.removePrefix("java.net.UnknownHostException: ").substring(0, 50)
+                        error = getString(R.string.error_unknown)
                         requestFocus()
                     }
                 }
@@ -109,7 +112,7 @@ class AuthController(
                     HttpStatusCode.Unauthorized -> { }
                     HttpStatusCode.RequestTimeout -> {
                         with(username) {
-                            error = "Timeout: 408 Timeout"
+                            error = getString(R.string.error_timeout)
                             requestFocus()
                         }
                     }
@@ -117,7 +120,7 @@ class AuthController(
                         val t = Throwable("AuthController received unexpected response code: ${result.responseCode}")
                         Log.e("AuthController", "Unexpected response", t)
                         with(username) {
-                            error = "Unknown error: ${result.responseCode.value}, Check your connection"
+                            error = getString(R.string.error_unknown)
                             requestFocus()
                         }
                     }

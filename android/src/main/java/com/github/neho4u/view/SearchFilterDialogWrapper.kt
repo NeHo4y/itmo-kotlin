@@ -64,22 +64,28 @@ class SearchFilterDialogWrapper(
         }
     }
 
-    private suspend fun loadData() {
-        val resp = categoryController.getCategories() ?: return
+    private suspend fun loadData(): Boolean {
+        val resp = categoryController.getCategories() ?: return false
         val (categoriesData, topicsData, subtopicsData) = resp
         withContext(Dispatchers.Main) {
             categories.updateData(categoriesData.map { it.toIdWithName() })
             topics.updateData(topicsData.map { it.toIdWithName() })
             subtopics.updateData(subtopicsData.map { it.toIdWithName() })
         }
+        return true
     }
 
     fun show(filter: FeedbackFilter) {
         dialog.show()
         GlobalScope.launch {
-            loadData()
-            withContext(Dispatchers.Main) {
-                initWithFilter(filter)
+            if (!loadData()) {
+                withContext(Dispatchers.Main) {
+                    dialog.dismiss()
+                }
+            } else {
+                withContext(Dispatchers.Main) {
+                    initWithFilter(filter)
+                }
             }
         }
     }

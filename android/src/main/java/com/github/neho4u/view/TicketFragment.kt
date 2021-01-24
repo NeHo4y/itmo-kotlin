@@ -63,7 +63,7 @@ class TicketFragment : Fragment(), TicketInterface {
             ticketType = it.getInt(ARG_TICKET_TYPE)
         }
 
-        tController = TicketController(this)
+        tController = TicketController(context, this)
         startTicketRefresh(listener?.getFilter() ?: FeedbackFilter())
     }
 

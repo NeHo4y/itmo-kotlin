@@ -1,5 +1,6 @@
 package com.github.neho4u.controller
 
+import com.github.neho4u.R
 import com.github.neho4u.utils.Client
 import com.github.neho4u.view.DrawerView
 import io.ktor.client.features.*
@@ -12,9 +13,13 @@ class CategoryController(
             action()
         } catch (t: Throwable) {
             when (t) {
-                is ResponseException -> parent.showError("Server error :${t.response.status}")
-                is HttpRequestTimeoutException -> parent.showError("Timeout error")
-                else -> parent.showError(t.toString())
+                is ResponseException -> {
+                    parent.showError(parent.getString(R.string.error_conn))
+                }
+                is HttpRequestTimeoutException -> {
+                    parent.showError(parent.getString(R.string.error_conn))
+                }
+                else -> parent.showError(parent.getString(R.string.error_unknown))
             }
             null
         }

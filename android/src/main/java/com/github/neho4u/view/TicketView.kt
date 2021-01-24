@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.github.neho4u.R
+import com.github.neho4u.controller.CommentController
 import com.github.neho4u.controller.NoteInterface
 import com.github.neho4u.controller.TicketController
 import com.github.neho4u.controller.TicketInterface
@@ -31,6 +32,7 @@ import kotlinx.coroutines.withContext
 class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
 
     private lateinit var ticketController: TicketController
+    private lateinit var commentController: CommentController
     private var ticketId: Long = -1L
     private var ticket: Ticket? = null
     private var menuRefresh: MenuItem? = null
@@ -45,7 +47,8 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
         super.onCreate(savedInstanceState)
         noteBinding = DataBindingUtil.setContentView(this, R.layout.a_ticket_view)
         ticketId = intent.getLongExtra(ARG_TICKET_ID, -1L)
-        ticketController = TicketController(this)
+        ticketController = TicketController(this, this)
+        commentController = CommentController(this, this)
 
         setSupportActionBar(noteBinding.ticketViewToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -68,13 +71,14 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
                 ticketLoadResult(it)
             }
             withContext(Dispatchers.Main) {
+                noteBinding.pbTicketView.visibility = View.GONE
                 pullToRefresh.isRefreshing = false
             }
         }
     }
 
     private fun inflateTicket(ticket: Ticket) {
-        title = "Ticket " + ticket.id
+        title = getString(R.string.ticket_title, ticket.id.toString())
         noteBinding.tvTicketViewId.visibility = View.VISIBLE
         noteBinding.tvTicketViewId.text = ticket.id.toString()
 
@@ -151,7 +155,6 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
                 dialog.setTitle(resources.getString(R.string.change_status))
                 changeStatusLayoutBinding.bNoteCancel.setOnClickListener { dialog.dismiss() }
                 changeStatusLayoutBinding.bNoteOk.setOnClickListener {
-
                 }
                 dialog.show()
                 true
@@ -188,7 +191,7 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
                         isVisible = false
                     }
                     GlobalScope.launch(Dispatchers.Default) {
-                        ticketController.sendComment(note)
+                        commentController.sendComment(note)
                         noteSendResult()
                     }
                     dialog.dismiss()
@@ -234,6 +237,7 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
                     isVisible = false
                 }
             }
+            noteBinding.pbTicketView.visibility = View.GONE
             inflateTicket(result)
         }
     }
@@ -248,14 +252,14 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
     override fun ticketError(error: String) {
         this.runOnUiThread {
             Log.d("TicketView", "Failed to load ticket: $error")
-            showError("Failed to load ticket: $error")
+            showError(getString(R.string.error_ticket_load, error))
         }
     }
 
     override fun noteSendError(error: String) {
         this.runOnUiThread {
             Log.d("TicketView", "Failed to send note: $error")
-            showError("Failed to add note: $error")
+            showError(getString(R.string.error_note_load, error))
         }
     }
 

@@ -26,9 +26,17 @@
     <string name="logout">Выйти</string>
     <string name="logout_details">Выйти из аккаунта</string>
     <string name="action_settings">Настройки</string>
+    <string name="error_not_empty">Поле не может быть пустым</string>
+    <string name="error_password">Неверный логин или пароль</string>
+    <string name="error_api">Не найдено подходящего API</string>
+    <string name="error_timeout">Не удалось установить соединение</string>
+    <string name="error_unknown">Неизвестная ошибка, проверьте соединение</string>
+    <string name="error_conn">Ошибка соединения</string>
+    <string name="error_ticket_load">Ошибка при загрузке обращения: %1$s</string>
+    <string name="error_note_load">Ошибка при добавлении комментария: %1$s</string>
+    <string name="ticket_title">Обращение %1$s</string>
     <string name="assign_to_me">Назначить на меня</string>
     <string name="change_status">Редактировать статус</string>
     <string name="new_feedback">Название обращения</string>
     <string name="new_feedback_description">Описание обращения</string>
-
 </resources>

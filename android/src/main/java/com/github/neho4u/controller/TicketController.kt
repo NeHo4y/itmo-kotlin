@@ -1,10 +1,11 @@
 package com.github.neho4u.controller
 
+import android.content.Context
+import com.github.neho4u.R
 import com.github.neho4u.model.FeedbackFilter
 import com.github.neho4u.model.Ticket
 import com.github.neho4u.model.toNote
 import com.github.neho4u.model.toTicket
-import com.github.neho4u.shared.model.comment.CommentCreationDto
 import com.github.neho4u.shared.model.feedback.FeedbackDto
 import com.github.neho4u.shared.model.follower.FeedbackFollowerType
 import com.github.neho4u.shared.model.follower.FollowerFilterDto
@@ -12,6 +13,7 @@ import com.github.neho4u.utils.Client
 import io.ktor.client.features.*
 
 class TicketController(
+    private val context: Context?,
     private var ticketInterface: TicketInterface
 ) {
     private suspend fun <T> handleErrors(action: suspend () -> T): T? {
@@ -19,8 +21,11 @@ class TicketController(
             action()
         } catch (t: Throwable) {
             when (t) {
-                is ResponseException -> ticketInterface.ticketError("Server error :${t.response.status}")
-                is HttpRequestTimeoutException -> ticketInterface.ticketError("Timeout error")
+                is ResponseException -> {
+                    ticketInterface.ticketError(context?.getString(R.string.error_conn) ?: "EГГОГ")
+                }
+                is HttpRequestTimeoutException ->
+                    ticketInterface.ticketError(context?.getString(R.string.error_unknown) ?: "EГГОГ")
                 else -> ticketInterface.ticketError(t.toString())
             }
             null
@@ -72,9 +77,5 @@ class TicketController(
                 )
             }
         }
-    }
-
-    suspend fun sendComment(commentDto: CommentCreationDto) {
-        handleErrors { Client().use { it.comment().add(commentDto) } }
     }
 }
