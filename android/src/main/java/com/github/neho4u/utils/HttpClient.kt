@@ -4,6 +4,7 @@ import com.github.neho4u.shared.client.Client
 import com.github.neho4u.shared.client.HttpClientProvider
 import com.github.neho4u.shared.client.TokenProvider
 import com.github.neho4u.shared.client.tokenAuth
+import com.github.neho4u.shared.model.user.UserData
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.features.*
@@ -29,7 +30,19 @@ class AndroidHttpClientProvider : HttpClientProvider {
 }
 
 object AndroidTokenProvider : TokenProvider {
-    private val tokenPrivate: AtomicReference<String?> = AtomicReference(null)
+    private val tokenPrivate = AtomicReference<String?>(null)
+    private val atomicUserData = AtomicReference<UserData?>(null)
+
+    fun clearState() {
+        setToken(null)
+        setUserData(null)
+    }
+
+    fun getUserData() = atomicUserData.get()
+
+    fun setUserData(user: UserData?) {
+        atomicUserData.set(user)
+    }
 
     fun setToken(token: String?) {
         tokenPrivate.set(token)

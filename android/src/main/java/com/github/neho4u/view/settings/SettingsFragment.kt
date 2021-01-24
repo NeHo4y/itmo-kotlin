@@ -8,6 +8,7 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import com.github.neho4u.R
 import com.github.neho4u.controller.AuthHelper
+import com.github.neho4u.utils.AndroidTokenProvider
 
 class SettingsFragment : PreferenceFragmentCompat() {
     private var _listener: OnInteractionListener? = null
@@ -34,6 +35,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 .remove(AuthHelper.PREF_SESSION_KEY)
                 .remove(AuthHelper.PREF_USERNAME)
                 .apply()
+            AndroidTokenProvider.clearState()
             listener.logout()
             true
         }

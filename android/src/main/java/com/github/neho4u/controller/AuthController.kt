@@ -133,7 +133,6 @@ class AuthController(
     }
 
     private fun sessionInvalid() {
-        AndroidTokenProvider.setToken(null)
         parent.sessionInvalid()
     }
 }

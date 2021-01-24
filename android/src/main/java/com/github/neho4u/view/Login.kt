@@ -7,12 +7,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.github.neho4u.R
 import com.github.neho4u.controller.AuthController
+import com.github.neho4u.controller.UserDataController
 import com.github.neho4u.databinding.ALoginBinding
+import com.github.neho4u.utils.AndroidTokenProvider
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class Login : AppCompatActivity() {
 
     private lateinit var auth: AuthController
     private lateinit var binding: ALoginBinding
+    private val userDataController = UserDataController()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,15 +78,31 @@ class Login : AppCompatActivity() {
         binding.bLogin.text = getString(R.string.logging_in)
         binding.etPassword.setOnEditorActionListener(null)
 
-        val i = Intent(this, DrawerView::class.java)
-        startActivity(i)
+        GlobalScope.launch {
+            try {
+                val userData = userDataController.getUserData()
+                AndroidTokenProvider.setUserData(userData)
 
-        // quit this activity so it doesn't show up in the back stack
-        finish()
+                withContext(Dispatchers.Main) {
+                    val i = Intent(this@Login, DrawerView::class.java)
+                    startActivity(i)
+
+                    // quit this activity so it doesn't show up in the back stack
+                    finish()
+                }
+            } catch (t: Throwable) {
+                withContext(Dispatchers.Main) {
+                    AndroidTokenProvider.clearState()
+                    binding.etUsername.error = getString(R.string.error_conn)
+                    setLoading(false)
+                }
+            }
+        }
     }
 
     // reset view to default
     fun sessionInvalid() = runOnUiThread {
+        AndroidTokenProvider.clearState()
         setLoading(false)
         binding.etPassword.hint = resources.getString(R.string.password)
     }
