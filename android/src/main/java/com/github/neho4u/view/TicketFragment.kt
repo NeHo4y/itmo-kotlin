@@ -34,7 +34,7 @@ class TicketFragment : Fragment(), TicketInterface {
 
     override fun ticketError(error: String) {
         activity?.runOnUiThread {
-            listener?.setProgressVisibility(false)
+            setProgressVisibility(false)
             Log.d("TicketFragment", "Failed to load ticket: $error")
             Snackbar.make(binding.list, error, Snackbar.LENGTH_LONG).apply {
                 view.findViewById<TextView>(R.id.snackbar_text).apply {
@@ -67,8 +67,15 @@ class TicketFragment : Fragment(), TicketInterface {
         startTicketRefresh(listener?.getFilter() ?: FeedbackFilter())
     }
 
+    private fun setProgressVisibility(visibility: Boolean) {
+        if (!visibility) {
+            _binding?.pullToRefresh?.isRefreshing = visibility
+        }
+        listener?.setProgressVisibility(visibility)
+    }
+
     fun startTicketRefresh(filter: FeedbackFilter) {
-        listener?.setProgressVisibility(true)
+        setProgressVisibility(true)
         when (ticketType) {
             TYPE_FOLLOWED -> GlobalScope.launch(Dispatchers.Default) { tController.refreshMyTickets(filter) }
             TYPE_ALL -> GlobalScope.launch(Dispatchers.Default) { tController.refreshAllTickets(filter) }
@@ -115,6 +122,7 @@ class TicketFragment : Fragment(), TicketInterface {
 
     override fun ticketRefreshResult(result: List<Ticket>) {
         activity?.runOnUiThread {
+            setProgressVisibility(false)
             listener?.setProgressVisibility(false)
             with(
                 binding.list.adapter as MyTicketRecyclerViewAdapter

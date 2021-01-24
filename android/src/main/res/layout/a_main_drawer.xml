@@ -32,18 +32,20 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="end"
-                    android:layout_marginEnd="12dp"
-                    android:layout_marginRight="10dp"
                     android:layout_weight=".30"
                     android:fitsSystemWindows="true"
                     android:gravity="end"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    tools:layout_editor_absoluteX="369dp"
+                    tools:layout_editor_absoluteY="13dp"
+                    tools:visibility="gone">
 
                     <ProgressBar
                         android:id="@+id/pb_main_drawer"
                         style="@android:style/Widget.Holo.ProgressBar"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content" />
 
                 </LinearLayout>
 
