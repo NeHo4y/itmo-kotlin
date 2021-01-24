@@ -3,6 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+            android:id="@+id/menu_assign_to_me"
+            android:title="@string/assign_to_me"
+            android:visible="false" />
+    <item
+        android:id="@+id/menu_change_status"
+        android:icon="@drawable/ic_menu"
+        android:title="@string/change_status"
+        android:visible="false"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/menu_add_note"
         android:title="@string/new_note"
         android:orderInCategory="50"

@@ -28,4 +28,9 @@
     <string name="logout">Logout</string>
     <string name="logout_details">Logout from account</string>
     <string name="action_settings">Settings</string>
+    <string name="assign_to_me">Assign to me</string>
+    <string name="change_status">Change status</string>
+    <string name="new_feedback">Feedback header</string>
+    <string name="new_feedback_description">Feedback description</string>
+
 </resources>

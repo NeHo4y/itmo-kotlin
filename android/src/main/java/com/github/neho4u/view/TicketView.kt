@@ -16,6 +16,7 @@ import com.github.neho4u.controller.NoteInterface
 import com.github.neho4u.controller.TicketController
 import com.github.neho4u.controller.TicketInterface
 import com.github.neho4u.databinding.ATicketViewBinding
+import com.github.neho4u.databinding.ChangeStatusLayoutBinding
 import com.github.neho4u.databinding.DialogNoteLayoutBinding
 import com.github.neho4u.databinding.NoteDetailBinding
 import com.github.neho4u.model.Ticket
@@ -37,6 +38,8 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
     private lateinit var markdown: Markwon
     private lateinit var noteBinding: ATicketViewBinding
     private lateinit var pullToRefresh: SwipeRefreshLayout
+    private var menuAssign: MenuItem? = null
+    private var menuChangeStatus: MenuItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -140,8 +143,24 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
                 finish()
                 true
             }
+            R.id.menu_change_status -> {
+                val dialog = Dialog(this)
+                val changeStatusLayoutBinding: ChangeStatusLayoutBinding =
+                    ChangeStatusLayoutBinding.inflate(LayoutInflater.from(this))
+                dialog.setContentView(changeStatusLayoutBinding.root)
+                dialog.setTitle(resources.getString(R.string.change_status))
+                changeStatusLayoutBinding.bNoteCancel.setOnClickListener { dialog.dismiss() }
+                changeStatusLayoutBinding.bNoteOk.setOnClickListener {
+
+                }
+                dialog.show()
+                true
+            }
             R.id.menu_dv_refresh -> {
                 startRefresh()
+                true
+            }
+            R.id.menu_assign_to_me -> {
                 true
             }
             R.id.menu_add_note -> {
@@ -187,6 +206,8 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
         menuInflater.inflate(R.menu.menu_ticket_view, menu)
         menuRefresh = menu?.findItem(R.id.menu_dv_refresh)
         menuNewNote = menu?.findItem(R.id.menu_add_note)
+        menuAssign = menu?.findItem(R.id.menu_assign_to_me)
+        menuChangeStatus = menu?.findItem(R.id.menu_change_status)
         return true
     }
 
@@ -200,6 +221,18 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
         this.runOnUiThread {
             menuNewNote?.apply {
                 isVisible = true
+            }
+            menuChangeStatus?.apply {
+                isVisible = true
+            }
+            if (result.assignee.isNullOrBlank()) {
+                menuAssign?.apply {
+                    isVisible = true
+                }
+            } else {
+                menuAssign?.apply {
+                    isVisible = false
+                }
             }
             inflateTicket(result)
         }
