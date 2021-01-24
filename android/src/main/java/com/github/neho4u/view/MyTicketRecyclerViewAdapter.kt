@@ -33,6 +33,8 @@ class MyTicketRecyclerViewAdapter(
             mLastUpdated.text = item.lastUpdated.toString()
             mSubject.text = item.subject
             mDetails.text = item.detail
+            mSeverity.text = item.priority
+            mStatus.text = item.status
         }
 
         with(holder.mView.root) {
@@ -54,7 +56,8 @@ class MyTicketRecyclerViewAdapter(
         val mLastUpdated = mView.tvTickLastUpdated
         val mSubject = mView.tvTickSubj
         val mDetails = mView.tvTickDet
-
+        val mSeverity = mView.vSeverity
+        val mStatus = mView.vStatus
         override fun toString() = "${super.toString()} '${mSubject.text}'"
     }
 }
