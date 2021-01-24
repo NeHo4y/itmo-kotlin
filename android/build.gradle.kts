@@ -31,6 +31,8 @@ android {
         isAbortOnError = false
     }
     compileOptions {
+        // Flag to enable support for the new language APIs
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -73,4 +75,6 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.21")
     implementation("io.noties.markwon:core:4.6.1")
     implementation("androidx.preference:preference:1.1.1")
+
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.1")
 }

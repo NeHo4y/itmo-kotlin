@@ -17,7 +17,11 @@ repositories {
 }
 
 kotlin {
-    android()
+    android {
+        compilations.all {
+            kotlinOptions.jvmTarget = "1.8"
+        }
+    }
     jvm {
         compilations.all {
             kotlinOptions.jvmTarget = "11"
@@ -74,17 +78,32 @@ kotlin {
 }
 
 android {
-    compileSdkVersion(28)
+    compileSdkVersion(30)
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+    buildToolsVersion = "30.0.3"
     defaultConfig {
         minSdkVersion(24)
-        targetSdkVersion(28)
-        versionCode = 1
-        versionName = "1.0"
+        targetSdkVersion(30)
+        versionCode = 21
+        versionName = "2.0.0"
+        multiDexEnabled = true
     }
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
         }
+    }
+    buildFeatures {
+        dataBinding = true
+        viewBinding = true
+    }
+    lintOptions {
+        isAbortOnError = false
+    }
+    compileOptions {
+        // Flag to enable support for the new language APIs
+        isCoreLibraryDesugaringEnabled = true
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 }
