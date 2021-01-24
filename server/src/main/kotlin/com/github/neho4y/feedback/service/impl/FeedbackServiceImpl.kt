@@ -41,15 +41,12 @@ class FeedbackServiceImpl(
     }
 
     override suspend fun getFeedbacksByFollower(userId: Long, filter: FeedbackFilter): List<FeedbackDto> {
-        val followerFilter = FollowerFilterDto(null, userId, null)
-        val followers = followerService.findFollowsByFilter(followerFilter)
-        val myFeedbacksFilter = filter.copy(authorId = userId)
-        val myFeedbacks = feedbackSpecificationRepository.findAll(FeedbackSearchSpecification(myFeedbacksFilter))
-        val followed = followers.map {
-            feedbackRepository.findById(it.feedbackId)
-                .orElseThrow { NotFoundException("Unable to find feedback") }
-        }
-        return myFeedbacks.union(followed).map { convertToDto(it) }
+        val followers = followerService.findFollowsByFilter(FollowerFilterDto(null, userId, null))
+            .map { it.feedbackId }
+            .toHashSet()
+        return feedbackSpecificationRepository.findAll(FeedbackSearchSpecification(filter))
+            .filter { it.id in followers || it.authorId == userId }
+            .map { convertToDto(it) }
     }
 
     override suspend fun createFeedback(userId: Long, feedbackCreationDto: FeedbackCreationDto): FeedbackDto {
