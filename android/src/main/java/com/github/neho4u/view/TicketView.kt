@@ -35,7 +35,6 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
     private lateinit var commentController: CommentController
     private var ticketId: Long = -1L
     private var ticket: Ticket? = null
-    private var menuRefresh: MenuItem? = null
     private var menuNewNote: MenuItem? = null
     private lateinit var markdown: Markwon
     private lateinit var noteBinding: ATicketViewBinding
@@ -65,7 +64,9 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
     }
 
     private fun startRefresh() {
-        menuNewNote?.isVisible = false
+        menuNewNote?.isEnabled = false
+        menuAssign?.isEnabled = false
+        menuChangeStatus?.isEnabled = false
         GlobalScope.launch(Dispatchers.Default) {
             ticketController.loadFullTicket(ticketId)?.let {
                 ticketLoadResult(it)
@@ -149,13 +150,11 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
             }
             R.id.menu_change_status -> {
                 val dialog = Dialog(this)
-                val changeStatusLayoutBinding: ChangeStatusLayoutBinding =
-                    ChangeStatusLayoutBinding.inflate(LayoutInflater.from(this))
+                val changeStatusLayoutBinding = ChangeStatusLayoutBinding.inflate(LayoutInflater.from(this))
                 dialog.setContentView(changeStatusLayoutBinding.root)
                 dialog.setTitle(resources.getString(R.string.change_status))
                 changeStatusLayoutBinding.bNoteCancel.setOnClickListener { dialog.dismiss() }
-                changeStatusLayoutBinding.bNoteOk.setOnClickListener {
-                }
+                changeStatusLayoutBinding.bNoteOk.setOnClickListener { dialog.dismiss() }
                 dialog.show()
                 true
             }
@@ -164,12 +163,12 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
                 true
             }
             R.id.menu_assign_to_me -> {
+
                 true
             }
             R.id.menu_add_note -> {
                 val dialog = Dialog(this)
-                val dialogNoteLayoutBinding: DialogNoteLayoutBinding =
-                    DialogNoteLayoutBinding.inflate(LayoutInflater.from(this))
+                val dialogNoteLayoutBinding = DialogNoteLayoutBinding.inflate(LayoutInflater.from(this))
 
                 dialog.setContentView(dialogNoteLayoutBinding.root)
 
@@ -187,17 +186,14 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
                     )
                     Log.d("TicketView", "Submitting note $note")
                     noteBinding.pbTicketView.visibility = View.VISIBLE
-                    menuRefresh?.apply {
-                        isVisible = false
-                    }
                     GlobalScope.launch(Dispatchers.Default) {
                         commentController.sendComment(note)
                         noteSendResult()
                     }
                     dialog.dismiss()
                 }
-
                 dialog.show()
+                dialogNoteLayoutBinding.etNoteText.requestFocus()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -207,7 +203,6 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 //        menuInflater.inflate(R.menu.menu_drawer_view, menu)
         menuInflater.inflate(R.menu.menu_ticket_view, menu)
-        menuRefresh = menu?.findItem(R.id.menu_dv_refresh)
         menuNewNote = menu?.findItem(R.id.menu_add_note)
         menuAssign = menu?.findItem(R.id.menu_assign_to_me)
         menuChangeStatus = menu?.findItem(R.id.menu_change_status)
@@ -222,21 +217,10 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
         Log.d("TicketView", "Got ticket result: $result")
         this.ticket = result
         this.runOnUiThread {
-            menuNewNote?.apply {
-                isVisible = true
-            }
-            menuChangeStatus?.apply {
-                isVisible = true
-            }
-            if (result.assignee.isNullOrBlank()) {
-                menuAssign?.apply {
-                    isVisible = true
-                }
-            } else {
-                menuAssign?.apply {
-                    isVisible = false
-                }
-            }
+            menuNewNote?.isEnabled = true
+            menuChangeStatus?.isEnabled = true
+            menuAssign?.isEnabled = true
+            menuAssign?.isVisible = result.assignee.isNullOrBlank()
             noteBinding.pbTicketView.visibility = View.GONE
             inflateTicket(result)
         }
@@ -264,9 +248,6 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
     }
 
     private fun showError(error: String) {
-        menuRefresh?.apply {
-            isVisible = true
-        }
         noteBinding.pbTicketView.visibility = View.GONE
         Snackbar.make(noteBinding.ticketViewParent, error, Snackbar.LENGTH_INDEFINITE).apply {
             view.findViewById<TextView>(R.id.snackbar_text).apply {

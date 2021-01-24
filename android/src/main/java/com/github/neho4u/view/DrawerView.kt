@@ -44,9 +44,8 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
     }
 
     override fun setProgressVisibility(visible: Boolean) {
-//        menuRefresh?.isVisible = !visible
-        menuAddFeedback?.isVisible = !visible
-        menuSearchFilter?.isVisible = !visible
+        menuAddFeedback?.isEnabled = !visible
+        menuSearchFilter?.isEnabled = !visible
         mainDrawerBinding.pbMainDrawer.visibility =
             if (visible) View.VISIBLE else View.GONE
     }

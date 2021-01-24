@@ -8,6 +8,7 @@ import android.widget.AdapterView
 import android.widget.TextView
 import com.github.neho4u.R
 import com.github.neho4u.controller.CategoryController
+import com.github.neho4u.controller.TicketController
 import com.github.neho4u.databinding.DialogTicketLayoutBinding
 import com.github.neho4u.model.IdWithName
 import com.github.neho4u.model.Placeholder
@@ -138,13 +139,17 @@ class NewTicketDialogWrapper(
             comment = body
         )
         GlobalScope.launch {
-            Client().use {
-                val created = it.feedback().create(creationDto)
-                it.comment().add(CommentCreationDto(created.id, "body", body))
-            }
-            withContext(Dispatchers.Main) {
-                onAddFeedback(creationDto)
-                dialog.dismiss()
+            try {
+                Client().use {
+                    val created = it.feedback().create(creationDto)
+                    it.comment().add(CommentCreationDto(created.id, "body", body))
+                }
+                withContext(Dispatchers.Main) {
+                    onAddFeedback(creationDto)
+                    dialog.dismiss()
+                }
+            } catch (e: Throwable) {
+                parent.showError(parent.getString(R.string.error_conn))
             }
         }
     }
