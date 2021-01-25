@@ -21,17 +21,21 @@ import com.github.neho4u.databinding.DialogNoteLayoutBinding
 import com.github.neho4u.databinding.NoteDetailBinding
 import com.github.neho4u.model.Ticket
 import com.github.neho4u.shared.model.comment.CommentCreationDto
+import com.github.neho4u.shared.model.feedback.FeedbackUpdateDto
 import com.github.neho4u.shared.model.user.UserData
 import com.github.neho4u.shared.model.user.UserRole
 import com.github.neho4u.utils.AndroidTokenProvider
+import com.github.neho4u.utils.Client
+import com.github.neho4u.utils.IShowError
 import com.google.android.material.snackbar.Snackbar
+import io.ktor.utils.io.core.*
 import io.noties.markwon.Markwon
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
+class TicketView : AppCompatActivity(), TicketInterface, NoteInterface, IShowError {
 
     private lateinit var ticketController: TicketController
     private lateinit var commentController: CommentController
@@ -196,6 +200,32 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
                 dialogNoteLayoutBinding.etNoteText.requestFocus()
                 true
             }
+            R.id.menu_edit_feedback -> {
+                NewTicketDialogWrapper(this, this, ticket) { creationDto, dialog ->
+                    val updateDto = FeedbackUpdateDto(
+                        header = creationDto.header,
+                        categoryId = creationDto.categoryId,
+                        topicId = creationDto.topicId,
+                        subtopicId = creationDto.subtopicId,
+                        comment = creationDto.comment
+                    )
+                    Log.w("menu_edit_feedback", updateDto.toString())
+                    GlobalScope.launch {
+                        try {
+                            Client().use { it.feedback().update(ticketId, updateDto) }
+                        } catch (e: Throwable) {
+                            showError(getString(R.string.error_conn))
+                        }
+                        withContext(Dispatchers.Main) {
+                            dialog.dismiss()
+                            startRefresh()
+                        }
+                    }
+                }.also {
+                    it.show()
+                }
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -251,7 +281,7 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
         }
     }
 
-    private fun showError(error: String) {
+    override fun showError(error: String) {
         noteBinding.pbTicketView.visibility = View.GONE
         Snackbar.make(noteBinding.ticketViewParent, error, Snackbar.LENGTH_INDEFINITE).apply {
             view.findViewById<TextView>(R.id.snackbar_text).apply {

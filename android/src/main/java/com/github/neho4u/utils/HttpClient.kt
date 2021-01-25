@@ -15,6 +15,10 @@ import java.util.concurrent.atomic.AtomicReference
 class AndroidHttpClientProvider : HttpClientProvider {
     override fun getHttpClient() = HttpClient(OkHttp) {
         defaultRequest {
+//            url {
+//                protocol = URLProtocol.HTTPS
+//                host = "helldesk.herokuapp.com"
+//            }
             host = "10.0.2.2"
             port = 8000
             contentType(ContentType.Application.Json)

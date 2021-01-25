@@ -27,7 +27,7 @@ class SearchFilterDialogWrapper(
         setContentView(layoutBinding.root)
         setTitle(context.resources.getString(R.string.search_filer))
     }
-    private val categoryController = CategoryController(parent)
+    private val categoryController = CategoryController(parent, parent)
 
     private val categories = SpinnerHolder(R.id.category_spinner, R.string.choose_category)
     private val topics = SpinnerHolder(R.id.topic_spinner, R.string.choose_topic)

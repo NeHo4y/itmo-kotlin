@@ -9,5 +9,8 @@ internal fun FeedbackDto.toTicket() = Ticket(
     lastUpdated = creationDate,
     detail = "${category?.name} : ${topic?.name} : ${subtopic?.name}",
     priority = priority,
-    status = status
+    status = status,
+    category = category,
+    topic = topic,
+    subtopic = subtopic
 )

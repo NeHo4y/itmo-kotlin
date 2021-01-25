@@ -18,17 +18,21 @@ import com.github.neho4u.controller.UserDataController
 import com.github.neho4u.databinding.AMainDrawerBinding
 import com.github.neho4u.model.FeedbackFilter
 import com.github.neho4u.model.Ticket
+import com.github.neho4u.shared.model.comment.CommentCreationDto
 import com.github.neho4u.shared.model.user.UserData
 import com.github.neho4u.shared.model.user.UserRole
 import com.github.neho4u.utils.AndroidTokenProvider
+import com.github.neho4u.utils.Client
+import com.github.neho4u.utils.IShowError
 import com.github.neho4u.view.settings.SettingsActivity
 import com.google.android.material.snackbar.Snackbar
+import io.ktor.utils.io.core.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteractionListener {
+class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteractionListener, IShowError {
 
     private var menuAddFeedback: MenuItem? = null
     private var menuSearchFilter: MenuItem? = null
@@ -163,10 +167,21 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
                 true
             }
             R.id.menu_add_feedback -> {
-                NewTicketDialogWrapper(this) {
-                    runOnUiThread {
-                        with(supportFragmentManager.findFragmentById(R.id.content_frame) as TicketFragment) {
-                            startTicketRefresh(feedbackFilter)
+                NewTicketDialogWrapper(this, this, null) { creationDto, dialog ->
+                    GlobalScope.launch {
+                        try {
+                            Client().use {
+                                val created = it.feedback().create(creationDto)
+                                it.comment().add(CommentCreationDto(created.id, "body", creationDto.comment))
+                            }
+                        } catch (e: Throwable) {
+                            showError(getString(R.string.error_conn))
+                        }
+                        withContext(Dispatchers.Main) {
+                            dialog.dismiss()
+                            with(supportFragmentManager.findFragmentById(R.id.content_frame) as TicketFragment) {
+                                startTicketRefresh(feedbackFilter)
+                            }
                         }
                     }
                 }.also {
@@ -210,7 +225,7 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
         }
     }
 
-    fun showError(error: String) {
+    override fun showError(error: String) {
         runOnUiThread {
             Log.d("TicketFragment", "Failed to load ticket: $error")
             Snackbar.make(mainDrawerBinding.contentFrame, error, Snackbar.LENGTH_LONG).apply {

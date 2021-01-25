@@ -1,6 +1,7 @@
 package com.github.neho4u.view
 
 import android.app.Dialog
+import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -11,10 +12,10 @@ import com.github.neho4u.controller.CategoryController
 import com.github.neho4u.databinding.DialogTicketLayoutBinding
 import com.github.neho4u.model.IdWithName
 import com.github.neho4u.model.Placeholder
+import com.github.neho4u.model.Ticket
 import com.github.neho4u.model.toIdWithName
-import com.github.neho4u.shared.model.comment.CommentCreationDto
 import com.github.neho4u.shared.model.feedback.FeedbackCreationDto
-import com.github.neho4u.utils.Client
+import com.github.neho4u.utils.IShowError
 import com.github.neho4u.utils.SpinnerAdapterWithInitialText
 import com.github.neho4u.utils.SpinnerHelper
 import io.ktor.utils.io.core.*
@@ -24,24 +25,28 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class NewTicketDialogWrapper(
-    private val parent: DrawerView,
-    private val onAddFeedback: (creationDto: FeedbackCreationDto) -> Unit
+    private val context: Context,
+    parent: IShowError,
+    private val ticket: Ticket?,
+    private val onAddFeedback: (creationDto: FeedbackCreationDto, dialog: Dialog) -> Unit
 ) {
-    private val layoutBinding = DialogTicketLayoutBinding.inflate(LayoutInflater.from(parent))
-    private val dialog = Dialog(parent).apply {
+    private val layoutBinding = DialogTicketLayoutBinding.inflate(LayoutInflater.from(context))
+    private val dialog = Dialog(context).apply {
         setContentView(layoutBinding.root)
         setTitle(context.resources.getString(R.string.add_feedback))
     }
-    private val categoryController = CategoryController(parent)
+    private val categoryController = CategoryController(context, parent)
 
     private val categories = SpinnerHolder(R.id.add_category_spinner, R.string.choose_category)
     private val topics = SpinnerHolder(R.id.add_topic_spinner, R.string.choose_topic)
     private val subtopics = SpinnerHolder(R.id.add_subtopic_spinner, R.string.choose_subtopic)
 
-    private fun initWithFilter() {
-        categories.initWith(null, topics)
-        topics.initWith(null, subtopics)
-        subtopics.initWith(null, null)
+    private fun initWithTicket(ticket: Ticket?) {
+        layoutBinding.etTicketHead.setText(ticket?.subject ?: "")
+        layoutBinding.etTicketBody.setText(ticket?.detail ?: "")
+        categories.initWith(ticket?.category?.toIdWithName(), topics)
+        topics.initWith(ticket?.topic?.toIdWithName(), subtopics)
+        subtopics.initWith(ticket?.subtopic?.toIdWithName(), null)
     }
 
     private val spinnerListener = object : AdapterView.OnItemSelectedListener {
@@ -91,13 +96,17 @@ class NewTicketDialogWrapper(
     fun show() {
         dialog.show()
         GlobalScope.launch {
+            withContext(Dispatchers.Main) {
+                layoutBinding.bCreateOk.isEnabled = false
+            }
             if (!loadData()) {
                 withContext(Dispatchers.Main) {
                     dialog.dismiss()
                 }
             } else {
                 withContext(Dispatchers.Main) {
-                    initWithFilter()
+                    initWithTicket(ticket)
+                    layoutBinding.bCreateOk.isEnabled = true
                 }
             }
         }
@@ -107,7 +116,7 @@ class NewTicketDialogWrapper(
         listOf(layoutBinding.etTicketHead, layoutBinding.etTicketBody).forEach { view ->
             view.setText(view.text.trim())
             if (view.text.isEmpty()) {
-                view.error = parent.getString(R.string.error_not_empty)
+                view.error = context.getString(R.string.error_not_empty)
                 view.requestFocus()
                 return@validate false
             }
@@ -137,20 +146,7 @@ class NewTicketDialogWrapper(
             header = layoutBinding.etTicketHead.text.toString(),
             comment = body
         )
-        GlobalScope.launch {
-            try {
-                Client().use {
-                    val created = it.feedback().create(creationDto)
-                    it.comment().add(CommentCreationDto(created.id, "body", body))
-                }
-                withContext(Dispatchers.Main) {
-                    onAddFeedback(creationDto)
-                    dialog.dismiss()
-                }
-            } catch (e: Throwable) {
-                parent.showError(parent.getString(R.string.error_conn))
-            }
-        }
+        onAddFeedback(creationDto, dialog)
     }
 
     private fun createAdapter(spinner: SpinnerHelper, defaultTextId: Int) =
@@ -158,7 +154,7 @@ class NewTicketDialogWrapper(
             dialog.context,
             android.R.layout.simple_spinner_item,
             mutableListOf(),
-            parent.getString(defaultTextId)
+            context.getString(defaultTextId)
         ).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinner.adapter = adapter
@@ -169,7 +165,7 @@ class NewTicketDialogWrapper(
         var choice: IdWithName = Placeholder("")
         val spinner: SpinnerHelper = SpinnerHelper(dialog.findViewById(spinnerId))
         val adapter = createAdapter(spinner, defaultTextId)
-        val defaultText = parent.getString(defaultTextId)
+        val defaultText = context.getString(defaultTextId)
 
         fun updateData(list: List<IdWithName>) {
             data = list
@@ -186,6 +182,7 @@ class NewTicketDialogWrapper(
                     it.spinner.setSelection(0, true)
                     it.spinner.isEnabled = newData.isNotEmpty()
                     parentChoice = it.adapter.getItem(0)
+                    choice = it.adapter.getItem(0)
                 }
             }
         }

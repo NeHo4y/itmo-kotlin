@@ -1,12 +1,14 @@
 package com.github.neho4u.controller
 
+import android.content.Context
 import com.github.neho4u.R
 import com.github.neho4u.utils.Client
-import com.github.neho4u.view.DrawerView
+import com.github.neho4u.utils.IShowError
 import io.ktor.client.features.*
 
 class CategoryController(
-    private val parent: DrawerView
+    private val context: Context,
+    private val parent: IShowError
 ) {
     private suspend fun <T> handleErrors(action: suspend () -> T): T? {
         return try {
@@ -14,12 +16,12 @@ class CategoryController(
         } catch (t: Throwable) {
             when (t) {
                 is ResponseException -> {
-                    parent.showError(parent.getString(R.string.error_conn))
+                    parent.showError(context.getString(R.string.error_conn))
                 }
                 is HttpRequestTimeoutException -> {
-                    parent.showError(parent.getString(R.string.error_conn))
+                    parent.showError(context.getString(R.string.error_conn))
                 }
-                else -> parent.showError(parent.getString(R.string.error_unknown))
+                else -> parent.showError(context.getString(R.string.error_unknown))
             }
             null
         }
