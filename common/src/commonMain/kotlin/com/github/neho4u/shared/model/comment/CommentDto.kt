@@ -14,6 +14,11 @@ data class CommentCreationDto(
 )
 
 @Serializable
+data class CommentUpdateDto(
+    val messageText: String
+)
+
+@Serializable
 data class CommentDto(
     val id: Long,
     val isUnread: Boolean,

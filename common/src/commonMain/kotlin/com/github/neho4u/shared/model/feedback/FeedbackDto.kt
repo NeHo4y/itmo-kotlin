@@ -16,6 +16,15 @@ data class FeedbackCreationDto(
 )
 
 @Serializable
+data class FeedbackUpdateDto(
+    val header: String?,
+    val categoryId: Long?,
+    val topicId: Long?,
+    val subtopicId: Long?,
+    val comment: String?
+)
+
+@Serializable
 data class FeedbackDto(
     var id: Long,
     val header: String?,

@@ -6,6 +6,7 @@ import com.github.neho4u.shared.model.follower.FollowerFilterDto
 import com.github.neho4y.category.service.CategoryService
 import com.github.neho4y.category.service.SubtopicService
 import com.github.neho4y.category.service.TopicService
+import com.github.neho4y.comment.service.CommentService
 import com.github.neho4y.common.exception.NotFoundException
 import com.github.neho4y.feedback.domain.Feedback
 import com.github.neho4y.feedback.domain.repository.FeedbackRepository
@@ -28,7 +29,8 @@ class FeedbackServiceImpl(
     private val followerService: FeedbackFollowerService,
     private val categoryService: CategoryService,
     private val topicService: TopicService,
-    private val subtopicService: SubtopicService
+    private val subtopicService: SubtopicService,
+    private val commentService: CommentService
 ) : FeedbackService {
 
     companion object {
@@ -72,20 +74,23 @@ class FeedbackServiceImpl(
         )
     }
 
-    override suspend fun updateFeedback(feedbackDto: FeedbackDto, id: Long): FeedbackDto {
+    override suspend fun updateFeedback(feedbackDto: FeedbackUpdateDto, id: Long): FeedbackDto {
         val feedback = feedbackRepository.findById(id)
             .orElseThrow { NotFoundException("Unable to find feedback") }
-        val newCategoryId = feedbackDto.category?.id
-        val newTopicId = feedbackDto.topic?.id
-        val newSubtopicId = feedbackDto.subtopic?.id
+        val newCategoryId = feedbackDto.categoryId
+        val newTopicId = feedbackDto.topicId
+        val newSubtopicId = feedbackDto.subtopicId
         feedback.apply {
             header = feedbackDto.header ?: header
             categoryId = newCategoryId ?: categoryId
             topicId = newTopicId ?: topicId
             subtopicId = newSubtopicId ?: subtopicId
-            status = feedbackDto.status ?: status
-            priority = feedbackDto.priority ?: priority
             updateDate = LocalDateTime.now()
+        }
+        val body = commentService.getComments(feedbackId = feedback.id)
+            .firstOrNull { it.messageType == "body" }
+        if (body != null && feedbackDto.comment != null) {
+            commentService.updateComment(body.id, feedbackDto.comment ?: "")
         }
         val updatedFeedback = feedbackRepository.save(feedback)
         return convertToDto(updatedFeedback)

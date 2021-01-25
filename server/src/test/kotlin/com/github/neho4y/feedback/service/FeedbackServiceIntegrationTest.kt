@@ -110,22 +110,16 @@ internal class FeedbackServiceIntegrationTest {
         )
         val savedFeedback = feedbackService.createFeedback(user.id, feedbackCreationDto)
 
-        val feedbackDto = FeedbackDto(
-            savedFeedback.id,
+        val feedbackDto = FeedbackCreationDto(
             "Test new header",
-            null,
-            null,
-            null,
-            FeedbackStatus.OPEN,
-            FeedbackPriority.GODLIKE,
-            LocalDateTime.now().toKotlinLocalDateTime(),
-            userData,
+            categoryId,
+            topicId,
+            subtopicId,
+            "comment"
         )
 
         val updatedFeedback = feedbackService.updateFeedback(feedbackDto, savedFeedback.id)
 
         assertThat(updatedFeedback.header).isEqualTo(feedbackDto.header)
-        assertThat(updatedFeedback.status).isEqualTo(feedbackDto.status)
-        assertThat(updatedFeedback.priority).isEqualTo(feedbackDto.priority)
     }
 }
