@@ -45,7 +45,7 @@
     <string name="choose_status">Choose Status</string>
     <string name="priority_header">Priority</string>
     <string name="status_header">Status</string>
-    <string name="feedback_properites">Feedback Properties</string>
+    <string name="feedback_properties">Feedback Properties</string>
     <string name="add_note">Add Note</string>
     <string name="edit_note">Edit Note</string>
     <string name="edit_feedback">Edit Feedback</string>

@@ -43,7 +43,7 @@
     <string name="choose_status">Выберите статус</string>
     <string name="priority_header">Приоритет</string>
     <string name="status_header">Статус</string>
-    <string name="feedback_properites">Параметры обращения</string>
+    <string name="feedback_properties">Параметры обращения</string>
     <string name="add_note">Добавить комментарий</string>
     <string name="edit_note">Редактировать комментарий</string>
     <string name="edit_feedback">Редактировать обращение</string>
