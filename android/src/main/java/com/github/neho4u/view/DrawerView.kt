@@ -59,6 +59,7 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
         setSupportActionBar(mainDrawerBinding.drawerToolbar)
 
         currentUser = AndroidTokenProvider.getUserData()
+
         if (currentUser?.role == UserRole.ADMIN) {
             val actionbar: ActionBar? = supportActionBar
             actionbar?.apply {
@@ -68,7 +69,6 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
         }
 
 
-        mainDrawerBinding.navView.visibility = if (currentUser?.role == UserRole.ADMIN) View.VISIBLE else View.GONE
         mainDrawerBinding.navView.setNavigationItemSelectedListener { menuItem ->
             // set item as selected to persist highlight
             menuItem.isChecked = true
@@ -106,6 +106,11 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
             }
         )
 
+        mainDrawerBinding.navView.visibility =
+            if (currentUser?.role == UserRole.ADMIN)
+                View.VISIBLE
+            else
+                View.GONE
         tvHeaderUser = mainDrawerBinding.navView
             .getHeaderView(0)
             .findViewById(R.id.tv_header_user)
