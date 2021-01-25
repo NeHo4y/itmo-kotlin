@@ -59,13 +59,16 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
         setSupportActionBar(mainDrawerBinding.drawerToolbar)
 
         currentUser = AndroidTokenProvider.getUserData()
-
-        val actionbar: ActionBar? = supportActionBar
-        actionbar?.apply {
-            setDisplayHomeAsUpEnabled(true)
-            setHomeAsUpIndicator(R.drawable.ic_menu)
+        if (currentUser?.role == UserRole.ADMIN) {
+            val actionbar: ActionBar? = supportActionBar
+            actionbar?.apply {
+                setDisplayHomeAsUpEnabled(true)
+                setHomeAsUpIndicator(R.drawable.ic_menu)
+            }
         }
 
+
+        mainDrawerBinding.navView.visibility = if (currentUser?.role == UserRole.ADMIN) View.VISIBLE else View.GONE
         mainDrawerBinding.navView.setNavigationItemSelectedListener { menuItem ->
             // set item as selected to persist highlight
             menuItem.isChecked = true

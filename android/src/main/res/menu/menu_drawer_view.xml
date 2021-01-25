@@ -11,14 +11,12 @@
     <item
         android:id="@+id/menu_add_feedback"
         android:icon="@drawable/ic_add"
-        android:orderInCategory="1"
-        android:visible="true"
-        app:showAsAction="ifRoom"
+        android:orderInCategory="102"
         android:title="@string/add_feedback"
-        />
+        android:visible="true" />
     <item
         android:id="@+id/action_settings"
-        android:orderInCategory="100"
+        android:orderInCategory="103"
         android:title="@string/action_settings"
         app:showAsAction="never" />
 </menu>

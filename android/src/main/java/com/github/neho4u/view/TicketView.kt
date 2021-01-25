@@ -134,7 +134,6 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface {
                     .inflate(R.layout.note_detail, noteBinding.ticketViewParent, false)
 
                 NoteDetailBinding.bind(noteView).apply {
-                    tvNoteDetailResolution.visibility = View.GONE
                     tvNoteDetailPrettyLastUpdated.text =
                         getString(R.string.pretty_updated_string, note.creationDate, note.userData?.username)
                     tvNoteDetailDetail.text = note.mobileNoteText
