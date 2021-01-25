@@ -10,6 +10,7 @@ import com.github.neho4y.feedback.domain.repository.FeedbackRepository
 import com.github.neho4y.user.model.toUserData
 import com.github.neho4y.user.service.UserService
 import kotlinx.datetime.toKotlinLocalDateTime
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
@@ -19,6 +20,11 @@ class CommentServiceImpl(
     private val feedbackRepository: FeedbackRepository,
     private val userService: UserService
 ) : CommentService {
+    companion object {
+        private val log = LoggerFactory.getLogger(this::class.java)
+    }
+
+
     override suspend fun addComment(userId: Long, commentCreationDto: CommentCreationDto): Long {
         val feedback = feedbackRepository.findById(commentCreationDto.feedbackId)
             .orElseThrow { NotFoundException("Requested comment not found") }
@@ -38,6 +44,13 @@ class CommentServiceImpl(
         return commentRepository.findByFeedbackIdAndIsDeletedFalse(
             feedbackRepository.findById(feedbackId).orElseThrow { NotFoundException("Requested comment not found") }
         ).map { convertToDto(it) }
+    }
+
+    override suspend fun updateComment(commentId: Long, newText: String) {
+        val comment =
+            commentRepository.findById(commentId).orElseThrow { NotFoundException("Requested comment not found") }
+        comment.messageText = newText
+        commentRepository.save(comment)
     }
 
     override suspend fun markRead(commentId: Long) {

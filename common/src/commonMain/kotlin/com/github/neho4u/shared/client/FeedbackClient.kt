@@ -27,7 +27,7 @@ class FeedbackClient(private val httpClient: HttpClient) {
         }
     }
 
-    suspend fun update(id: Long, feedbackUpdate: FeedbackDto): FeedbackDto {
+    suspend fun update(id: Long, feedbackUpdate: FeedbackUpdateDto): FeedbackDto {
         return httpClient.post("/feedback/$id") {
             body = feedbackUpdate
         }

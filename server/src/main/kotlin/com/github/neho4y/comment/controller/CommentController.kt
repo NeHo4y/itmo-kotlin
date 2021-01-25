@@ -2,6 +2,7 @@ package com.github.neho4y.comment.controller
 
 import com.github.neho4u.shared.model.comment.CommentCreationDto
 import com.github.neho4u.shared.model.comment.CommentDto
+import com.github.neho4u.shared.model.comment.CommentUpdateDto
 import com.github.neho4y.comment.service.CommentService
 import com.github.neho4y.user.domain.User
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -26,6 +27,11 @@ class CommentController(private val commentService: CommentService) {
     @PutMapping("/delete/{commentId}")
     suspend fun setCommentToDeleted(@PathVariable commentId: Long) {
         commentService.markDeleted(commentId)
+    }
+
+    @PutMapping("/update/{commentId}")
+    suspend fun updateComment(@PathVariable commentId: Long, @RequestBody text: CommentUpdateDto) {
+        commentService.updateComment(commentId, text.messageText)
     }
 
     @PutMapping("/read/{commentId}")
