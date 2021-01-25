@@ -43,5 +43,22 @@ VALUES (subtopic_seq.nextval, 'Невозможно обновить инфор�
        (subtopic_seq.nextval, 'Невозможно оплатить картой мир', false, topic_seq.currval);
 
 INSERT INTO FEEDBACK (ID, AUTHOR_ID, CATEGORY_ID, CREATION_DATE, END_DATE, HEADER, IS_ACTUAL, PRIORITY_ID, STATUS_ID, SUBTOPIC_ID, TOPIC_ID, UPDATE_DATE)
-VALUES (FEEDBACK_SEQ.nextval, 3, 1, current_date(), current_date(), 'Нет доступа к учетной записи', true, 'LOW', 'OPEN', 1, 1, current_date()),
-       (FEEDBACK_SEQ.nextval, 4, 1, current_date(), current_date(), 'Объединение учетных записей', true, 'MEDIUM', 'OPEN', 1, 2, current_date());
+VALUES (FEEDBACK_SEQ.nextval, 3, 1, current_date(), current_date(), 'Нет доступа к учетной записи', true, 'LOW', 'OPEN', 1, 1, current_date());
+
+INSERT INTO FEEDBACK_FOLLOWER (ID, FEEDBACK_ID, FOLLOWER_TYPE, USER_ID)
+VALUES (FOLLOWER_SEQ.nextval, FEEDBACK_SEQ.currval, 'ASSIGNEE', 2);
+
+INSERT INTO FEEDBACK_MESSAGE  (ID, AUTHOR_ID, IS_DELETED, IS_UNREAD, MESSAGE_DATE, MESSAGE_TEXT, MESSAGE_TYPE, FEEDBACK_ID)
+VALUES (FEEDBACK_MESSAGE_SEQ.nextval, 3, false, true, current_date(), 'Не могу получить доступ к учетной записи', 'body', FEEDBACK_SEQ.currval),
+       (FEEDBACK_MESSAGE_SEQ.nextval, 2, false, true, current_date(), 'А вы пробовали перезагрузить компьютер?', 'message', FEEDBACK_SEQ.currval);
+(FEEDBACK_MESSAGE_SEQ.nextval, 3, false, true, current_date(), 'Помогло', 'message', FEEDBACK_SEQ.currval);
+
+
+INSERT INTO FEEDBACK (ID, AUTHOR_ID, CATEGORY_ID, CREATION_DATE, END_DATE, HEADER, IS_ACTUAL, PRIORITY_ID, STATUS_ID, SUBTOPIC_ID, TOPIC_ID, UPDATE_DATE)
+VALUES (FEEDBACK_SEQ.nextval, 4, 1, current_date(), current_date(), 'Объединение учетных записей', true, 'MEDIUM', 'OPEN', 2, 1, current_date());
+
+INSERT INTO FEEDBACK_MESSAGE  (ID, AUTHOR_ID, IS_DELETED, IS_UNREAD, MESSAGE_DATE, MESSAGE_TEXT, MESSAGE_TYPE, FEEDBACK_ID)
+VALUES (FEEDBACK_MESSAGE_SEQ.nextval, 4, false, true, current_date(), 'Прошу объединить учетные записи
+* ЕГГОГ
+* ЕГГОГ', 'body', FEEDBACK_SEQ.currval),
+       (FEEDBACK_MESSAGE_SEQ.nextval, 1, false, true, current_date(), 'Да кто такой этот ваш еггог?', 'message', FEEDBACK_SEQ.currval);
