@@ -60,10 +60,12 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
 
         currentUser = AndroidTokenProvider.getUserData()
 
-        val actionbar: ActionBar? = supportActionBar
-        actionbar?.apply {
-            setDisplayHomeAsUpEnabled(true)
-            setHomeAsUpIndicator(R.drawable.ic_menu)
+        if (currentUser?.role == UserRole.ADMIN) {
+            val actionbar: ActionBar? = supportActionBar
+            actionbar?.apply {
+                setDisplayHomeAsUpEnabled(true)
+                setHomeAsUpIndicator(R.drawable.ic_menu)
+            }
         }
 
         mainDrawerBinding.navView.setNavigationItemSelectedListener { menuItem ->
@@ -103,6 +105,11 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
             }
         )
 
+        mainDrawerBinding.navView.visibility =
+            if (currentUser?.role == UserRole.ADMIN)
+                View.VISIBLE
+            else
+                View.GONE
         tvHeaderUser = mainDrawerBinding.navView
             .getHeaderView(0)
             .findViewById(R.id.tv_header_user)
