@@ -50,8 +50,8 @@ VALUES (FOLLOWER_SEQ.nextval, FEEDBACK_SEQ.currval, 'ASSIGNEE', 2);
 
 INSERT INTO FEEDBACK_MESSAGE  (ID, AUTHOR_ID, IS_DELETED, IS_UNREAD, MESSAGE_DATE, MESSAGE_TEXT, MESSAGE_TYPE, FEEDBACK_ID)
 VALUES (FEEDBACK_MESSAGE_SEQ.nextval, 3, false, true, current_date(), 'Не могу получить доступ к учетной записи', 'body', FEEDBACK_SEQ.currval),
-       (FEEDBACK_MESSAGE_SEQ.nextval, 2, false, true, current_date(), 'А вы пробовали перезагрузить компьютер?', 'message', FEEDBACK_SEQ.currval);
-(FEEDBACK_MESSAGE_SEQ.nextval, 3, false, true, current_date(), 'Помогло', 'message', FEEDBACK_SEQ.currval);
+       (FEEDBACK_MESSAGE_SEQ.nextval, 2, false, true, current_date(), 'А вы пробовали перезагрузить компьютер?', 'message', FEEDBACK_SEQ.currval),
+       (FEEDBACK_MESSAGE_SEQ.nextval, 3, false, true, current_date(), 'Помогло', 'message', FEEDBACK_SEQ.currval);
 
 
 INSERT INTO FEEDBACK (ID, AUTHOR_ID, CATEGORY_ID, CREATION_DATE, END_DATE, HEADER, IS_ACTUAL, PRIORITY_ID, STATUS_ID, SUBTOPIC_ID, TOPIC_ID, UPDATE_DATE)
