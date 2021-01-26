@@ -63,7 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:background="#FFFFFF"
+                android:background="@null"
                 android:maxWidth="40dp"
                 android:maxHeight="40dp"
                 android:scaleX="0.8"
