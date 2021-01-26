@@ -72,7 +72,6 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
             }
         }
 
-
         mainDrawerBinding.navView.setNavigationItemSelectedListener { menuItem ->
             // set item as selected to persist highlight
             menuItem.isChecked = true
@@ -111,10 +110,11 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
         )
 
         mainDrawerBinding.navView.visibility =
-            if (currentUser?.role == UserRole.ADMIN)
+            if (currentUser?.role == UserRole.ADMIN) {
                 View.VISIBLE
-            else
+            } else {
                 View.GONE
+            }
         tvHeaderUser = mainDrawerBinding.navView
             .getHeaderView(0)
             .findViewById(R.id.tv_header_user)

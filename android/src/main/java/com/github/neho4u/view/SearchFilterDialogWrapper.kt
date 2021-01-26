@@ -78,6 +78,10 @@ class SearchFilterDialogWrapper(
     fun show(filter: FeedbackFilter) {
         dialog.show()
         GlobalScope.launch {
+            withContext(Dispatchers.Main) {
+                layoutBinding.bNoteOk.isEnabled = false
+                layoutBinding.bNoteReset.isEnabled = false
+            }
             if (!loadData()) {
                 withContext(Dispatchers.Main) {
                     dialog.dismiss()
@@ -85,6 +89,8 @@ class SearchFilterDialogWrapper(
             } else {
                 withContext(Dispatchers.Main) {
                     initWithFilter(filter)
+                    layoutBinding.bNoteOk.isEnabled = true
+                    layoutBinding.bNoteReset.isEnabled = true
                 }
             }
         }
@@ -141,7 +147,8 @@ class SearchFilterDialogWrapper(
                     it.adapter.update(newData)
                     it.spinner.setSelection(0, true)
                     it.spinner.isEnabled = newData.isNotEmpty()
-                    parentChoice = it.adapter.getItem(0)
+                    it.choice = it.adapter.getItem(0)
+                    parentChoice = it.choice
                 }
             }
         }

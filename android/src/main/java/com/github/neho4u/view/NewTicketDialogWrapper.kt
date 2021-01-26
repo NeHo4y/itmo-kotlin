@@ -95,6 +95,9 @@ class NewTicketDialogWrapper(
 
     fun show() {
         dialog.show()
+        if (ticket != null) {
+            layoutBinding.newFeedback.text = context.getString(R.string.edit_feedback)
+        }
         GlobalScope.launch {
             withContext(Dispatchers.Main) {
                 layoutBinding.bCreateOk.isEnabled = false
@@ -181,8 +184,8 @@ class NewTicketDialogWrapper(
                     it.adapter.update(newData)
                     it.spinner.setSelection(0, true)
                     it.spinner.isEnabled = newData.isNotEmpty()
-                    parentChoice = it.adapter.getItem(0)
-                    choice = it.adapter.getItem(0)
+                    it.choice = it.adapter.getItem(0)
+                    parentChoice = it.choice
                 }
             }
         }
