@@ -1,12 +1,12 @@
 package com.github.neho4u.view
 
-import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -17,16 +17,17 @@ import com.github.neho4u.controller.NoteInterface
 import com.github.neho4u.controller.TicketController
 import com.github.neho4u.controller.TicketInterface
 import com.github.neho4u.databinding.ATicketViewBinding
-import com.github.neho4u.databinding.DialogNoteLayoutBinding
 import com.github.neho4u.databinding.NoteDetailBinding
 import com.github.neho4u.model.Ticket
 import com.github.neho4u.shared.model.comment.CommentCreationDto
+import com.github.neho4u.shared.model.comment.CommentUpdateDto
 import com.github.neho4u.shared.model.feedback.FeedbackUpdateDto
 import com.github.neho4u.shared.model.user.UserData
 import com.github.neho4u.shared.model.user.UserRole
 import com.github.neho4u.utils.AndroidTokenProvider
 import com.github.neho4u.utils.Client
 import com.github.neho4u.utils.IShowError
+import com.github.neho4u.utils.dateFormatter
 import com.google.android.material.snackbar.Snackbar
 import io.ktor.utils.io.core.*
 import io.noties.markwon.Markwon
@@ -34,6 +35,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.datetime.toJavaLocalDateTime
 
 class TicketView : AppCompatActivity(), TicketInterface, NoteInterface, IShowError {
 
@@ -48,6 +50,7 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface, IShowErr
     private var menuAssign: MenuItem? = null
     private var menuChangeStatus: MenuItem? = null
     private var currentUser: UserData? = null
+    private var menuEdit: MenuItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,6 +78,7 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface, IShowErr
         menuNewNote?.isEnabled = false
         menuAssign?.isEnabled = false
         menuChangeStatus?.isEnabled = false
+        menuEdit?.isEnabled = false
         GlobalScope.launch(Dispatchers.Default) {
             ticketController.loadFullTicket(ticketId)?.let {
                 ticketLoadResult(it)
@@ -98,7 +102,10 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface, IShowErr
 
         if (ticket.lastUpdated != null) {
             noteBinding.tvTicketViewLastUpdated.visibility = View.VISIBLE
-            noteBinding.tvTicketViewLastUpdated.text = getString(R.string.last_updated, ticket.lastUpdated.toString())
+            noteBinding.tvTicketViewLastUpdated.text = getString(
+                R.string.last_updated,
+                ticket.lastUpdated.toJavaLocalDateTime().format(dateFormatter)
+            )
         }
 
         if (ticket.priority != null) {
@@ -139,8 +146,31 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface, IShowErr
 
                 NoteDetailBinding.bind(noteView).apply {
                     tvNoteDetailPrettyLastUpdated.text =
-                        getString(R.string.pretty_updated_string, note.creationDate, note.userData?.username)
-                    tvNoteDetailDetail.text = note.mobileNoteText
+                        getString(
+                            R.string.pretty_updated_string,
+                            note.creationDate?.toJavaLocalDateTime()?.format(dateFormatter),
+                            note.userData?.username
+                        )
+                    markdown.setMarkdown(tvNoteDetailDetail, note.mobileNoteText ?: "")
+                }
+
+                noteView.findViewById<ImageButton>(R.id.image_button)?.apply {
+                    if (currentUser?.id != note.userData?.id) {
+                        visibility = View.INVISIBLE
+                    }
+                    setOnClickListener {
+                        NoteDialogWrapper(this@TicketView, note) { text, dialog ->
+                            val noteEdit = CommentUpdateDto(text)
+                            Log.d("TicketView", "Editing note $noteEdit")
+                            GlobalScope.launch(Dispatchers.Default) {
+                                commentController.updateComment(note.id, noteEdit)
+                                withContext(Dispatchers.Main) {
+                                    dialog.dismiss()
+                                    noteSendResult()
+                                }
+                            }
+                        }.show()
+                    }
                 }
 
                 noteBinding.llNoteContent.addView(noteView)
@@ -171,33 +201,17 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface, IShowErr
                 true
             }
             R.id.menu_add_note -> {
-                val dialog = Dialog(this)
-                val dialogNoteLayoutBinding = DialogNoteLayoutBinding.inflate(LayoutInflater.from(this))
-
-                dialog.setContentView(dialogNoteLayoutBinding.root)
-
-                dialog.setTitle(resources.getString(R.string.new_note))
-
-                dialogNoteLayoutBinding.bNoteCancel.setOnClickListener {
-                    dialog.dismiss()
-                }
-                dialogNoteLayoutBinding.bNoteOk.setOnClickListener {
-                    val note = CommentCreationDto(
-                        ticketId,
-                        "message",
-                        dialogNoteLayoutBinding.etNoteText.text.toString()
-
-                    )
+                NoteDialogWrapper(this, null) { text, dialog ->
+                    val note = CommentCreationDto(ticketId, "message", text)
                     Log.d("TicketView", "Submitting note $note")
-                    noteBinding.pbTicketView.visibility = View.VISIBLE
                     GlobalScope.launch(Dispatchers.Default) {
                         commentController.sendComment(note)
-                        noteSendResult()
+                        withContext(Dispatchers.Main) {
+                            dialog.dismiss()
+                            noteSendResult()
+                        }
                     }
-                    dialog.dismiss()
-                }
-                dialog.show()
-                dialogNoteLayoutBinding.etNoteText.requestFocus()
+                }.show()
                 true
             }
             R.id.menu_edit_feedback -> {
@@ -239,6 +253,9 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface, IShowErr
         menuChangeStatus = menu?.findItem(R.id.menu_change_status)?.apply {
             isVisible = currentUser?.role == UserRole.ADMIN
         }
+        menuEdit = menu?.findItem(R.id.menu_edit_feedback)?.apply {
+            isVisible = currentUser?.id == ticket?.authorData?.id
+        }
         return true
     }
 
@@ -256,6 +273,8 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface, IShowErr
             menuAssign?.isVisible = result.assignee.isNullOrBlank() &&
                 currentUser?.role == UserRole.ADMIN
             noteBinding.pbTicketView.visibility = View.GONE
+            menuEdit?.isVisible = currentUser?.id == ticket?.authorData?.id
+            menuEdit?.isEnabled = true
             inflateTicket(result)
         }
     }

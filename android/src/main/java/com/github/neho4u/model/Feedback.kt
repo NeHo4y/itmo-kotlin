@@ -12,5 +12,6 @@ internal fun FeedbackDto.toTicket() = Ticket(
     status = status,
     category = category,
     topic = topic,
-    subtopic = subtopic
+    subtopic = subtopic,
+    authorData = authorData
 )

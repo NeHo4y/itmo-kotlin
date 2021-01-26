@@ -3,6 +3,7 @@ package com.github.neho4u.controller
 import android.content.Context
 import com.github.neho4u.R
 import com.github.neho4u.shared.model.comment.CommentCreationDto
+import com.github.neho4u.shared.model.comment.CommentUpdateDto
 import com.github.neho4u.utils.Client
 import io.ktor.client.features.*
 
@@ -27,5 +28,9 @@ class CommentController(
 
     suspend fun sendComment(commentDto: CommentCreationDto) {
         handleErrors { Client().use { it.comment().add(commentDto) } }
+    }
+
+    suspend fun updateComment(commentId: Long, commentDto: CommentUpdateDto) {
+        handleErrors { Client().use { it.comment().update(commentId, commentDto) } }
     }
 }

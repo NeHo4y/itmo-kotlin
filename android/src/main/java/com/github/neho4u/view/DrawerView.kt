@@ -109,6 +109,11 @@ class DrawerView : AppCompatActivity(), TicketFragment.OnListFragmentInteraction
             }
         )
 
+        if (currentUser?.role == UserRole.USER) {
+            mainDrawerBinding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+        } else {
+            mainDrawerBinding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNDEFINED)
+        }
         mainDrawerBinding.navView.visibility =
             if (currentUser?.role == UserRole.ADMIN) {
                 View.VISIBLE

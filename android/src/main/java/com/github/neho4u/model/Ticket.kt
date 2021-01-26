@@ -3,6 +3,7 @@ package com.github.neho4u.model
 import com.github.neho4u.shared.model.common.IdName
 import com.github.neho4u.shared.model.feedback.FeedbackPriority
 import com.github.neho4u.shared.model.feedback.FeedbackStatus
+import com.github.neho4u.shared.model.user.UserData
 import kotlinx.datetime.LocalDateTime
 
 data class Ticket(
@@ -18,4 +19,5 @@ data class Ticket(
     val category: IdName? = null,
     val topic: IdName? = null,
     val subtopic: IdName? = null,
+    val authorData: UserData? = null
 )
