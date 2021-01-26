@@ -9,69 +9,70 @@ VALUES (user_seq.nextval, CURRENT_TIME(), 'admin1@qwe', false, true,
         '$2a$10$NNckB4EA6svjF7MX6kgS0./oGg9bwwZBzotBkKMFOAMzggMzbmo9O', +15551234567, 'USER', 'user4');
 
 INSERT INTO CATEGORY (ID, DESCRIPTION, IS_DELETED)
-VALUES (category_seq.nextval, '”˜ÂÚÌ‡ˇ Á‡ÔËÒ¸', false);
+VALUES (category_seq.nextval, '–£—á–µ—Ç–Ω–∞—è –∑–∞–ø–∏—Å—å', false);
 
 INSERT INTO TOPIC (ID, CATEGORY_ID, DESCRIPTION, IS_DELETED)
-VALUES (topic_seq.nextval, category_seq.currval, 'Œ·˘ËÂ ‚ÓÔÓÒ˚', false);
+VALUES (topic_seq.nextval, category_seq.currval, '–û–±—â–∏–µ –≤–æ–ø—Ä–æ—Å—ã', false);
 
 INSERT INTO SUBTOPIC (ID, DESCRIPTION, IS_DELETED, TOPIC_ID)
-VALUES (subtopic_seq.nextval, 'ÕÂÚ ‰ÓÒÚÛÔ‡', false, topic_seq.currval),
-       (subtopic_seq.nextval, 'Œ·˙Â‰ËÌÂÌËÂ Û˜ÂÚÌ˚ı Á‡ÔËÒÂÈ', false, topic_seq.currval);
+VALUES (subtopic_seq.nextval, '–ù–µ—Ç –¥–æ—Å—Ç—É–ø–∞', false, topic_seq.currval),
+       (subtopic_seq.nextval, '–û–±—ä–µ–¥–∏–Ω–µ–Ω–∏–µ —É—á–µ—Ç–Ω—ã—Ö –∑–∞–ø–∏—Å–µ–π', false, topic_seq.currval);
 
 INSERT INTO TOPIC (ID, CATEGORY_ID, DESCRIPTION, IS_DELETED)
-VALUES (topic_seq.nextval, category_seq.currval, 'Ã‡„‡ÁËÌ', false);
+VALUES (topic_seq.nextval, category_seq.currval, '–ú–∞–≥–∞–∑–∏–Ω', false);
 
 INSERT INTO SUBTOPIC (ID, DESCRIPTION, IS_DELETED, TOPIC_ID)
-VALUES (subtopic_seq.nextval, 'ÕÂ‚ÓÁÏÓÊÌÓ Á‡ÈÚË ‚ Ï‡„‡ÁËÌ', false, topic_seq.currval),
-       (subtopic_seq.nextval, 'Œ¯Ë·Í‡ ÔË ÔÓÍÛÔÍÂ', false, topic_seq.currval);
+VALUES (subtopic_seq.nextval, '–ù–µ–≤–æ–∑–º–æ–∂–Ω–æ –∑–∞–π—Ç–∏ –≤ –º–∞–≥–∞–∑–∏–Ω', false, topic_seq.currval),
+       (subtopic_seq.nextval, '–û—à–∏–±–∫–∞ –ø—Ä–∏ –ø–æ–∫—É–ø–∫–µ', false, topic_seq.currval);
 
 INSERT INTO CATEGORY (ID, DESCRIPTION, IS_DELETED)
-VALUES (category_seq.nextval, 'ŒÔÎ‡Ú‡', false);
+VALUES (category_seq.nextval, '–û–ø–ª–∞—Ç–∞', false);
 
 INSERT INTO TOPIC (ID, CATEGORY_ID, DESCRIPTION, IS_DELETED)
-VALUES (topic_seq.nextval, category_seq.currval, '¿‚ÚÓËÁ‡ˆËˇ ÓÔÎ‡Ú˚', false);
+VALUES (topic_seq.nextval, category_seq.currval, '–ê–≤—Ç–æ—Ä–∏–∑–∞—Ü–∏—è –æ–ø–ª–∞—Ç—ã', false);
 
 INSERT INTO SUBTOPIC (ID, DESCRIPTION, IS_DELETED, TOPIC_ID)
-VALUES (subtopic_seq.nextval, 'ÕÂ‡‚ÚÓËÁËÓ‚‡ÌÌ˚È ÔÎ‡ÚÂÊ', false, topic_seq.currval),
-       (subtopic_seq.nextval, '¬ÓÁÏÂÒÚËÚ¸ ÔÎ‡ÚÂÊ', false, topic_seq.currval);
+VALUES (subtopic_seq.nextval, '–ù–µ–∞–≤—Ç–æ—Ä–∏–∑–∏—Ä–æ–≤–∞–Ω–Ω—ã–π –ø–ª–∞—Ç–µ–∂', false, topic_seq.currval),
+       (subtopic_seq.nextval, '–í–æ–∑–º–µ—Å—Ç–∏—Ç—å –ø–ª–∞—Ç–µ–∂', false, topic_seq.currval);
 
 INSERT INTO TOPIC (ID, CATEGORY_ID, DESCRIPTION, IS_DELETED)
-VALUES (topic_seq.nextval, category_seq.currval, 'Œ·ÌÓ‚ÎÂÌËÂ ËÌÙÓÏ‡ˆËË Ó· ÓÔÎ‡ÚÂ', false);
+VALUES (topic_seq.nextval, category_seq.currval, '–û–±–Ω–æ–≤–ª–µ–Ω–∏–µ –∏–Ω—Ñ–æ—Ä–º–∞—Ü–∏–∏ –æ–± –æ–ø–ª–∞—Ç–µ', false);
 
 INSERT INTO SUBTOPIC (ID, DESCRIPTION, IS_DELETED, TOPIC_ID)
-VALUES (subtopic_seq.nextval, 'ÕÂ‚ÓÁÏÓÊÌÓ Ó·ÌÓ‚ËÚ¸ ËÌÙÓÏ‡ˆË˛', false, topic_seq.currval),
-       (subtopic_seq.nextval, 'ÕÂ‚ÓÁÏÓÊÌÓ ÓÔÎ‡ÚËÚ¸ Í‡ÚÓÈ ÏË', false, topic_seq.currval);
+VALUES (subtopic_seq.nextval, '–ù–µ–≤–æ–∑–º–æ–∂–Ω–æ –æ–±–Ω–æ–≤–∏—Ç—å –∏–Ω—Ñ–æ—Ä–º–∞—Ü–∏—é', false, topic_seq.currval),
+       (subtopic_seq.nextval, '–ù–µ–≤–æ–∑–º–æ–∂–Ω–æ –æ–ø–ª–∞—Ç–∏—Ç—å –∫–∞—Ä—Ç–æ–π –º–∏—Ä', false, topic_seq.currval);
 
 
 INSERT INTO FEEDBACK (ID, AUTHOR_ID, CATEGORY_ID, CREATION_DATE, END_DATE, HEADER, IS_ACTUAL, PRIORITY_ID, STATUS_ID, SUBTOPIC_ID, TOPIC_ID, UPDATE_DATE)
-VALUES (FEEDBACK_SEQ.nextval, 3, 1, CURRENT_TIME(), CURRENT_TIME(), 'ÕÂÚ ‰ÓÒÚÛÔ‡ Í Û˜ÂÚÌÓÈ Á‡ÔËÒË', true, 'LOW', 'RESOLVED', 1, 1, CURRENT_TIME());
+VALUES (FEEDBACK_SEQ.nextval, 3, 1, CURRENT_TIME(), CURRENT_TIME(), '–ù–µ—Ç –¥–æ—Å—Ç—É–ø–∞ –∫ —É—á–µ—Ç–Ω–æ–π –∑–∞–ø–∏—Å–∏', true, 'LOW', 'RESOLVED', 1, 1, CURRENT_TIME());
 
 INSERT INTO FEEDBACK_FOLLOWER (ID, FEEDBACK_ID, FOLLOWER_TYPE, USER_ID)
 VALUES (FOLLOWER_SEQ.nextval, FEEDBACK_SEQ.currval, 'ASSIGNEE', 2);
 
 INSERT INTO FEEDBACK_MESSAGE  (ID, AUTHOR_ID, IS_DELETED, IS_UNREAD, MESSAGE_DATE, MESSAGE_TEXT, MESSAGE_TYPE, FEEDBACK_ID)
-VALUES (FEEDBACK_MESSAGE_SEQ.nextval, 3, false, true, CURRENT_TIME(), 'ÕÂ ÏÓ„Û ÔÓÎÛ˜ËÚ¸ ‰ÓÒÚÛÔ Í Û˜ÂÚÌÓÈ Á‡ÔËÒË', 'body', FEEDBACK_SEQ.currval),
-       (FEEDBACK_MESSAGE_SEQ.nextval, 2, false, true, CURRENT_TIME(), '¿ ‚˚ ÔÓ·Ó‚‡ÎË ÔÂÂÁ‡„ÛÁËÚ¸ ÍÓÏÔ¸˛ÚÂ?', 'message', FEEDBACK_SEQ.currval),
-       (FEEDBACK_MESSAGE_SEQ.nextval, 3, false, true, CURRENT_TIME(), 'œÓÏÓ„ÎÓ', 'message', FEEDBACK_SEQ.currval);
+VALUES (FEEDBACK_MESSAGE_SEQ.nextval, 3, false, true, CURRENT_TIME(), '–ù–µ –º–æ–≥—É –ø–æ–ª—É—á–∏—Ç—å –¥–æ—Å—Ç—É–ø –∫ —É—á–µ—Ç–Ω–æ–π –∑–∞–ø–∏—Å–∏', 'body', FEEDBACK_SEQ.currval),
+       (FEEDBACK_MESSAGE_SEQ.nextval, 2, false, true, CURRENT_TIME(), '–ê –≤—ã –ø—Ä–æ–±–æ–≤–∞–ª–∏ –ø–µ—Ä–µ–∑–∞–≥—Ä—É–∑–∏—Ç—å –∫–æ–º–ø—å—é—Ç–µ—Ä?', 'message', FEEDBACK_SEQ.currval),
+       (FEEDBACK_MESSAGE_SEQ.nextval, 3, false, true, CURRENT_TIME(), '–ü–æ–º–æ–≥–ª–æ', 'message', FEEDBACK_SEQ.currval);
 
 
 INSERT INTO FEEDBACK (ID, AUTHOR_ID, CATEGORY_ID, CREATION_DATE, END_DATE, HEADER, IS_ACTUAL, PRIORITY_ID, STATUS_ID, SUBTOPIC_ID, TOPIC_ID, UPDATE_DATE)
-VALUES (FEEDBACK_SEQ.nextval, 3, 2, CURRENT_TIME(), CURRENT_TIME(), 'Õ‡ÁÌ‡˜¸ÚÂ ÏÂÌˇ Ì‡ ‡‰ÏËÌ‡', true, 'MEDIUM', 'CREATED', 5, 3, CURRENT_TIME());
+VALUES (FEEDBACK_SEQ.nextval, 3, 2, CURRENT_TIME(), CURRENT_TIME(), '–ù–∞–∑–Ω–∞—á—å—Ç–µ –º–µ–Ω—è –Ω–∞ –∞–¥–º–∏–Ω–∞', true, 'MEDIUM', 'CREATED', 5, 3, CURRENT_TIME());
 
 INSERT INTO FEEDBACK_MESSAGE  (ID, AUTHOR_ID, IS_DELETED, IS_UNREAD, MESSAGE_DATE, MESSAGE_TEXT, MESSAGE_TYPE, FEEDBACK_ID)
-VALUES (FEEDBACK_MESSAGE_SEQ.nextval, 3, false, true, CURRENT_TIME(), 'ƒ‡ ÍÓ„‰‡ ÏÓÈ ÓÚÁ˚‚ ‚ÓÁ¸ÏÛÚ ÛÊÂ ‚ ‡·ÓÚÛ???', 'body', FEEDBACK_SEQ.currval);
+VALUES (FEEDBACK_MESSAGE_SEQ.nextval, 3, false, true, CURRENT_TIME(), '–î–∞ –∫–æ–≥–¥–∞ –º–æ–π –æ—Ç–∑—ã–≤ –≤–æ–∑—å–º—É—Ç —É–∂–µ –≤ —Ä–∞–±–æ—Ç—É???', 'body', FEEDBACK_SEQ.currval);
 
 
 INSERT INTO FEEDBACK (ID, AUTHOR_ID, CATEGORY_ID, CREATION_DATE, END_DATE, HEADER, IS_ACTUAL, PRIORITY_ID, STATUS_ID, SUBTOPIC_ID, TOPIC_ID, UPDATE_DATE)
-VALUES (FEEDBACK_SEQ.nextval, 4, 1, CURRENT_TIME(), CURRENT_TIME(), 'Œ·˙Â‰ËÌÂÌËÂ Û˜ÂÚÌ˚ı Á‡ÔËÒÂÈ', true, 'MEDIUM', 'IN_PROGRESS', 2, 1, CURRENT_TIME());
+VALUES (FEEDBACK_SEQ.nextval, 4, 1, CURRENT_TIME(), CURRENT_TIME(), '–û–±—ä–µ–¥–∏–Ω–µ–Ω–∏–µ —É—á–µ—Ç–Ω—ã—Ö –∑–∞–ø–∏—Å–µ–π', true, 'MEDIUM', 'IN_PROGRESS', 2, 1, CURRENT_TIME());
 
 INSERT INTO FEEDBACK_FOLLOWER (ID, FEEDBACK_ID, FOLLOWER_TYPE, USER_ID)
 VALUES (FOLLOWER_SEQ.nextval, FEEDBACK_SEQ.currval, 'ASSIGNEE', 1);
 
 INSERT INTO FEEDBACK_MESSAGE  (ID, AUTHOR_ID, IS_DELETED, IS_UNREAD, MESSAGE_DATE, MESSAGE_TEXT, MESSAGE_TYPE, FEEDBACK_ID)
-VALUES (FEEDBACK_MESSAGE_SEQ.nextval, 4, false, true, CURRENT_TIME(), 'œÓ¯Û Ó·˙Â‰ËÌËÚ¸ Û˜ÂÚÌ˚Â Á‡ÔËÒË
-* ≈√√Œ√
-* ≈√√Œ√', 'body', FEEDBACK_SEQ.currval),
-       (FEEDBACK_MESSAGE_SEQ.nextval, 1, false, true, CURRENT_TIME(), 'ƒ‡ ÍÚÓ Ú‡ÍÓÈ ˝ÚÓÚ ‚‡¯ Â„„Ó„?', 'message', FEEDBACK_SEQ.currval),
-       (FEEDBACK_MESSAGE_SEQ.nextval, 4, false, true, CURRENT_TIME(), '> ƒ‡ ÍÚÓ Ú‡ÍÓÈ ˝ÚÓÚ ‚‡¯ Â„„Ó„?
-ÀÛ˜¯Â ‚‡Ï Ë ÌÂ ÁÌ‡Ú¸, ‚˚ ÏÓÎÓ‰ÓÈ, ¯ÛÚÎË‚˚È', 'message', FEEDBACK_SEQ.currval);
+VALUES (FEEDBACK_MESSAGE_SEQ.nextval, 4, false, true, CURRENT_TIME(), '–ü—Ä–æ—à—É –æ–±—ä–µ–¥–∏–Ω–∏—Ç—å —É—á–µ—Ç–Ω—ã–µ –∑–∞–ø–∏—Å–∏
+* –ï–ì–ì–û–ì
+* –ï–ì–ì–û–ì', 'body', FEEDBACK_SEQ.currval),
+       (FEEDBACK_MESSAGE_SEQ.nextval, 1, false, true, CURRENT_TIME(), '–î–∞ –∫—Ç–æ —Ç–∞–∫–æ–π —ç—Ç–æ—Ç –≤–∞—à –µ–≥–≥–æ–≥?', 'message', FEEDBACK_SEQ.currval),
+       (FEEDBACK_MESSAGE_SEQ.nextval, 4, false, true, CURRENT_TIME(), '> –î–∞ –∫—Ç–æ —Ç–∞–∫–æ–π —ç—Ç–æ—Ç –≤–∞—à –µ–≥–≥–æ–≥?
+
+–õ—É—á—à–µ –≤–∞–º –∏ –Ω–µ –∑–Ω–∞—Ç—å, –≤—ã –º–æ–ª–æ–¥–æ–π, —à—É—Ç–ª–∏–≤—ã–π', 'message', FEEDBACK_SEQ.currval);
