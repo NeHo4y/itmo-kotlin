@@ -11,7 +11,9 @@ import com.github.neho4y.user.model.UserCreationDto
 import com.github.neho4y.user.model.UserUpdateDto
 import com.github.neho4y.user.service.UserService
 import org.slf4j.LoggerFactory
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
+import org.springframework.web.bind.annotation.ResponseStatus
 
 @Service
 class UserServiceImpl(
@@ -70,4 +72,5 @@ class UserServiceImpl(
     }
 }
 
-internal class UserLoginException(username: String) : BasicException("User $username cannot be logged in")
+@ResponseStatus(code = HttpStatus.UNAUTHORIZED)
+class UserLoginException(username: String) : BasicException("User $username cannot be logged in")
