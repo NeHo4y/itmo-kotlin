@@ -74,8 +74,10 @@ class ChangeStatusDialogWrapper(
 
     fun show(status: FeedbackStatus?, priority: FeedbackPriority?) {
         dialog.show()
+        layoutBinding.bStatusOk.isEnabled = false
         loadData()
         initWith(priority, status)
+        layoutBinding.bStatusOk.isEnabled = true
     }
 
     private fun validate(): Boolean {

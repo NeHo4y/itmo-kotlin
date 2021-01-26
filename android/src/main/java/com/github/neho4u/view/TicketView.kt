@@ -118,6 +118,7 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface, IShowErr
         noteBinding.tvFeedbackProperties.visibility = View.VISIBLE
         noteBinding.tvPriorityStatus.visibility = View.VISIBLE
         noteBinding.tvFeedbackStatus.visibility = View.VISIBLE
+        noteBinding.vTicketViewLine3.visibility = View.VISIBLE
 
         if (ticket.displayClient != null) {
             noteBinding.tvTicketViewClientFullname.visibility = View.VISIBLE
