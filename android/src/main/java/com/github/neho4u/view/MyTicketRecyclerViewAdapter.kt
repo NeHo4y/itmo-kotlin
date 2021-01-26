@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.github.neho4u.databinding.FragmentTicketBinding
 import com.github.neho4u.model.Ticket
+import com.github.neho4u.utils.atCurrentTimeZone
 import com.github.neho4u.utils.dateFormatter
 import com.github.neho4u.view.TicketFragment.OnListFragmentInteractionListener
 import kotlinx.datetime.toJavaLocalDateTime
@@ -32,7 +33,10 @@ class MyTicketRecyclerViewAdapter(
         holder.apply {
             mIdView.text = item.id.toString()
             mClient.text = item.displayClient
-            mLastUpdated.text = item.lastUpdated?.toJavaLocalDateTime()?.format(dateFormatter)
+            mLastUpdated.text = item.lastUpdated
+                ?.toJavaLocalDateTime()
+                ?.atCurrentTimeZone()
+                ?.format(dateFormatter)
             mSubject.text = item.subject
             mDetails.text = item.detail
             mSeverity.text = item.priority?.name ?: "Priority"

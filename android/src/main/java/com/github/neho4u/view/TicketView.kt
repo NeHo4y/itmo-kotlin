@@ -24,10 +24,7 @@ import com.github.neho4u.shared.model.comment.CommentUpdateDto
 import com.github.neho4u.shared.model.feedback.FeedbackUpdateDto
 import com.github.neho4u.shared.model.user.UserData
 import com.github.neho4u.shared.model.user.UserRole
-import com.github.neho4u.utils.AndroidTokenProvider
-import com.github.neho4u.utils.Client
-import com.github.neho4u.utils.IShowError
-import com.github.neho4u.utils.dateFormatter
+import com.github.neho4u.utils.*
 import com.google.android.material.snackbar.Snackbar
 import io.ktor.utils.io.core.*
 import io.noties.markwon.Markwon
@@ -129,7 +126,10 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface, IShowErr
             noteBinding.tvTicketViewLastUpdated.visibility = View.VISIBLE
             noteBinding.tvTicketViewLastUpdated.text = getString(
                 R.string.last_updated,
-                ticket.lastUpdated.toJavaLocalDateTime().format(dateFormatter)
+                ticket.lastUpdated
+                    .toJavaLocalDateTime()
+                    .atCurrentTimeZone()
+                    .format(dateFormatter)
             )
         }
 
@@ -173,7 +173,10 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface, IShowErr
                     tvNoteDetailPrettyLastUpdated.text =
                         getString(
                             R.string.pretty_updated_string,
-                            note.creationDate?.toJavaLocalDateTime()?.format(dateFormatter),
+                            note.creationDate
+                                ?.toJavaLocalDateTime()
+                                ?.atCurrentTimeZone()
+                                ?.format(dateFormatter),
                             note.userData?.username
                         )
                     markdown.setMarkdown(tvNoteDetailDetail, note.mobileNoteText ?: "")
