@@ -24,7 +24,6 @@ class CommentServiceImpl(
         private val log = LoggerFactory.getLogger(this::class.java)
     }
 
-
     override suspend fun addComment(userId: Long, commentCreationDto: CommentCreationDto): Long {
         val feedback = feedbackRepository.findById(commentCreationDto.feedbackId)
             .orElseThrow { NotFoundException("Requested comment not found") }

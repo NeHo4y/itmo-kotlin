@@ -4,9 +4,7 @@ import com.github.neho4u.shared.model.category.CategoryDto
 import com.github.neho4u.shared.model.category.SubtopicDto
 import com.github.neho4u.shared.model.category.TopicDto
 import com.github.neho4u.shared.model.feedback.FeedbackCreationDto
-import com.github.neho4u.shared.model.feedback.FeedbackDto
-import com.github.neho4u.shared.model.feedback.FeedbackPriority
-import com.github.neho4u.shared.model.feedback.FeedbackStatus
+import com.github.neho4u.shared.model.feedback.FeedbackUpdateDto
 import com.github.neho4y.category.domain.Category
 import com.github.neho4y.category.domain.Subtopic
 import com.github.neho4y.category.domain.Topic
@@ -22,7 +20,6 @@ import com.github.neho4y.user.service.UserService
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.stub
 import kotlinx.coroutines.runBlocking
-import kotlinx.datetime.toKotlinLocalDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -30,8 +27,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.annotation.DirtiesContext
-import java.time.LocalDateTime
-import java.util.*
 
 private const val USER_ID = 1L
 private const val CATEGORY_ID = 3L
@@ -110,7 +105,7 @@ internal class FeedbackServiceIntegrationTest {
         )
         val savedFeedback = feedbackService.createFeedback(user.id, feedbackCreationDto)
 
-        val feedbackDto = FeedbackCreationDto(
+        val feedbackDto = FeedbackUpdateDto(
             "Test new header",
             categoryId,
             topicId,
