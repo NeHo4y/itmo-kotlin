@@ -15,8 +15,10 @@ import java.util.concurrent.atomic.AtomicReference
 class AndroidHttpClientProvider : HttpClientProvider {
     override fun getHttpClient() = HttpClient(OkHttp) {
         defaultRequest {
-            host = "10.0.2.2"
-            port = 8000
+            url {
+                protocol = URLProtocol.HTTPS
+                host = "helldesk.herokuapp.com"
+            }
             contentType(ContentType.Application.Json)
         }
         tokenAuth {

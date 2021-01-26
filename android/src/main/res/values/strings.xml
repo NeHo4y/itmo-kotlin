@@ -37,7 +37,7 @@
     <string name="error_ticket_load">Failed to load ticket: %1$s</string>
     <string name="error_note_load">Failed to add note: %1$s</string>
     <string name="ticket_title">Ticket: %1$s</string>
-    <string name="assign_to_me">Assign to me</string>
+    <string name="assign_to_me"><u>Assign to me</u></string>
     <string name="change_status">Change status</string>
     <string name="new_feedback">Feedback header</string>
     <string name="new_feedback_description">Feedback description</string>

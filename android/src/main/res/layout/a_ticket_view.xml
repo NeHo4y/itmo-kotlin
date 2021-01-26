@@ -77,61 +77,73 @@
                     app:layout_constraintTop_toTopOf="@+id/tv_ticket_view_id"/>
 
             <TextView
-                    android:id="@+id/tv_ticket_view_last_updated"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:visibility="invisible"
-                    android:text="Updated..."
-                    android:gravity="end"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toEndOf="@+id/tv_ticket_view_id"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_ticket_view_client_fullname"/>
+                android:id="@+id/tv_ticket_view_last_updated"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:gravity="end"
+                android:text="Updated..."
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_ticket_view_client_fullname" />
 
             <View
-                    android:id="@+id/v_ticket_view_line"
-                    android:layout_width="fill_parent"
-                    android:layout_height="3dp"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="24dp"
-                    android:layout_marginRight="24dp"
-                    android:background="@color/colorPrimaryDark"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_ticket_view_id"/>
+                android:id="@+id/v_ticket_view_line"
+                android:layout_width="fill_parent"
+                android:layout_height="3dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="24dp"
+                android:background="@color/colorPrimaryDark"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_ticket_view_id" />
+
+            <View
+                android:id="@+id/v_ticket_view_line3"
+                android:layout_width="80dp"
+                android:layout_height="2dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@color/colorPrimaryDark"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toTopOf="@+id/tv_ticket_view_subject"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/tv_ticket_view_subject"
-                android:layout_width="275dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="8dp"
                 android:text="Subject Line Text Text"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                 android:textSize="20sp"
                 android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/v_ticket_view_line" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_feedback_status" />
 
             <androidx.constraintlayout.widget.Barrier
-                    android:id="@+id/labelBarrier"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:barrierDirection="bottom"
-                    app:constraint_referenced_ids="tv_ticket_view_subject" tools:layout_editor_absoluteY="175dp"/>
+                android:id="@+id/labelBarrier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="tv_ticket_view_subject"
+                tools:layout_editor_absoluteY="175dp" />
 
             <View
                 android:id="@+id/v_ticket_view_line2"
                 android:layout_width="80dp"
                 android:layout_height="2dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:background="@color/colorPrimaryDark"
                 android:visibility="invisible"
@@ -141,31 +153,29 @@
                 app:layout_constraintTop_toBottomOf="@+id/labelBarrier" />
 
             <TextView
-                    android:id="@+id/tv_ticket_view_assigned_tech"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:visibility="invisible"
-                    android:text="Assigned to Mr.Technician"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_ticket_view_last_updated"/>
+                android:id="@+id/tv_ticket_view_assigned_tech"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="Assigned to Mr.Technician"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_ticket_view_last_updated" />
 
             <TextView
-                    android:id="@+id/tv_ticket_view_details"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:visibility="invisible"
-                    android:text="@string/lorem_ipsum"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/v_ticket_view_line2"/>
+                android:id="@+id/tv_ticket_view_details"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:text="@string/lorem_ipsum"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/v_ticket_view_line2" />
 
             <LinearLayout
                     android:id="@+id/av_ticket_view_bottom"
@@ -195,28 +205,77 @@
                 android:id="@+id/tv_severity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
                 android:text="Severity"
                 android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/tv_ticket_view_subject"
-                app:layout_constraintTop_toBottomOf="@+id/v_ticket_view_line" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_feedback_properties" />
 
             <TextView
                 android:id="@+id/tv_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
                 android:text="Status"
                 android:visibility="invisible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/tv_ticket_view_subject"
+                app:layout_constraintEnd_toEndOf="@+id/tv_severity"
                 app:layout_constraintTop_toBottomOf="@+id/tv_severity" />
+
+            <TextView
+                android:id="@+id/tv_priorityStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/priority_header"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_severity"
+                app:layout_constraintStart_toStartOf="@+id/tv_feedback_properties" />
+
+            <TextView
+                android:id="@+id/tv_feedback_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/status_header"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_status"
+                app:layout_constraintStart_toStartOf="@+id/tv_priorityStatus" />
+
+            <TextView
+                android:id="@+id/tv_feedback_properties"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/feedback_properties"
+                android:visibility="invisible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/v_ticket_view_line" />
+
+            <ImageButton
+                android:id="@+id/b_edit_props"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:maxWidth="25dp"
+                android:maxHeight="25dp"
+                android:scaleX="0.5"
+                android:scaleY="0.5"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_feedback_properties"
+                app:layout_constraintStart_toEndOf="@+id/tv_feedback_properties"
+                app:layout_constraintTop_toTopOf="@+id/tv_feedback_properties"
+                app:srcCompat="@android:drawable/ic_menu_edit" />
+
+            <TextView
+                android:id="@+id/tv_assign_to_me"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/assign_to_me"
+                android:textColor="@color/colorPrimaryLight"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="@+id/tv_ticket_view_assigned_tech"
+                app:layout_constraintTop_toTopOf="@+id/tv_ticket_view_assigned_tech" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

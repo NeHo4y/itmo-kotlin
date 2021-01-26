@@ -35,7 +35,7 @@
     <string name="error_ticket_load">Ошибка при загрузке обращения: %1$s</string>
     <string name="error_note_load">Ошибка при добавлении комментария: %1$s</string>
     <string name="ticket_title">Обращение %1$s</string>
-    <string name="assign_to_me">Назначить на меня</string>
+    <string name="assign_to_me"><u>Назначить на меня</u></string>
     <string name="change_status">Редактировать статус</string>
     <string name="new_feedback">Название обращения</string>
     <string name="new_feedback_description">Описание обращения</string>

@@ -47,8 +47,8 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface, IShowErr
     private lateinit var markdown: Markwon
     private lateinit var noteBinding: ATicketViewBinding
     private lateinit var pullToRefresh: SwipeRefreshLayout
-    private var menuAssign: MenuItem? = null
-    private var menuChangeStatus: MenuItem? = null
+    private lateinit var menuAssign: TextView
+    private lateinit var menuChangeStatus: ImageButton
     private var currentUser: UserData? = null
     private var menuEdit: MenuItem? = null
 
@@ -71,13 +71,34 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface, IShowErr
             }
         }
 
+        menuChangeStatus = noteBinding.bEditProps.apply {
+            setOnClickListener {
+                ChangeStatusDialogWrapper(this@TicketView, ticketId) {
+                    startRefresh()
+                }.show(ticket?.status, ticket?.priority)
+            }
+            visibility = View.GONE
+        }
+
+        menuAssign = noteBinding.tvAssignToMe.apply {
+            setOnClickListener {
+                GlobalScope.launch {
+                    ticketController.assignOnMe(ticketId)
+                    withContext(Dispatchers.Main) {
+                        startRefresh()
+                    }
+                }
+            }
+            visibility = View.GONE
+        }
+
         startRefresh()
     }
 
     private fun startRefresh() {
         menuNewNote?.isEnabled = false
-        menuAssign?.isEnabled = false
-        menuChangeStatus?.isEnabled = false
+        menuAssign.isEnabled = false
+        menuChangeStatus.isEnabled = false
         menuEdit?.isEnabled = false
         GlobalScope.launch(Dispatchers.Default) {
             ticketController.loadFullTicket(ticketId)?.let {
@@ -94,6 +115,9 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface, IShowErr
         title = getString(R.string.ticket_title, ticket.id.toString())
         noteBinding.tvTicketViewId.visibility = View.VISIBLE
         noteBinding.tvTicketViewId.text = ticket.id.toString()
+        noteBinding.tvFeedbackProperties.visibility = View.VISIBLE
+        noteBinding.tvPriorityStatus.visibility = View.VISIBLE
+        noteBinding.tvFeedbackStatus.visibility = View.VISIBLE
 
         if (ticket.displayClient != null) {
             noteBinding.tvTicketViewClientFullname.visibility = View.VISIBLE
@@ -185,21 +209,6 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface, IShowErr
                 finish()
                 true
             }
-            R.id.menu_change_status -> {
-                ChangeStatusDialogWrapper(this, ticketId) {
-                    startRefresh()
-                }.show(ticket?.status, ticket?.priority)
-                true
-            }
-            R.id.menu_assign_to_me -> {
-                GlobalScope.launch {
-                    ticketController.assignOnMe(ticketId)
-                    withContext(Dispatchers.Main) {
-                        startRefresh()
-                    }
-                }
-                true
-            }
             R.id.menu_add_note -> {
                 NoteDialogWrapper(this, null) { text, dialog ->
                     val note = CommentCreationDto(ticketId, "message", text)
@@ -247,12 +256,6 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface, IShowErr
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_ticket_view, menu)
         menuNewNote = menu?.findItem(R.id.menu_add_note)
-        menuAssign = menu?.findItem(R.id.menu_assign_to_me)?.apply {
-            isVisible = currentUser?.role == UserRole.ADMIN
-        }
-        menuChangeStatus = menu?.findItem(R.id.menu_change_status)?.apply {
-            isVisible = currentUser?.role == UserRole.ADMIN
-        }
         menuEdit = menu?.findItem(R.id.menu_edit_feedback)?.apply {
             isVisible = currentUser?.id == ticket?.authorData?.id
         }
@@ -268,10 +271,19 @@ class TicketView : AppCompatActivity(), TicketInterface, NoteInterface, IShowErr
         this.ticket = result
         this.runOnUiThread {
             menuNewNote?.isEnabled = true
-            menuChangeStatus?.isEnabled = true
-            menuAssign?.isEnabled = true
-            menuAssign?.isVisible = result.assignee.isNullOrBlank() &&
-                currentUser?.role == UserRole.ADMIN
+            menuChangeStatus.apply {
+                isEnabled = true
+                visibility = if (currentUser?.role == UserRole.ADMIN) View.VISIBLE else View.GONE
+            }
+            menuAssign.apply {
+                isEnabled = true
+                visibility =
+                    if (result.assignee.isNullOrBlank() && currentUser?.role == UserRole.ADMIN) {
+                        View.VISIBLE
+                    } else {
+                        View.GONE
+                    }
+            }
             noteBinding.pbTicketView.visibility = View.GONE
             menuEdit?.isVisible = currentUser?.id == ticket?.authorData?.id
             menuEdit?.isEnabled = true
